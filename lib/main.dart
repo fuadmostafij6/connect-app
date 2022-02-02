@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'Screen/Deshboard/deshboard.dart';
-import 'Screen/Form/registation.dart';
-import 'Screen/Linkscreen/linkscreen.dart';
 import 'Screen/splash/splash.dart';
-import 'homepage.dart';
-import 'login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
