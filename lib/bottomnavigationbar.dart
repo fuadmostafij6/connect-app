@@ -42,10 +42,15 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                   widget.pageindex(0);
                 });
               },
-              icon: Image.asset(
-                'images/home.png',
-                height: 20,
-              ),
+              icon: index == 1
+                  ? Image.asset(
+                      'images/Home (1).png',
+                      height: 30,
+                    )
+                  : Image.asset(
+                      'images/home.png',
+                      height: 20,
+                    ),
             ),
           ),
           Container(
@@ -62,10 +67,15 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                   widget.pageindex(1);
                 });
               },
-              icon: Image.asset(
-                'images/link.png',
-                height: 20,
-              ),
+              icon: index == 2
+                  ? Image.asset(
+                      'images/Link (1).png',
+                      height: 30,
+                    )
+                  : Image.asset(
+                      'images/link.png',
+                      height: 20,
+                    ),
             ),
           ),
           Container(
@@ -82,10 +92,15 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                   widget.pageindex(2);
                 });
               },
-              icon: Image.asset(
-                'images/signal-status.png',
-                height: 20,
-              ),
+              icon: index == 3
+                  ? Image.asset(
+                      'images/Dashboard.png',
+                      height: 30,
+                    )
+                  : Image.asset(
+                      'images/signal-status.png',
+                      height: 20,
+                    ),
             ),
           ),
           // IconButton(

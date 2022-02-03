@@ -25,7 +25,7 @@ class _HomepageState extends State<Homepage> {
           setState(() {
             pageindex = value;
             pageController.animateToPage(value,
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 100),
                 curve: Curves.easeIn);
           });
         },

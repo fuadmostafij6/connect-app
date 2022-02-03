@@ -14,10 +14,39 @@ class _SearchpageState extends State<Searchpage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
         backgroundColor: Color(0xFFE51D20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
         title: const Text(
           "মোঃ হাসান ইসলাম",
           style: TextStyle(fontSize: 14),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: Container(
+            child: Column(
+              children: [
+                const Text(
+                  "আপনার লিংক সার্চ করুন",
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
+                  style: TextStyle(
+                      fontSize: 8, color: Colors.white.withOpacity(0.7)),
+                ),
+              ],
+            ),
+          ),
         ),
         centerTitle: true,
         // leading: Column(
@@ -33,30 +62,30 @@ class _SearchpageState extends State<Searchpage> {
       ),
       body: Column(
         children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 5),
-            width: size.width,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: Color(0xFFE51D20),
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  "আপনার লিংক সার্চ করুন",
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text(
-                  "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
-                  style: TextStyle(
-                      fontSize: 8, color: Colors.white.withOpacity(0.7)),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   padding: const EdgeInsets.only(bottom: 5),
+          //   width: size.width,
+          //   decoration: const BoxDecoration(
+          //     borderRadius: BorderRadius.only(
+          //         bottomLeft: Radius.circular(10),
+          //         bottomRight: Radius.circular(10)),
+          //     color: Color(0xFFE51D20),
+          //   ),
+          //   child: Column(
+          //     children: [
+          //       const Text(
+          //         "আপনার লিংক সার্চ করুন",
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //       Text(
+          //         "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
+          //         style: TextStyle(
+          //             fontSize: 8, color: Colors.white.withOpacity(0.7)),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           searchpage(),
           Flexible(child: alllinkservice()),
         ],

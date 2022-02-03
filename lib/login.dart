@@ -29,8 +29,19 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFFE51D20),
-        title: Text(
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
+        backgroundColor: const Color(0xFFE51D20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
+        title: const Text(
           "কানেক্ট",
           style: TextStyle(fontFamily: 'Kalpurush'),
         ),
@@ -38,27 +49,35 @@ class _LoginPageState extends State<LoginPage> {
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.menu))
         ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: Text(
+            "কাজ পেতে লগইন করুন",
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontFamily: 'Kalpurush'),
+          ),
+        ),
       ),
       body: Form(
         key: _fromkey,
         child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(bottom: 5),
-              width: size.width,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                color: Color(0xFFE51D20),
-              ),
-              child: const Text(
-                "কাজ পেতে লগইন করুন",
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18, fontFamily: 'Kalpurush'),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.center,
+            //   padding: const EdgeInsets.only(bottom: 5),
+            //   width: size.width,
+            //   decoration: const BoxDecoration(
+            //     borderRadius: BorderRadius.only(
+            //         bottomLeft: Radius.circular(10),
+            //         bottomRight: Radius.circular(10)),
+            //     color: Color(0xFFE51D20),
+            //   ),
+            //   child: const Text(
+            //     "কাজ পেতে লগইন করুন",
+            //     style: TextStyle(
+            //         color: Colors.white, fontSize: 18, fontFamily: 'Kalpurush'),
+            //   ),
+            // ),
             formbox(
               name: "ইমেইল *",
               hinttext: "আপনার ইমেইল",

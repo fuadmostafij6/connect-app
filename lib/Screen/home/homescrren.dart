@@ -21,12 +21,42 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
       backgroundColor: Color(0xFFFDEAEC),
       appBar: AppBar(
         elevation: 0,
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
         backgroundColor: Color(0xFFE51D20),
         title: const Text(
           "মোঃ হাসান ইসলাম",
           style: TextStyle(fontSize: 14, fontFamily: 'Kalpurush'),
         ),
         centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: Column(
+            children: [
+              const Text(
+                "কানেকশন এবং লিংক পাওয়ার এবং দেওয়ার সহজতম মাধ্যম",
+                style: TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
+              ),
+              Text(
+                "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.white.withOpacity(0.7),
+                    fontFamily: 'Kalpurush'),
+              )
+            ],
+          ),
+        ),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -49,34 +79,34 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 5),
-            width: size.width,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: Color(0xFFE51D20),
-            ),
-            child: Column(
-              children: [
-                const Text(
-                  "কানেকশন এবং লিংক পাওয়ার এবং দেওয়ার সহজতম মাধ্যম",
-                  style:
-                      TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
-                ),
-                Text(
-                  "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.white.withOpacity(0.7),
-                      fontFamily: 'Kalpurush'),
-                )
-              ],
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   padding: const EdgeInsets.only(bottom: 5),
+          //   width: size.width,
+          //   decoration: const BoxDecoration(
+          //     borderRadius: BorderRadius.only(
+          //         bottomLeft: Radius.circular(10),
+          //         bottomRight: Radius.circular(10)),
+          //     color: Color(0xFFE51D20),
+          //   ),
+          //   child: Column(
+          //     children: [
+          //       const Text(
+          //         "কানেকশন এবং লিংক পাওয়ার এবং দেওয়ার সহজতম মাধ্যম",
+          //         style:
+          //             TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
+          //       ),
+          //       Text(
+          //         "যেকোনো ধরণের কাজ প্রজেক্ট ব্যবসা অথবা সাপ্লাই এর কাজের লিংক এবং কানেকশন পান যখন তখন যেখানে সেখানে",
+          //         overflow: TextOverflow.ellipsis,
+          //         style: TextStyle(
+          //             fontSize: 9,
+          //             color: Colors.white.withOpacity(0.7),
+          //             fontFamily: 'Kalpurush'),
+          //       )
+          //     ],
+          //   ),
+          // ),
           SizedBox(height: 10),
           categorylist(),
           Container(

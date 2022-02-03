@@ -53,6 +53,17 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        bottom: Radius.circular(30),
+      ),
+    ),
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
         title: const Text(
           "মোঃ হাসান ইসলাম",
           style: TextStyle(fontSize: 14),
@@ -63,6 +74,16 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
           children: [
             Text("কানেক্ট"),
           ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: Container(
+            height: 20,
+            child: Text(
+              "আমার লিংক সমূহ",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
         ),
         actions: [
           IconButton(
@@ -79,21 +100,21 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
       ),
       body: Column(
         children: [
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 5),
-            width: size.width,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: Color(0xFFE51D20),
-            ),
-            child: const Text(
-              "আমার লিংক সমূহ",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   padding: const EdgeInsets.only(bottom: 5),
+          //   width: size.width,
+          //   decoration: const BoxDecoration(
+          //     borderRadius: BorderRadius.only(
+          //         bottomLeft: Radius.circular(10),
+          //         bottomRight: Radius.circular(10)),
+          //     color: Color(0xFFE51D20),
+          //   ),
+          //   child: const Text(
+          //     "আমার লিংক সমূহ",
+          //     style: TextStyle(color: Colors.white),
+          //   ),
+          // ),
           Flexible(child: alllinkservice())
         ],
       ),

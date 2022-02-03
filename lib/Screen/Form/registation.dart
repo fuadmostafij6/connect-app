@@ -17,33 +17,51 @@ class _RegistationPageState extends State<RegistationPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
         ],
         backgroundColor: const Color(0xFFE51D20),
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        bottom: Radius.circular(30),
+      ),
+    ),
         title: const Text(
           'কানেক্ট',
           style: TextStyle(fontFamily: 'Kalpurush'),
+        ),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: const Text(
+            "যে কোন ধরনের কাজ /প্রজেক্ট এর কানেকশন \n এবং লিংক পেতে বা দিতে সাইন আপ করুন ",
+            style: TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 5),
-              width: size.width,
-              decoration: const BoxDecoration(
-                  color: Color(0xFFE51D20),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10))),
-              child: const Text(
-                "যে কোন ধরনের কাজ /প্রজেক্ট এর কানেকশন \n এবং লিংক পেতে বা দিতে সাইন আপ করুন ",
-                style: TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.center,
+            //   padding: EdgeInsets.only(bottom: 5),
+            //   width: size.width,
+            //   decoration: const BoxDecoration(
+            //       color: Color(0xFFE51D20),
+            //       borderRadius: BorderRadius.only(
+            //           bottomLeft: Radius.circular(10),
+            //           bottomRight: Radius.circular(10))),
+            //   child: const Text(
+            //     "যে কোন ধরনের কাজ /প্রজেক্ট এর কানেকশন \n এবং লিংক পেতে বা দিতে সাইন আপ করুন ",
+            //     style: TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
+            //   ),
+            // ),
             formbox(name: "নাম *", hintText: "আপনার নাম"),
             SizedBox(height: 10),
             formbox(name: "ইমেইল *", hintText: "আপনার ইমেইল"),
