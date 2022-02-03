@@ -103,6 +103,32 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                     ),
             ),
           ),
+
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    top: BorderSide(
+                        color: index == 4
+                            ? Color(0xFFE51D20)
+                            : Colors.transparent))),
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  index = 4;
+                  widget.pageindex(3);
+                });
+              },
+              icon: index == 4
+                  ? Image.asset(
+                      'images/Chat (1).png',
+                      height: 30,
+                    )
+                  : Image.asset(
+                      'images/Chat.png',
+                      height: 20,
+                    ),
+            ),
+          ),
           // IconButton(
           //   onPressed: () {},
           //   icon: FaIcon(FontAwesomeIcons.statu),
