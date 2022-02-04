@@ -77,6 +77,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       CircleAvatar(
+                        backgroundImage: AssetImage(
+                          'images/Chat_list/2.jpg',
+                        ),
                         radius: 50,
                         backgroundColor: Color(0xFFFF5428),
                       )
@@ -297,7 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderRadius: BorderRadius.circular(5)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Text(
                           "লগ আউট",
                           style: TextStyle(color: Colors.white),

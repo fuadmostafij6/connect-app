@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Screen/Form/registation.dart';
+import 'Screen/Proparty/proparty.dart';
 import 'Screen/splash/splash.dart';
 import 'homepage.dart';
 
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Homepage(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'Screen/Chat/chatlist.dart';
 import 'Screen/Deshboard/deshboard.dart';
 import 'Screen/Linkscreen/linkscreen.dart';
+import 'Screen/Notification/notification.dart';
 import 'Screen/Profile/profile.dart';
 import 'Screen/home/homescrren.dart';
 import 'bottomnavigationbar.dart';
@@ -40,7 +41,8 @@ class _HomepageState extends State<Homepage> {
           Linkscreenpage(),
           Deshboardpage(),
           ChatListpage(),
-          ProfilePage()
+          ProfilePage(),
+          NotificationPage()
         ],
       ),
     );

@@ -108,9 +108,10 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
           //   ),
           // ),
           SizedBox(height: 10),
-          categorylist(),
+          Container(margin: EdgeInsets.only(left: 10), child: categorylist()),
           Container(
             padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: const [
                 Text(
@@ -126,6 +127,7 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
             ),
           ),
           Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
             padding: EdgeInsets.all(10),
             child: const Text(
               "লিংক সমূহ",

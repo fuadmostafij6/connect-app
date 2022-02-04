@@ -155,6 +155,31 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                     ),
             ),
           ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    top: BorderSide(
+                        color: index == 6
+                            ? Color(0xFFE51D20)
+                            : Colors.transparent))),
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  index = 6;
+                  widget.pageindex(5);
+                });
+              },
+              icon: index == 6
+                  ? Image.asset(
+                      'images/Notification (1).png',
+                      height: 30,
+                    )
+                  : Image.asset(
+                      'images/Notification.png',
+                      height: 20,
+                    ),
+            ),
+          ),
           // IconButton(
           //   onPressed: () {},
           //   icon: FaIcon(FontAwesomeIcons.statu),

@@ -29,10 +29,10 @@ class _RegistationPageState extends State<RegistationPage> {
         ],
         backgroundColor: const Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        bottom: Radius.circular(30),
-      ),
-    ),
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(30),
+          ),
+        ),
         title: const Text(
           'কানেক্ট',
           style: TextStyle(fontFamily: 'Kalpurush'),
@@ -85,10 +85,22 @@ class _RegistationPageState extends State<RegistationPage> {
                     });
                   },
                 ),
-                const Text(
-                  "অক্কোউন্টের জন্য সাইন আপ করে আপনি আমাদের \n শর্তাবলী এবং নীতিমালা এর সাথে সম্মত হলেন",
-                  style: TextStyle(fontSize: 13, fontFamily: 'Kalpurush'),
-                ),
+                const Text.rich(TextSpan(
+                    style: TextStyle(fontSize: 13, fontFamily: 'Kalpurush'),
+                    children: [
+                      TextSpan(
+                          text: "অক্কোউন্টের জন্য সাইন আপ করে আপনি আমাদের \n"),
+                      TextSpan(
+                          text: "শর্তাবলী এবং নীতিমালা ",
+                          style: TextStyle(color: Colors.red)),
+                      TextSpan(
+                        text: "এর সাথে সম্মত হলেন",
+                      ),
+                    ]))
+                // const Text(
+                //   "অক্কোউন্টের জন্য সাইন আপ করে আপনি আমাদের \n শর্তাবলী এবং নীতিমালা এর সাথে সম্মত হলেন",
+                //   style: TextStyle(fontSize: 13, fontFamily: 'Kalpurush'),
+                // ),
               ],
             ),
             const SizedBox(height: 20),
