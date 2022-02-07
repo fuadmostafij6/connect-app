@@ -17,14 +17,17 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
+            bottom: Radius.circular(10),
           ),
         ),
-        flexibleSpace: const Image(
-          image: AssetImage(
-            'images/Top Bar illustration Solid.png',
+        flexibleSpace: ClipRRect(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+          child: const Image(
+            image: AssetImage(
+              'images/Top Bar illustration Solid.png',
+            ),
+            fit: BoxFit.cover,
           ),
-          fit: BoxFit.cover,
         ),
         title: const Text(
           "মোঃ হাসান ইসলাম",

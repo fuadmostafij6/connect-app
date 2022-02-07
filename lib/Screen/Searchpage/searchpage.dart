@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Model/Search_Job/searchjob.dart';
+import 'package:jobs_app/Provider/Search/search.dart';
+import 'package:jobs_app/Provider/home.dart';
+import 'package:provider/provider.dart';
 
 class Searchpage extends StatefulWidget {
   const Searchpage({Key? key}) : super(key: key);
@@ -8,22 +12,30 @@ class Searchpage extends StatefulWidget {
 }
 
 class _SearchpageState extends State<Searchpage> {
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final search = Provider.of<Searchprovider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        flexibleSpace: const Image(
-          image: AssetImage(
-            'images/Top Bar illustration Solid.png',
+        flexibleSpace: ClipRRect(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(10),
           ),
-          fit: BoxFit.cover,
+          child: const Image(
+            image: AssetImage(
+              'images/Top Bar illustration Solid.png',
+            ),
+            fit: BoxFit.cover,
+          ),
         ),
         backgroundColor: Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
+            bottom: Radius.circular(10),
           ),
         ),
         title: const Text(
@@ -87,16 +99,29 @@ class _SearchpageState extends State<Searchpage> {
           //   ),
           // ),
           searchpage(),
-          Flexible(child: alllinkservice()),
+          search.searchJob == null
+              ? Text(
+                  "Search Job",
+                  style: TextStyle(color: Colors.black.withOpacity(0.7)),
+                )
+              : Flexible(child: alllinkservice()),
         ],
       ),
     );
   }
 
   Widget searchpage() {
+    final search = Provider.of<Searchprovider>(context);
     return Container(
       margin: EdgeInsets.all(20),
       child: TextFormField(
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            search
+                .getsearchjob(keyword: value, context: context)
+                .then((value) {});
+          }
+        },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             hintText: "সার্চ করুন",
@@ -108,33 +133,20 @@ class _SearchpageState extends State<Searchpage> {
   }
 
   Widget alllinkservice() {
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (context, index) {
-        return Container(
-          color: Color(0xFFF8C2C2),
-          padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-          margin: EdgeInsets.only(bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Land in gazipur",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              SizedBox(height: 10),
-              const Text("কানেক্ট আইডি ৯"),
-              const Text("জমি/প্রপার্টি"),
-              SizedBox(height: 10),
-              DescriptionTextWidget(
-                text:
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-              )
-            ],
-          ),
-        );
-      },
-    );
+    final search = Provider.of<Searchprovider>(context);
+    return search.searchJob!.msg!.isEmpty
+        ? Center(
+            child: Text("No Job Found"),
+          )
+        : ListView.builder(
+            itemCount: search.searchJob!.msg!.length,
+            itemBuilder: (context, index) {
+              var data = search.searchJob!.msg![index];
+              return SeachJobPage(
+                data: data,
+              );
+            },
+          );
   }
 }
 
@@ -197,6 +209,65 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+class SeachJobPage extends StatefulWidget {
+  final Msg data;
+  const SeachJobPage({Key? key, required this.data}) : super(key: key);
+
+  @override
+  _SeachJobPageState createState() => _SeachJobPageState();
+}
+
+class _SeachJobPageState extends State<SeachJobPage> {
+  String categoryname = "";
+
+  void categorynamefind() {
+    final homeprovider = Provider.of<HomeProvider>(context, listen: false);
+    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+        setState(() {
+          categoryname = homeprovider.categorylist!.msg![i].catName!;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    categorynamefind();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: Material(
+        elevation: 1,
+        child: Container(
+          color: Color(0xFFF8C2C2),
+          padding: EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.data.jobTitle!,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              SizedBox(height: 10),
+              Text("কানেক্ট আইডি: ${widget.data.jobId}"),
+              Text(categoryname),
+              SizedBox(height: 10),
+              DescriptionTextWidget(
+                text: widget.data.description,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Provider/Form/form.dart';
 import 'package:jobs_app/homepage.dart';
+import 'package:provider/provider.dart';
 
-import 'Screen/Form/registation.dart';
+import 'registation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,11 +17,25 @@ class _LoginPageState extends State<LoginPage> {
 
   bool checkbox = false;
 
+  String? email, password;
+
+  bool btnloading = false;
+
   void validation() {
+    final fromdata = Provider.of<Fromprovider>(context, listen: false);
     final from = _fromkey.currentState;
     if (from!.validate()) {
       from.save();
-      redirecthomepage();
+      setState(() {
+        btnloading = true;
+      });
+      fromdata
+          .getlogin(context: context, email: email, password: password)
+          .then((value) {
+        setState(() {
+          btnloading = false;
+        });
+      });
     }
   }
 
@@ -29,17 +45,22 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        flexibleSpace: const Image(
-          image: AssetImage(
-            'images/Top Bar illustration Solid.png',
+        flexibleSpace: const ClipRRect(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10)),
+          child: Image(
+            image: AssetImage(
+              'images/Top Bar illustration Solid.png',
+            ),
+            fit: BoxFit.cover,
           ),
-          fit: BoxFit.cover,
         ),
         backgroundColor: const Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10)),
         ),
         title: const Text(
           "কানেক্ট",
@@ -81,6 +102,11 @@ class _LoginPageState extends State<LoginPage> {
             formbox(
               name: "ইমেইল *",
               hinttext: "আপনার ইমেইল",
+              onSaved: (newValue) {
+                setState(() {
+                  email = newValue;
+                });
+              },
               validator: (value) {
                 if (value!.isEmpty) {
                   return "";
@@ -91,6 +117,11 @@ class _LoginPageState extends State<LoginPage> {
             formbox(
               name: "পাসওয়ার্ড *",
               hinttext: "**************",
+              onSaved: (newValue) {
+                setState(() {
+                  password = newValue;
+                });
+              },
               validator: (value) {
                 if (value!.isEmpty) {
                   return "";
@@ -207,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
     String? name,
     String? hinttext,
     FormFieldValidator<String>? validator,
+    FormFieldSetter<String>? onSaved,
   }) {
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -218,6 +250,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontFamily: 'Kalpurush'),
           ),
           TextFormField(
+            onSaved: onSaved,
             validator: validator,
             decoration: InputDecoration(
                 errorStyle: const TextStyle(height: 0),

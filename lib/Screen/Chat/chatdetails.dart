@@ -70,24 +70,24 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
         //   ),
         // ),
         actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(),
-                //     ));
-              },
-              icon: Image.asset(
-                'images/message_icon/frame_overlay_gallery_video.png',
-                height: 45,
-              )),
-          IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                "images/message_icon/ic_reg_call_disabled.png",
-                height: 25,
-              )),
+          // IconButton(
+          //     onPressed: () {
+          //       // Navigator.push(
+          //       //     context,
+          //       //     MaterialPageRoute(
+          //       //       builder: (context) => Searchpage(),
+          //       //     ));
+          //     },
+          //     icon: Image.asset(
+          //       'images/message_icon/frame_overlay_gallery_video.png',
+          //       height: 45,
+          //     )),
+          // IconButton(
+          //     onPressed: () {},
+          //     icon: Image.asset(
+          //       "images/message_icon/ic_reg_call_disabled.png",
+          //       height: 25,
+          //     )),
         ],
       ),
       body: Column(
