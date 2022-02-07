@@ -54,7 +54,7 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
         backgroundColor: Color(0xFFE51D20),
         title: Text(
           box.get('name'),
-          style: TextStyle(fontSize: 14, fontFamily: 'Kalpurush'),
+          style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,
         shape: RoundedRectangleBorder(
