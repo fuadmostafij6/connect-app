@@ -143,6 +143,7 @@ class _RegistationPageState extends State<RegistationPage> {
               ),
               SizedBox(height: 10),
               formbox(
+                obscureText: true,
                 name: "পাসওয়ার্ড *",
                 hintText: "************",
                 onSaved: (newValue) {
@@ -158,6 +159,7 @@ class _RegistationPageState extends State<RegistationPage> {
               ),
               SizedBox(height: 10),
               formbox(
+                obscureText: true,
                 name: "কনফার্ম পাসওয়ার্ড *",
                 hintText: "************",
                 onSaved: (newValue) {
@@ -337,6 +339,7 @@ class _RegistationPageState extends State<RegistationPage> {
     String? hintText,
     FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,
+    bool? obscureText,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -349,6 +352,7 @@ class _RegistationPageState extends State<RegistationPage> {
           ),
           TextFormField(
             onSaved: onSaved,
+            obscureText: obscureText ?? false,
             validator: validator,
             decoration: InputDecoration(
               errorStyle: TextStyle(height: 0),

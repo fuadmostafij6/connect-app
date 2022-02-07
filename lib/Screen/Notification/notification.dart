@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -31,8 +33,8 @@ class _NotificationPageState extends State<NotificationPage> {
             fit: BoxFit.cover,
           ),
         ),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title: Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,

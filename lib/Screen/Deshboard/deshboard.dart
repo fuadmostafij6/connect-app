@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class Deshboardpage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _DeshboardpageState extends State<Deshboardpage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -40,8 +42,8 @@ class _DeshboardpageState extends State<Deshboardpage> {
             ),
           ),
         ),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title:  Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,

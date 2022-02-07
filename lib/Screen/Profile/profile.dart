@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -29,8 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
             fit: BoxFit.cover,
           ),
         ),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title: Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,
@@ -96,9 +98,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Container(
                           child: Row(
-                            children: const [
+                            children:  [
                               Text(
-                                "Tanvir Mahamud Shakil",
+                                box.get('name'),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
@@ -112,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Container(
                           child: Text(
-                            "@tanvirmahamud",
+                            "@${box.get('name')}",
                             style: TextStyle(color: Color(0xFF484649)),
                           ),
                         ),
@@ -128,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             Icon(Icons.email),
                             SizedBox(width: 5),
-                            Text("shakilhassan@gmail.com")
+                            Text(box.get('email'))
                           ],
                         ),
                         SizedBox(height: 5),

@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 10),
             formbox(
+              obscureText: true,
               name: "পাসওয়ার্ড *",
               hinttext: "**************",
               onSaved: (newValue) {
@@ -239,6 +240,7 @@ class _LoginPageState extends State<LoginPage> {
     String? hinttext,
     FormFieldValidator<String>? validator,
     FormFieldSetter<String>? onSaved,
+    bool? obscureText,
   }) {
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -250,6 +252,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontFamily: 'Kalpurush'),
           ),
           TextFormField(
+            obscureText: obscureText ?? false,
             onSaved: onSaved,
             validator: validator,
             decoration: InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/chatlist.dart';
 import 'package:jobs_app/Screen/Chat/chatdetails.dart';
 
@@ -12,6 +13,7 @@ class ChatListpage extends StatefulWidget {
 class _ChatListpageState extends State<ChatListpage> {
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -32,8 +34,8 @@ class _ChatListpageState extends State<ChatListpage> {
             fit: BoxFit.cover,
           ),
         ),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title: Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class Linkscreenpage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    var box = Hive.box('login');
     return Scaffold(
       backgroundColor: Colors.white,
       // floatingActionButton: Card(
@@ -67,8 +69,8 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
             fit: BoxFit.cover,
           ),
         ),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title: Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,

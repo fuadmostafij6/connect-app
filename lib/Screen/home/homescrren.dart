@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
@@ -34,6 +35,7 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final homeprovider = Provider.of<HomeProvider>(context);
+    var box = Hive.box('login');
     return Scaffold(
       backgroundColor: Color(0xFFFDEAEC),
       appBar: AppBar(
@@ -50,8 +52,8 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
           ),
         ),
         backgroundColor: Color(0xFFE51D20),
-        title: const Text(
-          "মোঃ হাসান ইসলাম",
+        title: Text(
+          box.get('name'),
           style: TextStyle(fontSize: 14, fontFamily: 'Kalpurush'),
         ),
         centerTitle: true,
