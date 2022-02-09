@@ -7,6 +7,9 @@ import 'Provider/Search/search.dart';
 import 'Provider/home.dart';
 import 'Screen/Form/registation.dart';
 import 'Screen/Proparty/proparty.dart';
+import 'Screen/home/homepage2.dart';
+import 'Screen/home/homepage3.dart';
+import 'Screen/home/postdetails.dart';
 import 'Screen/splash/splash.dart';
 import 'homepage.dart';
 
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: box.get('email') != null ? Homepage() : const SplashScreen(),
+      // home: HomePage3(),
     );
   }
 }

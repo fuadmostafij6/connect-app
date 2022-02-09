@@ -6,6 +6,7 @@ import 'Screen/Deshboard/deshboard.dart';
 import 'Screen/Linkscreen/linkscreen.dart';
 import 'Screen/Notification/notification.dart';
 import 'Screen/Profile/profile.dart';
+import 'Screen/home/homepage3.dart';
 import 'Screen/home/homescrren.dart';
 import 'bottomnavigationbar.dart';
 
@@ -37,7 +38,7 @@ class _HomepageState extends State<Homepage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: const [
-          HomeScreenpage(),
+          HomePage3(),
           Linkscreenpage(),
           Deshboardpage(),
           ChatListpage(),
