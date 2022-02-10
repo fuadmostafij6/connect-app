@@ -3,8 +3,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'Provider/Form/form.dart';
 import 'package:path_provider/path_provider.dart';
+import 'Provider/Jobdetails/jobdetails.dart';
 import 'Provider/Profile/profile.dart';
 import 'Provider/Search/search.dart';
+import 'Provider/Userjob/userjob.dart';
 import 'Provider/home.dart';
 import 'Screen/Form/registation.dart';
 import 'Screen/Proparty/proparty.dart';
@@ -25,6 +27,8 @@ void main() async {
     ChangeNotifierProvider(create: (context) => HomeProvider()),
     ChangeNotifierProvider(create: (context) => Searchprovider()),
     ChangeNotifierProvider(create: (context) => ProfileProvider()),
+    ChangeNotifierProvider(create:  (context) => Userjobpage()),
+    ChangeNotifierProvider(create: (context) => JobDetailsProvider())
   ], child: const MyApp()));
 }
 

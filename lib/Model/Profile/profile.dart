@@ -21,7 +21,7 @@ class Profile {
 
 class Msg {
   UserData? userData;
-  Null? membership;
+  Membership? membership;
 
   Msg({this.userData, this.membership});
 
@@ -29,7 +29,9 @@ class Msg {
     userData = json['user_data'] != null
         ? new UserData.fromJson(json['user_data'])
         : null;
-    membership = json['membership'];
+    membership = json['membership'] != null
+        ? new Membership.fromJson(json['membership'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -37,7 +39,9 @@ class Msg {
     if (this.userData != null) {
       data['user_data'] = this.userData!.toJson();
     }
-    data['membership'] = this.membership;
+    if (this.membership != null) {
+      data['membership'] = this.membership!.toJson();
+    }
     return data;
   }
 }
@@ -48,21 +52,21 @@ class UserData {
   String? companyName;
   String? phone;
   String? email;
-  Null? userName;
+  String? userName;
   String? password;
-  Null? typeReg;
+  String? typeReg;
   String? serviceArea;
   String? status;
   String? createdAt;
-  Null? pic;
+  String? pic;
   String? nidStatus;
   String? nidFront;
   String? nidBack;
-  Null? address;
+  String? address;
   String? verifiedMember;
   String? profileTagline;
-  Null? nidName;
-  Null? favorite;
+  String? nidName;
+  String? favorite;
 
   UserData(
       {this.userId,
@@ -131,6 +135,67 @@ class UserData {
     data['profile_tagline'] = this.profileTagline;
     data['nid_name'] = this.nidName;
     data['favorite'] = this.favorite;
+    return data;
+  }
+}
+
+class Membership {
+  String? membershipId;
+  String? userId;
+  String? packageId;
+  String? packageName;
+  String? startDate;
+  String? endDate;
+  String? status;
+  String? payHistoryId;
+  String? paymentStatus;
+  String? paymentDetails;
+  String? nextBillDate;
+  String? createdAt;
+
+  Membership(
+      {this.membershipId,
+      this.userId,
+      this.packageId,
+      this.packageName,
+      this.startDate,
+      this.endDate,
+      this.status,
+      this.payHistoryId,
+      this.paymentStatus,
+      this.paymentDetails,
+      this.nextBillDate,
+      this.createdAt});
+
+  Membership.fromJson(Map<String, dynamic> json) {
+    membershipId = json['membership_id'];
+    userId = json['user_id'];
+    packageId = json['package_id'];
+    packageName = json['package_name'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
+    status = json['status'];
+    payHistoryId = json['pay_history_id'];
+    paymentStatus = json['payment_status'];
+    paymentDetails = json['payment_details'];
+    nextBillDate = json['next_bill_date'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['membership_id'] = this.membershipId;
+    data['user_id'] = this.userId;
+    data['package_id'] = this.packageId;
+    data['package_name'] = this.packageName;
+    data['start_date'] = this.startDate;
+    data['end_date'] = this.endDate;
+    data['status'] = this.status;
+    data['pay_history_id'] = this.payHistoryId;
+    data['payment_status'] = this.paymentStatus;
+    data['payment_details'] = this.paymentDetails;
+    data['next_bill_date'] = this.nextBillDate;
+    data['created_at'] = this.createdAt;
     return data;
   }
 }

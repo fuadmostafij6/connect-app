@@ -197,7 +197,7 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PostDetailsPage(),
+                                    builder: (context) => PostDetailsPage(jobid: data.jobId!),
                                   ));
                             },
                             child: Text(
