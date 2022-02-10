@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
+import 'package:provider/provider.dart';
 
 class Deshboardpage extends StatefulWidget {
   const Deshboardpage({Key? key}) : super(key: key);
@@ -10,6 +12,19 @@ class Deshboardpage extends StatefulWidget {
 }
 
 class _DeshboardpageState extends State<Deshboardpage> {
+  bool loading = false;
+
+  // @override
+  // void initState() {
+  //   loading = true;
+  //   Provider.of<HomeProvider>(context, listen: false)
+  //       .getcategorylist()
+  //       .then((value) {
+  //     loading = false;
+  //   });
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -42,7 +57,7 @@ class _DeshboardpageState extends State<Deshboardpage> {
             ),
           ),
         ),
-        title:  Text(
+        title: Text(
           box.get('name'),
           style: TextStyle(fontSize: 14),
         ),
@@ -63,7 +78,7 @@ class _DeshboardpageState extends State<Deshboardpage> {
                     ));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
       body: SingleChildScrollView(
@@ -248,27 +263,29 @@ class _DeshboardpageState extends State<Deshboardpage> {
   }
 
   Widget categorylist() {
+    final homeprovider = Provider.of<HomeProvider>(context);
     return Container(
-      padding: EdgeInsets.only(top: 5),
-      alignment: Alignment.center,
       height: 40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: 10,
+        itemCount: homeprovider.categorylist!.msg!.length,
         itemBuilder: (context, index) {
+          var data = homeprovider.categorylist!.msg![index];
           return Column(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-                margin: EdgeInsets.only(left: 0, right: 10),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                margin: EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
                     color: Color(0xFFE51D20),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  "ক্যাটাগরি ৩",
-                  style: TextStyle(fontSize: 13, color: Colors.white),
+                  data.catName!,
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                      fontFamily: 'Kalpurush'),
                 ),
               ),
             ],

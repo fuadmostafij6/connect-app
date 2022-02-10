@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/home.dart';
+import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/home/postdetails.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +95,7 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                     ));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
       body: loading
@@ -182,8 +183,18 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                         children: [
                           Flexible(
                               child: MaterialButton(
-                            color: Color(0xFFE51D20),
-                            onPressed: () {},
+                            color: data.status == "0"
+                                ? Colors.grey
+                                : Color(0xFFE51D20),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ApplyjobPage(
+                                      jobid: data.jobId!,
+                                    ),
+                                  ));
+                            },
                             child: Text(
                               "প্রস্তাবনা দিন",
                               style: TextStyle(color: Colors.white),
@@ -197,7 +208,8 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PostDetailsPage(jobid: data.jobId!),
+                                    builder: (context) =>
+                                        PostDetailsPage(jobid: data.jobId!),
                                   ));
                             },
                             child: Text(

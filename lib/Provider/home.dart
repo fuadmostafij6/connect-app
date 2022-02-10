@@ -23,6 +23,7 @@ class HomeProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       categorylist = Categorylist.fromJson(jsonDecode(responsedata.body));
+      print(responsedata.body);
       notifyListeners();
     } else {
       print(responsedata.body);

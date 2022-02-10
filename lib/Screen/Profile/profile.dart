@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:provider/provider.dart';
 
 import '../../Provider/Profile/profile.dart';
@@ -81,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //     ));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
       body: loading
@@ -328,24 +329,34 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Color(0xFFE94244),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                "লগ আউট",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                              )
-                            ],
+                        InkWell(
+                          onTap: () {
+                            box.clear();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()),
+                                (route) => false);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFE94244),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "লগ আউট",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],

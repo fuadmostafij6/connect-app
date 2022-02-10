@@ -65,7 +65,7 @@ class _ChatListpageState extends State<ChatListpage> {
                 //     ));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
       body: ListView.builder(

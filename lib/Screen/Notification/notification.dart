@@ -60,11 +60,11 @@ class _NotificationPageState extends State<NotificationPage> {
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(),
+                //       builder: (context) => Searchpage(), 
                 //     ));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
       body: Column(

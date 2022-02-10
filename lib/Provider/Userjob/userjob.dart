@@ -25,8 +25,12 @@ class Userjobpage extends ChangeNotifier {
     var responsedata = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
-      userjob = Userjob.fromJson(jsonDecode(responsedata.body));
-      notifyListeners();
+      if (jsonDecode(responsedata.body)['error'] == 0) {
+        userjob = Userjob.fromJson(jsonDecode(responsedata.body));
+        notifyListeners();
+      } else {
+        print(responsedata.body);
+      }
     } else {
       print(responsedata.body);
       notifyListeners();
