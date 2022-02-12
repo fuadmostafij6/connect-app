@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
+import 'package:jobs_app/Screen/create_Job/createjob.dart';
 import 'package:provider/provider.dart';
 
 import '../../Model/Userjob/userjob.dart';
@@ -35,42 +36,48 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
     var box = Hive.box('login');
     return Scaffold(
       backgroundColor: Colors.white,
-      // floatingActionButton: Card(
-      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      //   elevation: 10,
-      //   child: Stack(
-      //     children: [
-      //       InkWell(
-      //         onTap: () {},
-      //         child: Container(
-      //           height: size.height * 0.07,
-      //           width: size.width * 0.15,
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(10),
-      //             color: Colors.white,
-      //           ),
-      //           child: const Icon(
-      //             Icons.edit,
-      //             color: Color(0xFFE51D20),
-      //           ),
-      //         ),
-      //       ),
-      //       Positioned(
-      //         bottom: 0,
-      //         right: 0,
-      //         child: Container(
-      //           height: 30,
-      //           width: 40,
-      //           decoration: BoxDecoration(
-      //               color: Colors.red.withOpacity(0.4),
-      //               borderRadius: BorderRadius.only(
-      //                   bottomRight: Radius.circular(10),
-      //                   topLeft: Radius.circular(10))),
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
+      floatingActionButton: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 10,
+        child: Stack(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreateJobpage(),
+                    ));
+              },
+              child: Container(
+                height: size.height * 0.07,
+                width: size.width * 0.15,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: const Icon(
+                  Icons.edit,
+                  color: Color(0xFFE51D20),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                height: 30,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.4),
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(10),
+                        topLeft: Radius.circular(10))),
+              ),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),

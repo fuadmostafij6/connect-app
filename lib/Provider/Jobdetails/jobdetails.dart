@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Const_value/snakbar.dart';
 
 import '../../Model/Job_Details/jobdetails.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +31,43 @@ class JobDetailsProvider extends ChangeNotifier {
     } else {
       print(responsedata.body);
       notifyListeners();
+    }
+  }
+
+  Future newjobcreate(
+      {String? jobtite,
+      description,
+      category,
+      userid,
+      contactnumber,
+      BuildContext? context}) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('https://launch1.goshrt.com/api/job/jobcreate'));
+    request.fields.addAll({
+      'job_title': jobtite!,
+      'description': description,
+      'category': category,
+      'user_id': userid,
+      'contactnumber': contactnumber,
+      'doc': ''
+    });
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      if (jsonDecode(responsedata.body)['error'] == 0) {
+        Message().scaffoldmessage(
+            context!, jsonDecode(responsedata.body)['msg'].toString());
+        notifyListeners();
+      } else {
+        print(responsedata.body);
+        Message().scaffoldmessage(
+            context!, jsonDecode(responsedata.body)['msg'].toString());
+        notifyListeners();
+      }
+    } else {
+      print(responsedata.body);
     }
   }
 }

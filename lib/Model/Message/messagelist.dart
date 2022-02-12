@@ -13,18 +13,9 @@ List<MessageModel> messagelist = [
   MessageModel(
       filetype: 0, message: "Good Bye", seen: 1, sendme: 0, time: "17:47"),
   MessageModel(
-      filetype: 0,
-      message:
-          "Good Byehjfdbvskdbvsdbvsjdhbvsjdhvsjhcvsjdhvcsjdhbcvjsdhbvjshvbsdcdfdfbfbdfbdfbdfbdfbdfbdfbdfbfbdnfgmhmjhjgthyjnj",
-      seen: 1,
-      sendme: 1,
-      time: "17:47"),
+      filetype: 0, message: "Good Bye", seen: 1, sendme: 1, time: "17:47"),
   MessageModel(
-      filetype: 0,
-      message: "Good Byehjfdbvskdbvsdbvsjdhbvsjdhvs",
-      seen: 1,
-      sendme: 1,
-      time: "17:47"),
+      filetype: 0, message: "Good Bye", seen: 1, sendme: 1, time: "17:47"),
   MessageModel(
       filetype: 0, message: "Good Bye", seen: 1, sendme: 1, time: "17:47"),
   MessageModel(

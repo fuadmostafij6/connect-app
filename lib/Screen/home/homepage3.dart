@@ -197,7 +197,9 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                             },
                             child: Text(
                               "প্রস্তাবনা দিন",
-                              style: TextStyle(color: Colors.white),
+                              maxLines: 1,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           )),
                           SizedBox(width: 10),
@@ -214,7 +216,9 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                             },
                             child: Text(
                               "বিস্তারিত দেখুন",
-                              style: TextStyle(color: Colors.white),
+                              maxLines: 1,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           )),
                         ],
