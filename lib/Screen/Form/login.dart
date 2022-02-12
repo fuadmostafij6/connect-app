@@ -145,31 +145,35 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ],
             ),
-            InkWell(
-              onTap: () {
-                validation();
-              },
-              child: Container(
-                padding: EdgeInsets.all(10),
-                width: size.width * 0.3,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFE51D20)),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text("লগইন করুন",
-                        style:
-                            TextStyle(fontSize: 13, fontFamily: 'Kalpurush')),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.arrow_forward,
-                      size: 19,
-                    )
-                  ],
-                ),
-              ),
-            ),
+            btnloading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : InkWell(
+                    onTap: () {
+                      validation();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      width: size.width * 0.3,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xFFE51D20)),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text("লগইন করুন",
+                              style: TextStyle(
+                                  fontSize: 13, fontFamily: 'Kalpurush')),
+                          SizedBox(width: 5),
+                          Icon(
+                            Icons.arrow_forward,
+                            size: 19,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

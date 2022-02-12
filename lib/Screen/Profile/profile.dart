@@ -4,6 +4,7 @@ import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:provider/provider.dart';
 
 import '../../Provider/Profile/profile.dart';
+import '../Membership/membeshipiteam.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -310,14 +311,23 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 5),
                           Text("পরবর্তী পেমেন্ট তারিখ : February 20, 2022"),
                           SizedBox(height: 5),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Color(0xFFE94244),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Text(
-                              "মেম্বারশিপ আপগ্রেড করুন",
-                              style: TextStyle(color: Colors.white),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MembershipIteamPage(),
+                                  ));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFE94244),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                "মেম্বারশিপ আপগ্রেড করুন",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           )
                         ],

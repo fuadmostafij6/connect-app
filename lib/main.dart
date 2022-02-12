@@ -10,6 +10,8 @@ import 'Provider/Search/search.dart';
 import 'Provider/Userjob/userjob.dart';
 import 'Provider/home.dart';
 import 'Screen/Form/registation.dart';
+import 'Screen/Membership/membershipbuy.dart';
+import 'Screen/Membership/membeshipiteam.dart';
 import 'Screen/Proparty/proparty.dart';
 import 'Screen/home/homepage2.dart';
 import 'Screen/home/homepage3.dart';
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: box.get('email') != null ? Homepage() : const SplashScreen(),
-      // home: HomePage3(),
+      // home: MemeberShipBuyPage(),
     );
   }
 }
