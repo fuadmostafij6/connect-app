@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../Const_value/textfielddropdown.dart';
 import '../../Const_value/textfrom.dart';
+import '../SSlcommerz/sslcommerz.dart';
 import '../Searchpage/searchpage.dart';
 
 class MemeberShipBuyPage extends StatefulWidget {
@@ -41,7 +42,6 @@ class _MemeberShipBuyPageState extends State<MemeberShipBuyPage> {
           style: TextStyle(fontSize: 14),
         ),
         centerTitle: true,
-    
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: Container(
@@ -129,7 +129,13 @@ class _MemeberShipBuyPageState extends State<MemeberShipBuyPage> {
           ),
           MaterialButton(
             color: Color(0xFFE51D20),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SslcommerzPage(),
+                  ));
+            },
             child: Text(
               "পেমেন্ট করুন",
               style: TextStyle(color: Colors.white),
