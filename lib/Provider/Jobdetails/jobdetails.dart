@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:jobs_app/Const_value/snakbar.dart';
 
@@ -69,5 +71,14 @@ class JobDetailsProvider extends ChangeNotifier {
     } else {
       print(responsedata.body);
     }
+  }
+
+  //video record
+
+  String path = "";
+
+  void getpath(String _path) {
+    path = _path;
+    notifyListeners();
   }
 }

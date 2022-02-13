@@ -39,22 +39,20 @@ class _TextfieldDropdownState extends State<TextfieldDropdown> {
             //     const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
             child: Text(
               widget.name!,
-              style: const TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Kalpurush'),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontFamily: 'Kalpurush'),
             ),
           ),
           Container(
             height: 40,
             // margin: const EdgeInsets.symmetric(horizontal: 10),
             child: DropdownSearch<String>(
-              dropdownSearchDecoration: const InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                enabledBorder: OutlineInputBorder(
-                  // width: 0.0 produces a thin "hairline" border
-                  borderSide: BorderSide(color: Colors.transparent, width: 0.0),
-                ),
-                filled: true,
-                isDense: true,
-                border: OutlineInputBorder(),
+              dropdownSearchDecoration: InputDecoration(
+                errorStyle: TextStyle(height: 0),
+                hintText: widget.hinttext,
+                hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+                contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                // isDense: true,
               ),
               mode: Mode.MENU,
               items: widget.items,

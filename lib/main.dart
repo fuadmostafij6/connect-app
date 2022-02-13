@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'Provider/Categorybyjob/categoryjob.dart';
 import 'Provider/Form/form.dart';
 import 'package:path_provider/path_provider.dart';
 import 'Provider/Job_Apply/job_apply.dart';
@@ -11,10 +13,13 @@ import 'Provider/Userjob/userjob.dart';
 import 'Provider/home.dart';
 import 'Screen/splash/splash.dart';
 import 'homepage.dart';
+ List<CameraDescription>? cameras;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dir = await getApplicationDocumentsDirectory();
+  cameras = await availableCameras();
   await Hive.initFlutter();
   await Hive.openBox("login");
   Hive.init(dir.path);
@@ -26,6 +31,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => Userjobpage()),
     ChangeNotifierProvider(create: (context) => JobDetailsProvider()),
     ChangeNotifierProvider(create: (context) => JobApplyprovider()),
+    ChangeNotifierProvider(create: (context) => CategoryJobprovider()),
   ], child: const MyApp()));
 }
 

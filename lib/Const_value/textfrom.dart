@@ -62,17 +62,11 @@ class _TextfromPageState extends State<TextfromPage> {
               onTap: widget.onTap,
               initialValue: widget.initialValue,
               decoration: InputDecoration(
-                enabledBorder: const OutlineInputBorder(
-                  // width: 0.0 produces a thin "hairline" border
-                  borderSide:
-                      const BorderSide(color: Colors.transparent, width: 0.0),
-                ),
-                filled: true,
-                isDense: true,
+                errorStyle: TextStyle(height: 0),
                 hintText: widget.hinttext,
                 hintStyle: TextStyle(fontFamily: 'Kalpurush'),
-                border: const OutlineInputBorder(),
-                contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                isDense: true,
               ),
             ),
           )

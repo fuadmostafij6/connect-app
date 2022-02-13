@@ -13,143 +13,158 @@ import 'package:flutter_sslcommerz/model/sslproductinitilizer/General.dart';
 import 'package:flutter_sslcommerz/model/sslproductinitilizer/SSLCProductInitializer.dart';
 import 'package:flutter_sslcommerz/sslcommerz.dart';
 
-  class SslcommerzPage extends StatefulWidget {
-    const SslcommerzPage({ Key? key }) : super(key: key);
-  
-    @override
-    _SslcommerzPageState createState() => _SslcommerzPageState();
-  }
-  
-  class _SslcommerzPageState extends State<SslcommerzPage> {
-     var _key = GlobalKey<FormState>();
+class SslcommerzPage extends StatefulWidget {
+  const SslcommerzPage({Key? key}) : super(key: key);
+
+  @override
+  _SslcommerzPageState createState() => _SslcommerzPageState();
+}
+
+class _SslcommerzPageState extends State<SslcommerzPage> {
+  var _key = GlobalKey<FormState>();
   dynamic formData = {};
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('SSLCommerz'),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Payment Information'),
+        elevation: 0,
+        backgroundColor: Color(0xFFE51D20),
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
         ),
-        body: Form(
-          key: _key,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      initialValue: "demotest",
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        hintText: "Store ID",
-                      ),
-                      validator: (value) {
-                        if (value != null)
-                          return "Please input store id";
-                        else
-                          return null;
-                      },
-                      onSaved: (value) {
-                        formData['store_id'] = value;
-                      },
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => Searchpage(),
+                //     ));
+              },
+              icon: Icon(Icons.search)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+        ],
+      ),
+      body: Form(
+        key: _key,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    initialValue: "demotest",
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      hintText: "Store ID",
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      initialValue: "qwerty",
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        hintText: "Store password",
-                      ),
-                      validator: (value) {
-                        if (value != null)
-                          return "Please input store password";
-                        else
-                          return null;
-                      },
-                      onSaved: (value) {
-                        formData['store_password'] = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        hintText: "Phone number",
-                      ),
-                      onSaved: (value) {
-                        formData['phone'] = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      initialValue: "10",
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        hintText: "Payment amount",
-                      ),
-                      validator: (value) {
-                        if (value != null)
-                          return "Please input amount";
-                        else
-                          return null;
-                      },
-                      onSaved: (value) {
-                        formData['amount'] = double.parse(value!);
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                        hintText: "Enter multi card",
-                      ),
-                      onSaved: (value) {
-                        formData['multicard'] = value;
-                      },
-                    ),
-                  ),
-                  ElevatedButton(
-                    child: Text("Pay now"),
-                    onPressed: () {
-                      if (_key.currentState != null) {
-                        _key.currentState?.save();
-                        //sslCommerzGeneralCall();
-                        sslCommerzCustomizedCall();
-                      }
+                    validator: (value) {
+                      if (value != null)
+                        return "Please input store id";
+                      else
+                        return null;
                     },
-                  )
-                ],
-              ),
+                    onSaved: (value) {
+                      formData['store_id'] = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    initialValue: "qwerty",
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      hintText: "Store password",
+                    ),
+                    validator: (value) {
+                      if (value != null)
+                        return "Please input store password";
+                      else
+                        return null;
+                    },
+                    onSaved: (value) {
+                      formData['store_password'] = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      hintText: "Phone number",
+                    ),
+                    onSaved: (value) {
+                      formData['phone'] = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    initialValue: "10",
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      hintText: "Payment amount",
+                    ),
+                    validator: (value) {
+                      if (value != null)
+                        return "Please input amount";
+                      else
+                        return null;
+                    },
+                    onSaved: (value) {
+                      formData['amount'] = double.parse(value!);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      hintText: "Enter multi card",
+                    ),
+                    onSaved: (value) {
+                      formData['multicard'] = value;
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  child: Text("Pay now"),
+                  onPressed: () {
+                    if (_key.currentState != null) {
+                      _key.currentState?.save();
+                      //sslCommerzGeneralCall();
+                      sslCommerzCustomizedCall();
+                    }
+                  },
+                )
+              ],
             ),
           ),
         ),
-      );
-    }
-  
+      ),
+    );
+  }
 
   Future<void> sslCommerzGeneralCall() async {
     Sslcommerz sslcommerz = Sslcommerz(

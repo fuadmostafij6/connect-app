@@ -44,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        title: Text("কাজ পেতে লগইন করুন",
+            style: TextStyle(fontFamily: 'Kalpurush')),
         elevation: 0,
         flexibleSpace: const ClipRRect(
           borderRadius: BorderRadius.only(
@@ -57,27 +59,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         backgroundColor: const Color(0xFFE51D20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "কানেক্ট",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            ),
+          ],
         ),
-        title: const Text(
-          "কানেক্ট",
-          style: TextStyle(fontFamily: 'Kalpurush'),
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.menu))
-        ],
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Text(
-            "কাজ পেতে লগইন করুন",
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontFamily: 'Kalpurush'),
-          ),
-        ),
+        centerTitle: true,
       ),
       body: Form(
         key: _fromkey,
@@ -262,7 +253,8 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
                 errorStyle: const TextStyle(height: 0),
                 isDense: true,
-                hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+                hintStyle:
+                    TextStyle(fontFamily: 'Kalpurush', color: Colors.grey[600]),
                 contentPadding: EdgeInsets.fromLTRB(20, 10, 10, 5),
                 hintText: hinttext),
           )

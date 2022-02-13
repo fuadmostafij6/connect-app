@@ -72,6 +72,7 @@ class Fromprovider extends ChangeNotifier {
     if (response.statusCode == 200) {
       var jsondata = jsonDecode(responsedata.body);
       if (jsondata['error'] == 0) {
+        print(responsedata.body);
         box.put('email', jsondata['msg']['UserEmail']);
         box.put('userid', jsondata['msg']['mainUserId']);
         box.put('name', jsondata['msg']['name']);

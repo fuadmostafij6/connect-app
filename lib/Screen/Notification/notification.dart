@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Screen/Menu/menu.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -9,33 +10,22 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var box = Hive.box('login');
     return Scaffold(
+      endDrawer: DrawerPage(),
       appBar: AppBar(
+        title: Text('নোটিফিকেশন'),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
           ),
-        ),
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
-          ),
-          child: const Image(
-            image: AssetImage(
-              'images/Top Bar illustration Solid.png',
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-        title: Text(
-          box.get('name'),
-          style: TextStyle(fontSize: 14),
+          fit: BoxFit.cover,
         ),
         centerTitle: true,
         leading: Column(
@@ -44,26 +34,21 @@ class _NotificationPageState extends State<NotificationPage> {
             Text("কানেক্ট"),
           ],
         ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Container(
-            height: 20,
-            child: Text(
-              "নোটিফিকেশন",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
         actions: [
           IconButton(
               onPressed: () {
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(), 
+                //       builder: (context) => Searchpage(),
                 //     ));
               },
               icon: Icon(Icons.search)),
+              IconButton(
+              onPressed: () {
+                _key.currentState!.openEndDrawer();
+              },
+              icon: Icon(Icons.menu)),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),

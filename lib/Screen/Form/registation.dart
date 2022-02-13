@@ -50,21 +50,22 @@ class _RegistationPageState extends State<RegistationPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        flexibleSpace: const ClipRRect(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
-          child: Image(
-            image: AssetImage(
-              'images/Top Bar illustration Solid.png',
-            ),
-            fit: BoxFit.cover,
+        centerTitle: true,
+        flexibleSpace: Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
           ),
+          fit: BoxFit.cover,
         ),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-        ],
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "কানেক্ট",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            ),
+          ],
+        ),
         backgroundColor: const Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -72,15 +73,8 @@ class _RegistationPageState extends State<RegistationPage> {
               bottomRight: Radius.circular(10)),
         ),
         title: const Text(
-          'কানেক্ট',
+          'রেজিস্টেশন',
           style: TextStyle(fontFamily: 'Kalpurush'),
-        ),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: const Text(
-            "যে কোন ধরনের কাজ /প্রজেক্ট এর কানেকশন \n এবং লিংক পেতে বা দিতে সাইন আপ করুন ",
-            style: TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
-          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -357,7 +351,8 @@ class _RegistationPageState extends State<RegistationPage> {
             decoration: InputDecoration(
               errorStyle: TextStyle(height: 0),
               hintText: hintText,
-              hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+              hintStyle:
+                  TextStyle(fontFamily: 'Kalpurush', color: Colors.grey[600]),
               contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               isDense: true,
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/chatlist.dart';
 import 'package:jobs_app/Screen/Chat/chatdetails.dart';
+import 'package:jobs_app/Screen/Menu/menu.dart';
 
 class ChatListpage extends StatefulWidget {
   const ChatListpage({Key? key}) : super(key: key);
@@ -11,32 +12,22 @@ class ChatListpage extends StatefulWidget {
 }
 
 class _ChatListpageState extends State<ChatListpage> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('login');
     return Scaffold(
+      key: _key,
+      drawer: DrawerPage(),
       appBar: AppBar(
+        title: Text('বার্তা সমূহ'),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
           ),
-        ),
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
-          ),
-          child: const Image(
-            image: AssetImage(
-              'images/Top Bar illustration Solid.png',
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-        title: Text(
-          box.get('name'),
-          style: TextStyle(fontSize: 14),
+          fit: BoxFit.cover,
         ),
         centerTitle: true,
         leading: Column(
@@ -44,16 +35,6 @@ class _ChatListpageState extends State<ChatListpage> {
           children: [
             Text("কানেক্ট"),
           ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Container(
-            height: 20,
-            child: Text(
-              "বার্তা সমূহ",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
         ),
         actions: [
           IconButton(
@@ -65,6 +46,11 @@ class _ChatListpageState extends State<ChatListpage> {
                 //     ));
               },
               icon: Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                _key.currentState!.openEndDrawer();
+              },
+              icon: Icon(Icons.menu)),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),

@@ -1,77 +1,81 @@
+// To parse this JSON data, do
+//
+//     final searchJob = searchJobFromJson(jsonString);
+
+import 'dart:convert';
+
+SearchJob searchJobFromJson(String str) => SearchJob.fromJson(json.decode(str));
+
+String searchJobToJson(SearchJob data) => json.encode(data.toJson());
+
 class SearchJob {
-  int? error;
-  String? type;
-  List<Msg>? msg;
+    SearchJob({
+        this.error,
+        this.type,
+        this.msg,
+    });
 
-  SearchJob({this.error, this.type, this.msg});
+    int? error;
+    String? type;
+    List<Msg>? msg;
 
-  SearchJob.fromJson(Map<String, dynamic> json) {
-    error = json['error'];
-    type = json['type'];
-    if (json['msg'] != null) {
-      msg = <Msg>[];
-      json['msg'].forEach((v) {
-        msg!.add(new Msg.fromJson(v));
-      });
-    }
-  }
+    factory SearchJob.fromJson(Map<String, dynamic> json) => SearchJob(
+        error: json["error"],
+        type: json["type"],
+        msg: List<Msg>.from(json["msg"].map((x) => Msg.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error'] = this.error;
-    data['type'] = this.type;
-    if (this.msg != null) {
-      data['msg'] = this.msg!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+    Map<String, dynamic> toJson() => {
+        "error": error,
+        "type": type,
+        "msg": List<dynamic>.from(msg!.map((x) => x.toJson())),
+    };
 }
 
 class Msg {
-  String? jobId;
-  String? jobTitle;
-  String? description;
-  String? contactnumber;
-  String? category;
-  String? createdAt;
-  String? status;
-  String? createdBy;
-  String? doc;
+    Msg({
+        this.jobId,
+        this.jobTitle,
+        this.description,
+        this.contactnumber,
+        this.category,
+        this.createdAt,
+        this.status,
+        this.createdBy,
+        this.doc,
+    });
 
-  Msg(
-      {this.jobId,
-      this.jobTitle,
-      this.description,
-      this.contactnumber,
-      this.category,
-      this.createdAt,
-      this.status,
-      this.createdBy,
-      this.doc});
+    String? jobId;
+    String? jobTitle;
+    String? description;
+    String? contactnumber;
+    String? category;
+    DateTime? createdAt;
+    String? status;
+    String? createdBy;
+    String? doc;
 
-  Msg.fromJson(Map<String, dynamic> json) {
-    jobId = json['job_id'];
-    jobTitle = json['job_title'];
-    description = json['description'];
-    contactnumber = json['contactnumber'];
-    category = json['category'];
-    createdAt = json['created_at'];
-    status = json['status'];
-    createdBy = json['created_by'];
-    doc = json['doc'];
-  }
+    factory Msg.fromJson(Map<String, dynamic> json) => Msg(
+        jobId: json["job_id"],
+        jobTitle: json["job_title"],
+        description: json["description"],
+        contactnumber: json["contactnumber"],
+        category: json["category"],
+        createdAt: DateTime.parse(json["created_at"]),
+        status: json["status"],
+        createdBy: json["created_by"],
+        doc: json["doc"] == null ? null : json["doc"],
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['job_id'] = this.jobId;
-    data['job_title'] = this.jobTitle;
-    data['description'] = this.description;
-    data['contactnumber'] = this.contactnumber;
-    data['category'] = this.category;
-    data['created_at'] = this.createdAt;
-    data['status'] = this.status;
-    data['created_by'] = this.createdBy;
-    data['doc'] = this.doc;
-    return data;
-  }
+    Map<String, dynamic> toJson() => {
+        "job_id": jobId,
+        "job_title": jobTitle,
+        "description": description,
+        "contactnumber": contactnumber,
+        "category": category,
+        "created_at": createdAt!.toIso8601String(),
+        "status": status,
+        "created_by": createdBy,
+        "doc": doc == null ? null : doc,
+    };
 }

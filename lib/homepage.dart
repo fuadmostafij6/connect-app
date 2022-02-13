@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Screen/Deshboard/deshboard2.dart';
+import 'package:jobs_app/Screen/home/homepage4.dart';
 
 import 'Screen/Chat/chatlist.dart';
 import 'Screen/Deshboard/deshboard.dart';
 import 'Screen/Linkscreen/linkscreen.dart';
+import 'Screen/Linkscreen/mylinkscreen.dart';
 import 'Screen/Notification/notification.dart';
 import 'Screen/Profile/profile.dart';
 import 'Screen/home/homepage3.dart';
@@ -38,9 +41,9 @@ class _HomepageState extends State<Homepage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: const [
-          HomePage3(),
-          Linkscreenpage(),
-          Deshboardpage(),
+          Homepage4(),
+          MylinkListPage(),
+          Deshboard2page(),
           ChatListpage(),
           ProfilePage(),
           NotificationPage()

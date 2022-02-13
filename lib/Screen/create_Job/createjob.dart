@@ -1,13 +1,25 @@
+// ignore_for_file: unused_local_variable
+
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sound_lite/flutter_sound.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/Jobdetails/jobdetails.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
+import 'package:jobs_app/Screen/create_Job/audioplay.dart';
+import 'package:jobs_app/Screen/create_Job/soundrecord.dart';
+import 'package:jobs_app/Screen/create_Job/videorecoard2.dart';
+import 'package:jobs_app/Screen/create_Job/videorecord.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_timer/simple_timer.dart';
 
 class CreateJobpage extends StatefulWidget {
   const CreateJobpage({Key? key}) : super(key: key);
@@ -21,32 +33,65 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
   String? jobtite, description, category, userid, contactnumber;
 
+  final recorder = Soundrecord();
+  final player = AudioPlay();
+
+  bool audiorun = false;
+
+  Duration duration = Duration();
+  Timer? timer;
+
+  @override
+  void initState() {
+    recorder.init();
+    player.playaudioinit();
+
+    super.initState();
+  }
+
+  void addtime() {
+    final addsecunt = 1;
+    setState(() {
+      final secount = duration.inSeconds + addsecunt;
+      duration = Duration(seconds: secount);
+    });
+  }
+
+  void starttimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) => addtime());
+  }
+
+  void cancletimer() {
+    timer!.cancel();
+    setState(() {
+      audiorun = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    recorder.dispose();
+    player.audiodispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final jbdetails = Provider.of<JobDetailsProvider>(context);
     var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
+        title: Text('লিংকঅ্যাপ'),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
+
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
           ),
+          fit: BoxFit.cover,
         ),
-        flexibleSpace: ClipRRect(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-          child: const Image(
-            image: AssetImage(
-              'images/Top Bar illustration Solid.png',
-            ),
-            fit: BoxFit.cover,
-          ),
-        ),
-        title: Text(
-          box.get('name'),
-          style: TextStyle(fontSize: 14),
-        ),
+
         centerTitle: true,
         // leading: Column(
         //   mainAxisAlignment: MainAxisAlignment.center,
@@ -54,16 +99,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
         //     Text("কানেক্ট"),
         //   ],
         // ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Container(
-            height: 20,
-            child: Text(
-              "লিংকঅ্যাপ",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
+
         actions: [
           IconButton(
               onPressed: () {
@@ -92,6 +128,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
             Textbox(),
             SizedBox(height: 10),
             textform(),
+            audiobox(),
             SizedBox(height: 10),
             filepicker(),
             SizedBox(height: 10),
@@ -134,7 +171,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
             },
             decoration: InputDecoration(
               isDense: true,
-              border: OutlineInputBorder(),
+              hintText: "শিরোনাম",
               contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             ),
           ),
@@ -158,7 +195,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                 homeprovider.categorylist!.msg!.map((e) => e.catName!).toList(),
             dropdownSearchDecoration: InputDecoration(
                 isDense: true,
-                border: OutlineInputBorder(),
+                hintText: "ক্যাটাগরি",
                 contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
             onChanged: (value) {
               for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
@@ -176,44 +213,31 @@ class _CreateJobpageState extends State<CreateJobpage> {
   }
 
   Widget filepicker() {
+    final jbdetails = Provider.of<JobDetailsProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
             margin: EdgeInsets.only(left: 10, top: 4),
-            child: Text("(০২) ফাইল যুক্ত করুন (ঐচ্ছিক)")),
+            child: Text("(০৫) ভিডিও  যুক্ত করুন (ঐচ্ছিক)")),
         Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(border: Border.all()),
           child: Row(
             children: [
-              InkWell(
-                onTap: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-
-                  if (result != null) {
-                    File file = File(result.files.single.path!);
-                    setState(() {
-                      filename = result.files.single.name;
-                    });
-                  } else {
-                    // User canceled the picker
-                  }
+              MaterialButton(
+                color: Colors.grey[300],
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoRecordCameraPage(),
+                      ));
                 },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(), color: Color(0xFFEFEFEF)),
-                  child: Text("Choose File",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ),
+                child: Text("Video Record"),
               ),
               SizedBox(width: 10),
-              Text(filename ?? "No File Chosen")
+              Expanded(child: Text(jbdetails.path))
             ],
           ),
         ),
@@ -237,7 +261,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
               });
             },
             maxLines: 5,
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            decoration: InputDecoration(),
           ),
         ),
       ],
@@ -250,7 +274,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
       children: [
         Container(
             margin: EdgeInsets.only(left: 10),
-            child: Text("(০৫) কন্টাক নম্বর")),
+            child: Text("(০৬) কন্টাক নম্বর")),
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
@@ -259,15 +283,68 @@ class _CreateJobpageState extends State<CreateJobpage> {
                 contactnumber = value;
               });
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               isDense: true,
               hintText: "০১৯৩২৩৩১৭১৮",
-              border: OutlineInputBorder(),
               contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             ),
           ),
         )
       ],
+    );
+  }
+
+  Widget audiobox() {
+    String twodegit(int n) => n.toString().padLeft(2, '0');
+    final minute = twodegit(duration.inMinutes.remainder(60));
+    final secound = twodegit(duration.inSeconds.remainder(60));
+    final isrecording = recorder.isRecoding;
+    final icon = isrecording
+        ? const Icon(
+            Icons.stop,
+            color: Colors.white,
+          )
+        : Icon(Icons.mic);
+    Color? color = isrecording ? Colors.red : Colors.grey[300];
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("(০৪) অডিও  যুক্ত করুন (ঐচ্ছিক)"),
+          Row(
+            children: [
+              MaterialButton(
+                color: color,
+                onPressed: () async {
+                  await recorder.tooglerecording();
+                  isrecording ? cancletimer() : starttimer();
+                  setState(() {});
+                },
+                child: icon,
+              ),
+              SizedBox(width: 10),
+              Text("$minute:$secound"),
+              SizedBox(width: 10),
+              audiorun == true
+                  ? MaterialButton(
+                      color: Colors.grey[300],
+                      onPressed: () async {
+                        await player.toogleaudioplayer(
+                          whenfinish: () {
+                            setState(() {});
+                          },
+                        );
+
+                        setState(() {});
+                      },
+                      child: Text(player.isaudioplay ? "stop" : "Play"),
+                    )
+                  : Container(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
