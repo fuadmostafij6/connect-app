@@ -21,6 +21,8 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
   Duration duration = Duration();
   Timer? timer;
 
+  bool fontcamera = false;
+
   void addtime() {
     final addsecunt = 1;
     setState(() {
@@ -155,6 +157,34 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
                     ],
                   ),
                 ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: MaterialButton(
+                      onPressed: () {
+                        if (fontcamera == false) {
+                          cameraController = CameraController(
+                              cameras![1], ResolutionPreset.high);
+                          initializedcontroller =
+                              cameraController!.initialize();
+                          setState(() {
+                            fontcamera = true;
+                          });
+                        } else {
+                          cameraController = CameraController(
+                              cameras![0], ResolutionPreset.high);
+                          initializedcontroller =
+                              cameraController!.initialize();
+                          setState(() {
+                            fontcamera = false;
+                          });
+                        }
+                      },
+                      child: Icon(
+                        Icons.camera_front,
+                        size: 50,
+                        color: Colors.white,
+                      )),
+                )
               ],
             ),
           );
