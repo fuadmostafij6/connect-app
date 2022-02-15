@@ -39,6 +39,8 @@ class Msg {
         this.status,
         this.createdBy,
         this.doc,
+        this.canapply,
+        this.createdByName,
     });
 
     String? jobId;
@@ -50,6 +52,8 @@ class Msg {
     String? status;
     String? createdBy;
     String? doc;
+    int? canapply;
+    String? createdByName;
 
     factory Msg.fromJson(Map<String, dynamic> json) => Msg(
         jobId: json["job_id"],
@@ -61,6 +65,8 @@ class Msg {
         status: json["status"],
         createdBy: json["created_by"],
         doc: json["doc"] == null ? null : json["doc"],
+        canapply: json["canapply"],
+        createdByName: json["created_by_name"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -73,5 +79,7 @@ class Msg {
         "status": status,
         "created_by": createdBy,
         "doc": doc == null ? null : doc,
+        "canapply": canapply,
+        "created_by_name": createdByName,
     };
 }

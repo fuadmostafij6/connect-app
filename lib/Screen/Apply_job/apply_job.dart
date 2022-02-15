@@ -27,13 +27,9 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
     var box = Hive.box('login');
     return Scaffold(
       appBar: AppBar(
+        title: Text('প্রস্তাবনা'),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(10),
-          ),
-        ),
         flexibleSpace: const ClipRRect(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
           child: Image(
@@ -43,21 +39,7 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
             fit: BoxFit.cover,
           ),
         ),
-        title: Text(
-          box.get('name'),
-          style: TextStyle(fontSize: 14),
-        ),
         centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Container(
-            height: 20,
-            child: Text(
-              "",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -134,9 +116,10 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
               '2 মাস'
             ],
             dropdownSearchDecoration: InputDecoration(
-                isDense: true,
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+              errorStyle: TextStyle(height: 0),
+              hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+              contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+            ),
             hint: "অনির্ধারিত",
             selectedItem: "অনির্ধারিত",
             onChanged: (value) {
@@ -160,7 +143,7 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
         Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(border: Border.all()),
+          decoration: BoxDecoration(),
           child: Row(
             children: [
               InkWell(
@@ -179,8 +162,7 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(), color: Color(0xFFEFEFEF)),
+                  decoration: BoxDecoration(color: Color(0xFFEFEFEF)),
                   child: Text("Choose File",
                       style: TextStyle(
                         color: Colors.black,
@@ -212,7 +194,11 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
               });
             },
             maxLines: 5,
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            decoration: InputDecoration(
+              errorStyle: TextStyle(height: 0),
+              hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+              contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+            ),
           ),
         ),
       ],

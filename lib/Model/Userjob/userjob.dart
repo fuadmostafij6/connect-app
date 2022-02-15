@@ -39,6 +39,7 @@ class Msg {
         this.status,
         this.createdBy,
         this.doc,
+        this.createdByName,
     });
 
     String? jobId;
@@ -50,6 +51,7 @@ class Msg {
     String? status;
     String? createdBy;
     dynamic doc;
+    String? createdByName;
 
     factory Msg.fromJson(Map<String, dynamic> json) => Msg(
         jobId: json["job_id"],
@@ -61,6 +63,7 @@ class Msg {
         status: json["status"],
         createdBy: json["created_by"],
         doc: json["doc"],
+        createdByName: json["created_by_name"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -73,5 +76,6 @@ class Msg {
         "status": status,
         "created_by": createdBy,
         "doc": doc,
+        "created_by_name": createdByName,
     };
 }

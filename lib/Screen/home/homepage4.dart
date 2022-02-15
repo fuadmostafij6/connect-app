@@ -6,6 +6,7 @@ import 'package:jobs_app/Screen/Categoryjob/categoryjob.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/create_Job/createjob.dart';
+import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
@@ -128,34 +129,34 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: double.infinity,
-      child: Card(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Allcategorypage(),
-                        ));
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(bottom: 1),
-                      child: Text("View All")),
-                )
-              ],
-            ),
-            Container(
-              height: size.height * 0.11,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: homeprovider.categorylist!.msg!.length,
-                itemBuilder: (context, index) {
-                  var data = homeprovider.categorylist!.msg![index];
-                  return InkWell(
+      child: Column(
+        children: [
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     InkWell(
+          //       onTap: () {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => Allcategorypage(),
+          //             ));
+          //       },
+          //       child: Container(
+          //           margin: EdgeInsets.only(bottom: 1),
+          //           child: Text("View All")),
+          //     )
+          //   ],
+          // ),
+          Container(
+            height: size.height * 0.08,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: homeprovider.categorylist!.msg!.length,
+              itemBuilder: (context, index) {
+                var data = homeprovider.categorylist!.msg![index];
+                return Card(
+                  child: InkWell(
                     onTap: () {
                       print(data.catId);
                       Navigator.push(
@@ -169,49 +170,51 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                     },
                     child: Container(
                       width: size.width * 0.3,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          gradient: LinearGradient(
+                              colors: [Colors.red.shade500, Colors.red],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 1),
-                            height: size.height * 0.08,
-                            width: size.width * 0.3,
-                            child: Image.asset(
-                              'images/download.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
                           Text(
                             data.catName!,
                             overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white, fontFamily: 'Kalpurush'),
                           ),
                         ],
                       ),
                     ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }
 
   Widget tabbarbox() {
     return TabBar(
+      labelColor: Colors.red,
+      indicatorColor: Colors.red,
+      unselectedLabelColor: Colors.black,
       controller: tabController,
       tabs: const [
         Tab(
           child: Text(
             "My Feed",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(),
           ),
         ),
         Tab(
           child: Text(
             "Recent Feed",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(),
           ),
         )
       ],
@@ -220,9 +223,7 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
 
   Widget tabbarview() {
     return TabBarView(controller: tabController, children: [
-      Container(
-        child: Text("No Feed"),
-      ),
+      Myfeedpage(),
       Recentfeedpage(),
     ]);
   }

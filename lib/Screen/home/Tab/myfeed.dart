@@ -1,102 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
-import 'package:jobs_app/Model/Userjob/userjob.dart';
-import 'package:jobs_app/Provider/Userjob/userjob.dart';
+import 'package:intl/intl.dart';
+import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
-import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
-import 'package:jobs_app/Screen/Menu/menu.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
-import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
-class MylinkListPage extends StatefulWidget {
-  const MylinkListPage({Key? key}) : super(key: key);
+class Myfeedpage extends StatefulWidget {
+  const Myfeedpage({Key? key}) : super(key: key);
 
   @override
-  _MylinkListPageState createState() => _MylinkListPageState();
+  _MyfeedpageState createState() => _MyfeedpageState();
 }
 
-class _MylinkListPageState extends State<MylinkListPage> {
-  bool loading = false;
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
-
-  @override
-  void initState() {
-    loading = true;
-    Provider.of<Userjobpage>(context, listen: false).getuserjob().then((value) {
-      setState(() {
-        loading = false;
-      });
-    });
-    super.initState();
-  }
-
+class _MyfeedpageState extends State<Myfeedpage> {
   @override
   Widget build(BuildContext context) {
-    final userjob = Provider.of<Userjobpage>(context);
-    return Scaffold(
-      endDrawer: DrawerPage(),
-      backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        title: const Text('আমার লিংক সমূহ'),
-
-        elevation: 0,
-        backgroundColor: Color(0xFFE51D20),
-
-        flexibleSpace: const Image(
-          image: AssetImage(
-            'images/Top Bar illustration Solid.png',
-          ),
-          fit: BoxFit.cover,
-        ),
-        centerTitle: true,
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("কানেক্ট"),
-          ],
-        ),
-        // bottom: PreferredSize(
-        //   preferredSize: Size.fromHeight(30.0),
-        //   child: Container(
-        //     height: 20,
-        //     child: Text(
-        //       "আমার লিংক সমূহ",
-        //       style: TextStyle(color: Colors.white),
-        //     ),
-        //   ),
-        // ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Searchpage2(),
-                    ));
-              },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
-                _key.currentState!.openEndDrawer();
-              },
-              icon: Icon(Icons.menu)),
-          // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
-        ],
+    final homeprovider = Provider.of<HomeProvider>(context);
+    return Container(
+      color: Colors.grey[300],
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
+        itemCount: homeprovider.joblist!.msg!.length,
+        itemBuilder: (context, index) {
+          var data = homeprovider.joblist!.msg![index];
+          return JobListcard(
+            data: data,
+          );
+        },
       ),
-      body: userjob.userjob == null || userjob.userjob!.msg!.isEmpty
-          ? Center(
-              child: Text("No Job"),
-            )
-          : ListView.builder(
-              itemCount: userjob.userjob!.msg!.length,
-              itemBuilder: (context, index) {
-                var data = userjob.userjob!.msg![index];
-                return JobListcard(data: data);
-              },
-            ),
     );
   }
 }
@@ -256,6 +188,135 @@ class _JobListcardState extends State<JobListcard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ImagedialogBox extends StatefulWidget {
+  const ImagedialogBox({Key? key}) : super(key: key);
+
+  @override
+  _ImagedialogBoxState createState() => _ImagedialogBoxState();
+}
+
+class _ImagedialogBoxState extends State<ImagedialogBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: Container(
+        height: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 300,
+              width: double.infinity,
+              color: Colors.white,
+              child: PageView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Container(
+                    child: Image.asset(
+                      'images/post.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DescriptionTextWidget extends StatefulWidget {
+  final String? text;
+
+  DescriptionTextWidget({@required this.text});
+
+  @override
+  _DescriptionTextWidgetState createState() => _DescriptionTextWidgetState();
+}
+
+class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
+  String? firstHalf;
+  String? secondHalf;
+
+  bool flag = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.text!.length > 80) {
+      firstHalf = widget.text!.substring(0, 80);
+      secondHalf = widget.text!.substring(80, widget.text!.length);
+    } else {
+      firstHalf = widget.text;
+      secondHalf = "";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: secondHalf!.isEmpty
+          ? Text(
+              firstHalf!,
+              maxLines: 2,
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                flag
+                    ? Row(
+                        children: [
+                          Text(
+                            firstHalf!,
+                          ),
+                          Spacer(),
+                          InkWell(
+                              onTap: () {
+                                setState(() {
+                                  flag = !flag;
+                                });
+                              },
+                              child: Text(
+                                "    ...show more",
+                                style: TextStyle(
+                                    color: Color(0xFFE51D20).withOpacity(0.8)),
+                              ))
+                        ],
+                      )
+                    : Text(
+                        flag ? (firstHalf!) : (firstHalf! + secondHalf!),
+                      ),
+                InkWell(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          flag ? "" : "show less",
+                          style: TextStyle(
+                              color: Color(0xFFE51D20).withOpacity(0.8)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      flag = !flag;
+                    });
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
