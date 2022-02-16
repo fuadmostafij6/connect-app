@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Model/Following/following.dart';
+import 'package:jobs_app/Model/Postlinkuser/postlinkuser.dart';
 
 import '../../Model/Profile/profile.dart';
 import 'package:http/http.dart' as http;
@@ -75,6 +78,61 @@ class ProfileProvider extends ChangeNotifier {
     } else {
       print(responsedata.body);
       notifyListeners();
+    }
+  }
+
+  Postlinkuser? postlinkuser;
+
+  Future getpostlinkuser({String? userid, String? mainuserid}) async {
+    var headers = {
+      'Cookie': 'ci_session=078502072d22dd8f57fd941184a9d4dffcc1898d'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://launch1.goshrt.com/api/user/profile/$userid/1/$mainuserid'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      postlinkuser = postlinkuserFromJson(responsedata.body);
+      notifyListeners();
+    } else {
+      print(responsedata.body);
+      notifyListeners();
+    }
+  }
+
+  Following? following;
+
+  Future getfollowing({String? type}) async {
+    var box = Hive.box('login');
+    var headers = {
+      'Cookie': 'ci_session=b9761a6ab237259e012629d2dc8c591188119af6'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://launch1.goshrt.com/api/follow/listing?user_id=${box.get('userid')}&limit=10&offset=0&type=$type'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      if (jsonDecode(responsedata.body)['error'] == 0) {
+        following = followingFromJson(responsedata.body);
+        notifyListeners();
+      } else {
+        following = null;
+        notifyListeners();
+      }
+    } else {
+      print(responsedata.body);
     }
   }
 }

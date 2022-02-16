@@ -59,6 +59,7 @@ class _RegistationPageState extends State<RegistationPage> {
         ),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             Text(
               "কানেক্ট",
@@ -66,6 +67,7 @@ class _RegistationPageState extends State<RegistationPage> {
             ),
           ],
         ),
+        leadingWidth: 100,
         backgroundColor: const Color(0xFFE51D20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

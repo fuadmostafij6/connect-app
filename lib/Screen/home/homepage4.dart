@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Allcategory/allcategory.dart';
@@ -201,26 +202,22 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                               colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight)),
-                      child: Stack(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.category,
-                              size: 25,
-                              color: Colors.white,
-                            ),
+                          SizedBox(height: 4),
+                          SvgPicture.asset(
+                            'images/svg/compact-disc-solid.svg',
+                            height: 45,
+                            color: Colors.white,
                           ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              data.catName!,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: Colors.white, fontFamily: 'Kalpurush'),
-                            ),
+                          Text(
+                            data.catName!,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white, fontFamily: 'Kalpurush'),
                           ),
-                          SizedBox(height: 5),
+                          // SizedBox(height: 5),
                         ],
                       ),
                     ),

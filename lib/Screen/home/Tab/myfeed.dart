@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/Profile/postlinkuser.dart';
 import 'package:provider/provider.dart';
 
 class Myfeedpage extends StatefulWidget {
@@ -109,11 +110,22 @@ class _JobListcardState extends State<JobListcard> {
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  widget.data.createdByName!,
-                  style: TextStyle(
-                      fontFamily: 'Kalpurush',
-                      color: Colors.red.withOpacity(0.7)),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostLinkuserprofile(
+                            userid: widget.data.createdBy!,
+                          ),
+                        ));
+                  },
+                  child: Text(
+                    widget.data.createdByName!,
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush',
+                        color: Colors.red.withOpacity(0.7)),
+                  ),
                 ),
               ],
             ),

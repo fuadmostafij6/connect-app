@@ -61,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color(0xFFE51D20),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             Text(
               "কানেক্ট",
@@ -68,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
+        leadingWidth: 100,
         centerTitle: true,
       ),
       body: Form(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:jobs_app/Screen/Following/follower.dart';
+import 'package:jobs_app/Screen/Following/following.dart';
 import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
 import 'package:jobs_app/Screen/Profile/profileedit.dart';
@@ -192,13 +194,17 @@ class _DrawerPageState extends State<DrawerPage> {
                 Divider(),
                 button(
                   icon: Icons.arrow_forward_ios,
-                  onTap: () {},
+                  onTap: () {
+                    redirectpage(FollowerPage());
+                  },
                   name: 'Follower',
                 ),
                 Divider(),
                 button(
                   icon: Icons.arrow_forward_ios,
-                  onTap: () {},
+                  onTap: () {
+                    redirectpage(FollowingPage());
+                  },
                   name: 'Following',
                 ),
                 Divider(),
