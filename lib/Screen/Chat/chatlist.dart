@@ -20,7 +20,7 @@ class _ChatListpageState extends State<ChatListpage> {
     var box = Hive.box('login');
     return Scaffold(
       key: _key,
-      drawer: DrawerPage(),
+      endDrawer: DrawerPage(),
       appBar: AppBar(
         title: Text('বার্তা সমূহ',
             style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
@@ -35,6 +35,7 @@ class _ChatListpageState extends State<ChatListpage> {
         centerTitle: true,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: EdgeInsets.only(left: 10),
@@ -45,6 +46,7 @@ class _ChatListpageState extends State<ChatListpage> {
             ),
           ],
         ),
+        leadingWidth: 70,
         actions: [
           InkWell(
               onTap: () {

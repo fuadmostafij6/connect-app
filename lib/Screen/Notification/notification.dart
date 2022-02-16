@@ -18,6 +18,7 @@ class _NotificationPageState extends State<NotificationPage> {
     Size size = MediaQuery.of(context).size;
     var box = Hive.box('login');
     return Scaffold(
+      key: _key,
       endDrawer: DrawerPage(),
       appBar: AppBar(
         title: Text('নোটিফিকেশন',
@@ -33,6 +34,7 @@ class _NotificationPageState extends State<NotificationPage> {
         centerTitle: true,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: EdgeInsets.only(left: 10),
@@ -43,6 +45,7 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
           ],
         ),
+        leadingWidth: 100,
         actions: [
           InkWell(
               onTap: () {

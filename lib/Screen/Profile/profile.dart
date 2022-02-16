@@ -72,6 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         leading: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
@@ -83,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+        leadingWidth: 70,
         actions: [
           InkWell(
               onTap: () {

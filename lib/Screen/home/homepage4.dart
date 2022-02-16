@@ -6,7 +6,7 @@ import 'package:jobs_app/Screen/Categoryjob/categoryjob.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
+import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
 import 'package:jobs_app/Screen/create_Job/createjob.dart';
 import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
@@ -83,20 +83,32 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
             child: Text(
               "হোমপেজ",
               style: TextStyle(
-                  color: Colors.white, fontFamily: 'Kalpurush', fontSize: 16),
+                  color: Colors.white, fontFamily: 'Kalpurush', fontSize: 14),
             )),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 "কানেক্ট",
+                maxLines: 1,
                 style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
               ),
             ),
           ],
         ),
+        leadingWidth: 100,
+
+        // leading: MaterialButton(
+        //   minWidth: 20,
+        //   onPressed: () {},
+        //   child: Text(
+        //     "কানেক্ট",
+        //     style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+        //   ),
+        // ),
         actions: [
           InkWell(
               onTap: () {
@@ -189,14 +201,24 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                               colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      child: Stack(
                         children: [
-                          Text(
-                            data.catName!,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white, fontFamily: 'Kalpurush'),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.category,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              data.catName!,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white, fontFamily: 'Kalpurush'),
+                            ),
                           ),
                           SizedBox(height: 5),
                         ],

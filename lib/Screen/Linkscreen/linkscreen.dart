@@ -174,7 +174,7 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
 }
 
 class UserJob extends StatefulWidget {
-  final Msg data;
+  final Msgs data;
   const UserJob({Key? key, required this.data}) : super(key: key);
 
   @override

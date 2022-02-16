@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/Categorybyjob/categoryjob.dart';
 import 'package:jobs_app/Provider/home.dart';
+import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
 import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
+import 'package:jobs_app/Screen/Menu/menu.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +23,7 @@ class CategoryjobPage extends StatefulWidget {
 
 class _CategoryjobPageState extends State<CategoryjobPage> {
   bool loading = false;
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   void initState() {
@@ -37,8 +42,13 @@ class _CategoryjobPageState extends State<CategoryjobPage> {
   Widget build(BuildContext context) {
     final categoryjob = Provider.of<CategoryJobprovider>(context);
     return Scaffold(
+      key: _key,
+      endDrawer: DrawerPage(),
       appBar: AppBar(
-        title: Text(widget.categoryname),
+        title: Text(
+          widget.categoryname,
+          style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
+        ),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
         flexibleSpace: const Image(
@@ -48,16 +58,33 @@ class _CategoryjobPageState extends State<CategoryjobPage> {
           fit: BoxFit.cover,
         ),
         centerTitle: true,
+        leading: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
         actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(),
-                //     ));
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Mainsearchpage(),
+                    ));
               },
-              icon: Icon(Icons.search)),
+              child: Icon(Icons.search)),
+
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
+                _key.currentState!.openEndDrawer();
+              },
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -70,11 +97,15 @@ class _CategoryjobPageState extends State<CategoryjobPage> {
                   child: Text('No Job Found'),
                 )
               : Container(
+                  color: Colors.grey[300],
                   child: ListView.builder(
                     itemCount: categoryjob.joblist!.msg!.length,
                     itemBuilder: (context, index) {
                       var data = categoryjob.joblist!.msg![index];
-                      return JobListcard(data: data);
+                      return JobListcard(
+                        data: data,
+                        index: index,
+                      );
                     },
                   ),
                 ),
@@ -84,7 +115,9 @@ class _CategoryjobPageState extends State<CategoryjobPage> {
 
 class JobListcard extends StatefulWidget {
   final Msg data;
-  const JobListcard({Key? key, required this.data}) : super(key: key);
+  final int index;
+  const JobListcard({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
   _JobListcardState createState() => _JobListcardState();
@@ -127,53 +160,75 @@ class _JobListcardState extends State<JobListcard> {
 
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: EdgeInsets.only(left: 15, top: 5),
             child: Text(
               widget.data.jobTitle!,
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Kalpurush'),
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               children: [
-                Text("কানেক্ট আইডি: ${widget.data.jobId}"),
+                Text(
+                  "কানেক্ট আইডি: ${widget.data.jobId}",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                Text("user: Tanvir Mahamud Shakil"),
+                Text(
+                  widget.data.createdByName!,
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush',
+                      color: Colors.red.withOpacity(0.7)),
+                ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               children: [
-                Text("Post: ${difference} day ago"),
+                Text(
+                  "Post: ${difference} day ago",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
                 SizedBox(
                   width: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5)),
-                  child: Text(categoryname),
+                  child: Text(
+                    widget.data.category!,
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                  ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Text(
               widget.data.description!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
             ),
           ),
           Container(
@@ -189,10 +244,6 @@ class _JobListcardState extends State<JobListcard> {
                 alignment: Alignment.center,
                 children: [
                   Image.asset('images/post.jpg'),
-                  Text(
-                    '21+',
-                    style: TextStyle(color: Colors.white, fontSize: 35),
-                  ),
                 ],
               ),
             ),
@@ -200,75 +251,98 @@ class _JobListcardState extends State<JobListcard> {
           Divider(
             height: 0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  padding: EdgeInsets.all(7),
-                  child: Row(
-                    children: const [
-                      Icon(
-                        Icons.edit,
-                        size: 17,
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ApplyjobPage(
+                                jobid: widget.data.jobId!,
+                              ),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/check-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "প্রস্তাবনা দিন",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(width: 5),
-                      Text("এডিট করুন"),
-                    ],
-                  )),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ApplicationListPage(),
-                      ));
-                },
-                child: Container(
-                    padding: EdgeInsets.all(7),
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.edit,
-                          size: 17,
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        share();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'images/svg/share-solid.svg',
+                                  height: 15,
+                                  color: Colors.grey[700],
+                                ),
+                                SizedBox(width: 5),
+                                Text("শেয়ার",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700])),
+                              ],
+                            )),
+                          ],
                         ),
-                        SizedBox(width: 5),
-                        Text("প্রার্থী"),
-                      ],
-                    )),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          size: 17,
-                        ),
-                        SizedBox(width: 5),
-                        Text("মুছে ফেলুন"),
-                      ],
-                    )),
-              ),
-              InkWell(
-                onTap: () {
-                  share();
-                },
-                child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.share,
-                          size: 17,
-                        ),
-                        SizedBox(width: 5),
-                        Text("শেয়ার"),
-                      ],
-                    )),
-              )
-            ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

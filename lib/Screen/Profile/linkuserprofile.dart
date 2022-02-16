@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive/hive.dart';
 import 'package:jobs_app/Model/Userjob/userjob.dart';
+
 import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
-import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
+
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
-import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
+import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:provider/provider.dart';
+import 'package:jobs_app/Model/SearchUser/searchuser.dart';
 
-class MylinkListPage extends StatefulWidget {
-  const MylinkListPage({Key? key}) : super(key: key);
+class Linkuserprofile extends StatefulWidget {
+  final Msg data;
+  const Linkuserprofile({Key? key, required this.data}) : super(key: key);
 
   @override
-  _MylinkListPageState createState() => _MylinkListPageState();
+  _LinkuserprofileState createState() => _LinkuserprofileState();
 }
 
-class _MylinkListPageState extends State<MylinkListPage> {
-  bool loading = false;
+class _LinkuserprofileState extends State<Linkuserprofile> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  bool loading = false;
 
   @override
   void initState() {
-    var box = Hive.box('login');
     loading = true;
     Provider.of<Userjobpage>(context, listen: false)
-        .getuserjob(userid: box.get('userid'))
+        .getuserjob(userid: widget.data.userId)
         .then((value) {
       setState(() {
         loading = false;
@@ -45,43 +44,23 @@ class _MylinkListPageState extends State<MylinkListPage> {
     return Scaffold(
       key: _key,
       endDrawer: DrawerPage(),
-      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: const Text('আমার লিংক সমূহ',
+        title: Text('Profile',
             style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
-
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
-
-        flexibleSpace: const Image(
+        flexibleSpace: Image(
           image: AssetImage(
             'images/Top Bar illustration Solid.png',
           ),
           fit: BoxFit.cover,
         ),
         centerTitle: true,
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Text("কানেক্ট",
-                  style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22)),
-            ),
-          ],
-        ),
-        leadingWidth: 70,
-        // bottom: PreferredSize(
-        //   preferredSize: Size.fromHeight(30.0),
-        //   child: Container(
-        //     height: 20,
-        //     child: Text(
-        //       "আমার লিংক সমূহ",
-        //       style: TextStyle(color: Colors.white),
-        //     ),
-        //   ),
-        // ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
         actions: [
           InkWell(
               onTap: () {
@@ -92,15 +71,7 @@ class _MylinkListPageState extends State<MylinkListPage> {
                     ));
               },
               child: Icon(Icons.search)),
-          // IconButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => const Searchpage(),
-          //           ));
-          //     },
-          //     icon: Icon(Icons.search)),
+
           SizedBox(width: 5),
           InkWell(
               onTap: () {
@@ -111,19 +82,143 @@ class _MylinkListPageState extends State<MylinkListPage> {
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
-      body: userjob.userjob == null || userjob.userjob!.msg!.isEmpty
+      body: loading
           ? Center(
-              child: Text("No Job"),
+              child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: userjob.userjob!.msg!.length,
-              itemBuilder: (context, index) {
-                var data = userjob.userjob!.msg![index];
-                return JobListcard(
-                  data: data,
-                  index: index,
-                );
-              },
+          : SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                widget.data.pic != null
+                                    ? CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                            "https://launch1.goshrt.com/uploads/${widget.data.pic}"),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: AssetImage(
+                                            'images/Chat_list/3.jpg'),
+                                      ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.data.fullName!,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: 'kalpurush',
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    if (widget.data.userName != null)
+                                      Text(
+                                        widget.data.userName,
+                                        style:
+                                            TextStyle(fontFamily: 'kalpurush'),
+                                      ),
+                                    Text(
+                                      widget.data.profileTagline!,
+                                      style: TextStyle(fontFamily: 'kalpurush'),
+                                    ),
+                                    Text(
+                                      "সিলিভার মেম্বার",
+                                      style: TextStyle(
+                                          fontFamily: 'kalpurush',
+                                          color: Colors.red),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "অনুসরুন করুন",
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontFamily: 'kalpurush'),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Divider(),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "যোগাযোগঃ ",
+                              style: TextStyle(
+                                  fontFamily: 'kalpurush', fontSize: 17),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Icon(Icons.email, size: 17),
+                                SizedBox(width: 5),
+                                Text(
+                                  widget.data.email ?? '',
+                                  style: TextStyle(fontFamily: 'kalpurush'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Icon(Icons.phone, size: 17),
+                                SizedBox(width: 5),
+                                Text(
+                                  widget.data.phone ?? '',
+                                  style: TextStyle(fontFamily: 'kalpurush'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                          "${widget.data.fullName} এর প্রস্তাবিত লিংক সমুহ: ",
+                          style:
+                              TextStyle(fontFamily: 'kalpurush', fontSize: 18)),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: userjob.userjob!.msg!.length,
+                      itemBuilder: (context, index) {
+                        var data = userjob.userjob!.msg![index];
+                        return JobListcard(
+                          data: data,
+                          index: index,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
     );
   }
@@ -293,119 +388,13 @@ class _JobListcardState extends State<JobListcard> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                    'images/svg/pen-solid.svg',
+                                    'images/svg/check-solid.svg',
                                     height: 15,
                                     color: Colors.grey[700],
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    "এডিট করুন",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.grey[300],
-                  width: 1,
-                  child: VerticalDivider(
-                    color: Colors.black,
-                    thickness: 3,
-                    indent: 20,
-                    endIndent: 0,
-                    width: 1,
-                  ),
-                ),
-                Flexible(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
-                              ),
-                            ));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(9),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'images/svg/user-solid.svg',
-                                    height: 15,
-                                    color: Colors.grey[700],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "প্রার্থী",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.grey[300],
-                  width: 1,
-                  child: VerticalDivider(
-                    color: Colors.black,
-                    thickness: 3,
-                    indent: 20,
-                    endIndent: 0,
-                    width: 1,
-                  ),
-                ),
-                Flexible(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
-                              ),
-                            ));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(9),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'images/svg/xmark-solid.svg',
-                                    height: 15,
-                                    color: Colors.grey[700],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "রিমোভ করুন",
+                                    "প্রস্তাবনা দিন",
                                     style: TextStyle(
                                         fontFamily: 'Kalpurush',
                                         color: Colors.grey[700]),
@@ -462,7 +451,7 @@ class _JobListcardState extends State<JobListcard> {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
           )

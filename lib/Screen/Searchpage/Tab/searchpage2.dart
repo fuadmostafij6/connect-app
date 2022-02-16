@@ -71,9 +71,14 @@ class _Searchpage2State extends State<Searchpage2> {
       child: TextFormField(
         onChanged: (value) {
           if (value.isNotEmpty) {
-            search
-                .getsearchjob(keyword: value, context: context)
-                .then((value) {});
+            search.getsearchjob(keyword: value, context: context).then((value) {
+              search
+                  .getsearchuser(context: context, keyword: value, type: 2)
+                  .then((value) {
+                search.getsearchcategory(
+                    context: context, keyword: value, type: 3);
+              });
+            });
           }
         },
         decoration: InputDecoration(

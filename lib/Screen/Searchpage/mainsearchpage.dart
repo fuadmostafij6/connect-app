@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jobs_app/Provider/Search/search.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
+import 'package:jobs_app/Screen/Searchpage/Tab/categorysearch.dart';
+import 'package:jobs_app/Screen/Searchpage/Tab/peoplesearch.dart';
+import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +71,14 @@ class _MainsearchpageState extends State<Mainsearchpage>
           if (value.isNotEmpty) {
             search
                 .getsearchjob(keyword: value, context: context)
-                .then((value) {});
+                .then((values) {
+              search
+                  .getsearchuser(context: context, keyword: value, type: 2)
+                  .then((valuee) {
+                search.getsearchcategory(
+                    context: context, keyword: value, type: 3);
+              });
+            });
           }
         },
         decoration: InputDecoration(
@@ -112,16 +121,8 @@ class _MainsearchpageState extends State<Mainsearchpage>
   Widget tabbarview() {
     return TabBarView(controller: tabController, children: [
       Searchpage2(),
-      Container(
-        height: 300,
-        alignment: Alignment.center,
-        child: Text("No people Found"),
-      ),
-      Container(
-        height: 300,
-        alignment: Alignment.center,
-        child: Text("No category Found"),
-      ),
+      PeopleSearchPage(),
+      Categorysearchpage(),
     ]);
   }
 }

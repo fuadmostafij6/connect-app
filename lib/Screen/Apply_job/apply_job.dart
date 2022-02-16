@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/Job_Apply/job_apply.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
+import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
 import 'package:provider/provider.dart';
 
 class ApplyjobPage extends StatefulWidget {
@@ -29,8 +29,8 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
     final jobapply = Provider.of<JobApplyprovider>(context);
     var box = Hive.box('login');
     return Scaffold(
-      key: _key,
-      endDrawer: DrawerPage(),
+      // key: _key,
+      // endDrawer: DrawerPage(),
       appBar: AppBar(
         title: Text('প্রস্তাবনা',
             style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
@@ -52,22 +52,22 @@ class _ApplyjobPageState extends State<ApplyjobPage> {
             },
             icon: Icon(Icons.arrow_back)),
         actions: [
-          InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Searchpage2(),
-                    ));
-              },
-              child: Icon(Icons.search)),
-          SizedBox(width: 5),
-          InkWell(
-              onTap: () {
-                _key.currentState!.openEndDrawer();
-              },
-              child: Icon(Icons.menu)),
-          SizedBox(width: 10),
+          // InkWell(
+          //     onTap: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const Searchpage2(),
+          //           ));
+          //     },
+          //     child: Icon(Icons.search)),
+          // SizedBox(width: 5),
+          // InkWell(
+          //     onTap: () {
+          //       _key.currentState!.openEndDrawer();
+          //     },
+          //     child: Icon(Icons.menu)),
+          // SizedBox(width: 10),
         ],
       ),
       body: Card(

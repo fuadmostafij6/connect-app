@@ -15,11 +15,11 @@ class Userjob {
     });
 
     int? error;
-    List<Msg>? msg;
+    List<Msgs>? msg;
 
     factory Userjob.fromJson(Map<String, dynamic> json) => Userjob(
         error: json["error"],
-        msg: List<Msg>.from(json["msg"].map((x) => Msg.fromJson(x))),
+        msg: List<Msgs>.from(json["msg"].map((x) => Msgs.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -28,8 +28,8 @@ class Userjob {
     };
 }
 
-class Msg {
-    Msg({
+class Msgs {
+    Msgs({
         this.jobId,
         this.jobTitle,
         this.description,
@@ -53,7 +53,7 @@ class Msg {
     dynamic doc;
     String? createdByName;
 
-    factory Msg.fromJson(Map<String, dynamic> json) => Msg(
+    factory Msgs.fromJson(Map<String, dynamic> json) => Msgs(
         jobId: json["job_id"],
         jobTitle: json["job_title"],
         description: json["description"],

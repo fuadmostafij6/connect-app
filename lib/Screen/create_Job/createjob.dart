@@ -102,15 +102,15 @@ class _CreateJobpageState extends State<CreateJobpage> {
         // ),
 
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Mainsearchpage(),
-                    ));
-              },
-              icon: Icon(Icons.search)),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => Mainsearchpage(),
+          //           ));
+          //     },
+          //     icon: Icon(Icons.search)),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),

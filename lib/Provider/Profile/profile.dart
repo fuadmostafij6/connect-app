@@ -32,4 +32,49 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future followaction({String? action, userid, userprofileid}) async {
+    var headers = {
+      'Cookie': 'ci_session=9d28b8137e3efdce4d19a5c2d3140dcbd0d306c7'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://launch1.goshrt.com/api/follow/action?action=$action&user_id=$userid&user_profile_id=$userprofileid'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      print(responsedata.body);
+    } else {
+      print(responsedata.body);
+    }
+  }
+
+  Future followstatuscheck({String? userid, userprofileid}) async {
+    var headers = {
+      'Cookie': 'ci_session=9d28b8137e3efdce4d19a5c2d3140dcbd0d306c7'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://launch1.goshrt.com/api/follow/followstatus?user_id=2&user_profile_id=5'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(responsedata.body);
+      notifyListeners();
+      return data;
+    } else {
+      print(responsedata.body);
+      notifyListeners();
+    }
+  }
 }

@@ -173,16 +173,13 @@ class _DrawerPageState extends State<DrawerPage> {
                 //   },
                 //   name: 'Add Books',
                 // ),
-                Divider(height: 0),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 2),
-                  child: button(
-                    name2: "বাংলা",
-                    onTap: () {
-                      redirectpage(Membershipiteam2page());
-                    },
-                    name: 'Language',
-                  ),
+                SizedBox(height: 5),
+                button(
+                  name2: "বাংলা",
+                  onTap: () {
+                    redirectpage(Membershipiteam2page());
+                  },
+                  name: 'Language',
                 ),
                 Divider(),
                 button(

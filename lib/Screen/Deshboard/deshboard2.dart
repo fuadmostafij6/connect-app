@@ -31,6 +31,7 @@ class _Deshboard2pageState extends State<Deshboard2page> {
         backgroundColor: const Color(0xFFE51D20),
         centerTitle: true,
         leading: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
@@ -42,6 +43,7 @@ class _Deshboard2pageState extends State<Deshboard2page> {
             ),
           ],
         ),
+        leadingWidth: 70,
         actions: [
           InkWell(
               onTap: () {
