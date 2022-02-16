@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/home/postdetails.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,7 @@ class _HomePage3State extends State<HomePage3> with TickerProviderStateMixin {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Searchpage(),
+                      builder: (context) => const Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

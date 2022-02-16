@@ -3,6 +3,7 @@ import 'package:jobs_app/Screen/Membership/Tab/fivehuntk.dart';
 import 'package:jobs_app/Screen/Membership/Tab/hundredtk.dart';
 import 'package:jobs_app/Screen/Membership/Tab/threehuntk.dart';
 import 'package:jobs_app/Screen/Membership/Tab/zerotk.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class Membershipiteam2page extends StatefulWidget {
@@ -61,7 +62,7 @@ class _Membershipiteam2pageState extends State<Membershipiteam2page>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

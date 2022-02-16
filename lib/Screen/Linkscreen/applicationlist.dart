@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class ApplicationListPage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _ApplicationListPageState extends State<ApplicationListPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 
 import '../../Const_value/textfielddropdown.dart';
 import '../../Const_value/textfrom.dart';
@@ -37,7 +38,7 @@ class _MemeberShipBuyPageState extends State<MemeberShipBuyPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

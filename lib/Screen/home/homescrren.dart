@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +94,7 @@ class _HomeScreenpageState extends State<HomeScreenpage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Searchpage(),
+                      builder: (context) => const Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

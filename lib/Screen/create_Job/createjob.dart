@@ -13,6 +13,7 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/Jobdetails/jobdetails.dart';
 import 'package:jobs_app/Provider/home.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/create_Job/audioplay.dart';
 import 'package:jobs_app/Screen/create_Job/soundrecord.dart';
@@ -106,7 +107,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

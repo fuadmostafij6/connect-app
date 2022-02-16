@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
@@ -25,6 +26,7 @@ class _MyfeedpageState extends State<Myfeedpage> {
         itemBuilder: (context, index) {
           var data = homeprovider.joblist!.msg![index];
           return JobListcard(
+            index: index,
             data: data,
           );
         },
@@ -35,25 +37,27 @@ class _MyfeedpageState extends State<Myfeedpage> {
 
 class JobListcard extends StatefulWidget {
   final Msg data;
-  const JobListcard({Key? key, required this.data}) : super(key: key);
+  final int index;
+  const JobListcard({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
   _JobListcardState createState() => _JobListcardState();
 }
 
 class _JobListcardState extends State<JobListcard> {
-  // String categoryname = '';
+  String categoryname = '';
 
-  // void categorynamefind() {
-  //   final homeprovider = Provider.of<HomeProvider>(context, listen: false);
-  //   for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-  //     if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
-  //       setState(() {
-  //         categoryname = homeprovider.categorylist!.msg![i].catName!;
-  //       });
-  //     }
-  //   }
-  // }
+  void categorynamefind() {
+    final homeprovider = Provider.of<HomeProvider>(context, listen: false);
+    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+        setState(() {
+          categoryname = homeprovider.categorylist!.msg![i].catName!;
+        });
+      }
+    }
+  }
 
   Future<void> share() async {
     await FlutterShare.share(
@@ -65,7 +69,7 @@ class _JobListcardState extends State<JobListcard> {
 
   @override
   void initState() {
-    // categorynamefind();
+    categorynamefind();
     super.initState();
   }
 
@@ -77,72 +81,105 @@ class _JobListcardState extends State<JobListcard> {
     final difference = date2.difference(birthday).inDays;
 
     return Container(
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage('images/mainicon.png'),
+      color: Colors.white,
+      margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            child: Text(
+              widget.data.jobTitle!,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Kalpurush'),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "কানেক্ট আইডি: ${widget.data.jobId}",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  widget.data.createdByName!,
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush',
+                      color: Colors.red.withOpacity(0.7)),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "Post: ${difference} day ago",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    widget.data.category!,
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush', color: Colors.grey[700]),
                   ),
-                  SizedBox(width: 10),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.data.jobTitle!,
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "কানেক্ট আইডি: ${widget.data.jobId}",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontFamily: 'Kalpurush'),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              widget.data.createdByName!,
-                              style: TextStyle(color: Colors.grey[700]),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Post: ${difference} day ago",
-                          style: TextStyle(
-                              color: Colors.grey[700], fontFamily: 'Kalpurush'),
-                        ),
-                      ],
-                    ),
-                  )
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              widget.data.description!,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ImagedialogBox(),
+                );
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset('images/post.jpg'),
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Text(
-                widget.data.description!,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontFamily: 'Kalpurush'),
-              ),
-            ),
-            Divider(height: 0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                    padding: EdgeInsets.all(10),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -153,40 +190,83 @@ class _JobListcardState extends State<JobListcard> {
                               ),
                             ));
                       },
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.check,
-                            size: 17,
-                          ),
-                          SizedBox(width: 5),
-                          Text("প্রস্তাবনা দিন",
-                              style: TextStyle(fontFamily: 'Kalpurush')),
-                        ],
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/check-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "প্রস্তাবনা দিন",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
-                InkWell(
-                  onTap: () {
-                    share();
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.share,
-                            size: 17,
-                          ),
-                          SizedBox(width: 5),
-                          Text("শেয়ার",
-                              style: TextStyle(fontFamily: 'Kalpurush')),
-                        ],
-                      )),
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        share();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'images/svg/share-solid.svg',
+                                  height: 15,
+                                  color: Colors.grey[700],
+                                ),
+                                SizedBox(width: 5),
+                                Text("শেয়ার",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700])),
+                              ],
+                            )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 )
               ],
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

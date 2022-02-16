@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jobs_app/Model/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
 import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
@@ -40,7 +42,8 @@ class _MylinkListPageState extends State<MylinkListPage> {
       endDrawer: DrawerPage(),
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: const Text('আমার লিংক সমূহ'),
+        title: const Text('আমার লিংক সমূহ',
+            style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
 
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
@@ -55,7 +58,11 @@ class _MylinkListPageState extends State<MylinkListPage> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("কানেক্ট"),
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text("কানেক্ট",
+                  style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22)),
+            ),
           ],
         ),
         // bottom: PreferredSize(
@@ -69,20 +76,31 @@ class _MylinkListPageState extends State<MylinkListPage> {
         //   ),
         // ),
         actions: [
-          IconButton(
-              onPressed: () {
+          InkWell(
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage2(),
+                      builder: (context) => const Mainsearchpage(),
                     ));
               },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
+              child: Icon(Icons.search)),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const Searchpage(),
+          //           ));
+          //     },
+          //     icon: Icon(Icons.search)),
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              icon: Icon(Icons.menu)),
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -94,7 +112,10 @@ class _MylinkListPageState extends State<MylinkListPage> {
               itemCount: userjob.userjob!.msg!.length,
               itemBuilder: (context, index) {
                 var data = userjob.userjob!.msg![index];
-                return JobListcard(data: data);
+                return JobListcard(
+                  data: data,
+                  index: index,
+                );
               },
             ),
     );
@@ -103,25 +124,27 @@ class _MylinkListPageState extends State<MylinkListPage> {
 
 class JobListcard extends StatefulWidget {
   final Msg data;
-  const JobListcard({Key? key, required this.data}) : super(key: key);
+  final int index;
+  const JobListcard({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
   _JobListcardState createState() => _JobListcardState();
 }
 
 class _JobListcardState extends State<JobListcard> {
-  // String categoryname = '';
+  String categoryname = '';
 
-  // void categorynamefind() {
-  //   final homeprovider = Provider.of<HomeProvider>(context, listen: false);
-  //   for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-  //     if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
-  //       setState(() {
-  //         categoryname = homeprovider.categorylist!.msg![i].catName!;
-  //       });
-  //     }
-  //   }
-  // }
+  void categorynamefind() {
+    final homeprovider = Provider.of<HomeProvider>(context, listen: false);
+    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+        setState(() {
+          categoryname = homeprovider.categorylist!.msg![i].catName!;
+        });
+      }
+    }
+  }
 
   Future<void> share() async {
     await FlutterShare.share(
@@ -133,7 +156,7 @@ class _JobListcardState extends State<JobListcard> {
 
   @override
   void initState() {
-    // categorynamefind();
+    categorynamefind();
     super.initState();
   }
 
@@ -145,72 +168,105 @@ class _JobListcardState extends State<JobListcard> {
     final difference = date2.difference(birthday).inDays;
 
     return Container(
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage('images/mainicon.png'),
+      color: Colors.white,
+      margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            child: Text(
+              widget.data.jobTitle!,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Kalpurush'),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "কানেক্ট আইডি: ${widget.data.jobId}",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  widget.data.createdByName!,
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush',
+                      color: Colors.red.withOpacity(0.7)),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "Post: ${difference} day ago",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    widget.data.category!,
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush', color: Colors.grey[700]),
                   ),
-                  SizedBox(width: 10),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.data.jobTitle!,
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "কানেক্ট আইডি: ${widget.data.jobId}",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontFamily: 'Kalpurush'),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              widget.data.createdByName!,
-                              style: TextStyle(color: Colors.grey[700]),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Post: ${difference} day ago",
-                          style: TextStyle(
-                              color: Colors.grey[700], fontFamily: 'Kalpurush'),
-                        ),
-                      ],
-                    ),
-                  )
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              widget.data.description!,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+            ),
+          ),
+          Container(
+            color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ImagedialogBox(),
+                );
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset('images/post.jpg'),
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Text(
-                widget.data.description!,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontFamily: 'Kalpurush'),
-              ),
-            ),
-            Divider(height: 0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                    padding: EdgeInsets.all(10),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -221,40 +277,189 @@ class _JobListcardState extends State<JobListcard> {
                               ),
                             ));
                       },
-                      child: Row(
-                        children: const [
-                          Icon(
-                            Icons.check,
-                            size: 17,
-                          ),
-                          SizedBox(width: 5),
-                          Text("প্রস্তাবনা দিন",
-                              style: TextStyle(fontFamily: 'Kalpurush')),
-                        ],
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/pen-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "এডিট করুন",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
-                InkWell(
-                  onTap: () {
-                    share();
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.share,
-                            size: 17,
-                          ),
-                          SizedBox(width: 5),
-                          Text("শেয়ার",
-                              style: TextStyle(fontFamily: 'Kalpurush')),
-                        ],
-                      )),
-                )
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ApplyjobPage(
+                                jobid: widget.data.jobId!,
+                              ),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/user-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "প্রার্থী",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ApplyjobPage(
+                                jobid: widget.data.jobId!,
+                              ),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/xmark-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "রিমোভ করুন",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        share();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'images/svg/share-solid.svg',
+                                  height: 15,
+                                  color: Colors.grey[700],
+                                ),
+                                SizedBox(width: 5),
+                                Text("শেয়ার",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700])),
+                              ],
+                            )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

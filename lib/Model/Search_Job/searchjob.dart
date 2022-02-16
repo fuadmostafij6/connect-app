@@ -11,23 +11,19 @@ String searchJobToJson(SearchJob data) => json.encode(data.toJson());
 class SearchJob {
     SearchJob({
         this.error,
-        this.type,
         this.msg,
     });
 
     int? error;
-    String? type;
     List<Msg>? msg;
 
     factory SearchJob.fromJson(Map<String, dynamic> json) => SearchJob(
         error: json["error"],
-        type: json["type"],
         msg: List<Msg>.from(json["msg"].map((x) => Msg.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "error": error,
-        "type": type,
         "msg": List<dynamic>.from(msg!.map((x) => x.toJson())),
     };
 }
@@ -43,6 +39,8 @@ class Msg {
         this.status,
         this.createdBy,
         this.doc,
+        this.canapply,
+        this.createdByName,
     });
 
     String? jobId;
@@ -54,6 +52,8 @@ class Msg {
     String? status;
     String? createdBy;
     String? doc;
+    int? canapply;
+    String? createdByName;
 
     factory Msg.fromJson(Map<String, dynamic> json) => Msg(
         jobId: json["job_id"],
@@ -65,6 +65,8 @@ class Msg {
         status: json["status"],
         createdBy: json["created_by"],
         doc: json["doc"] == null ? null : json["doc"],
+        canapply: json["canapply"],
+        createdByName: json["created_by_name"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -77,5 +79,7 @@ class Msg {
         "status": status,
         "created_by": createdBy,
         "doc": doc == null ? null : doc,
+        "canapply": canapply,
+        "created_by_name": createdByName,
     };
 }

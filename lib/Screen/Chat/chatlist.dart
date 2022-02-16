@@ -3,6 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/chatlist.dart';
 import 'package:jobs_app/Screen/Chat/chatdetails.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
+import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class ChatListpage extends StatefulWidget {
   const ChatListpage({Key? key}) : super(key: key);
@@ -20,7 +22,8 @@ class _ChatListpageState extends State<ChatListpage> {
       key: _key,
       drawer: DrawerPage(),
       appBar: AppBar(
-        title: Text('বার্তা সমূহ'),
+        title: Text('বার্তা সমূহ',
+            style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
         flexibleSpace: const Image(
@@ -33,24 +36,33 @@ class _ChatListpageState extends State<ChatListpage> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("কানেক্ট"),
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
+            ),
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(),
-                //     ));
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Mainsearchpage(),
+                    ));
               },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
+              child: Icon(Icons.search)),
+
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              icon: Icon(Icons.menu)),
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -88,12 +100,16 @@ class _ChatListpageState extends State<ChatListpage> {
                                 Text(
                                   data.name!,
                                   style: TextStyle(
-                                      color: Color(0xFF000000), fontSize: 15),
+                                      color: Color(0xFF000000),
+                                      fontSize: 15,
+                                      fontFamily: 'Kalpurush'),
                                 ),
                                 Spacer(),
                                 Text(
                                   data.date!,
-                                  style: TextStyle(color: Color(0xFF919195)),
+                                  style: TextStyle(
+                                      color: Color(0xFF919195),
+                                      fontFamily: 'Kalpurush'),
                                 )
                               ],
                             ),
@@ -108,8 +124,9 @@ class _ChatListpageState extends State<ChatListpage> {
                                       SizedBox(width: 5),
                                       Text(
                                         "0:14",
-                                        style:
-                                            TextStyle(color: Color(0xFF8E8E93)),
+                                        style: TextStyle(
+                                            color: Color(0xFF8E8E93),
+                                            fontFamily: 'Kalpurush'),
                                       )
                                     ],
                                   )
@@ -123,8 +140,9 @@ class _ChatListpageState extends State<ChatListpage> {
                                           : Container(),
                                       Text(
                                         data.lastmessage!,
-                                        style:
-                                            TextStyle(color: Color(0xFF8E8E93)),
+                                        style: TextStyle(
+                                            color: Color(0xFF8E8E93),
+                                            fontFamily: 'Kalpurush'),
                                       )
                                     ],
                                   )

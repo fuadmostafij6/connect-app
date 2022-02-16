@@ -54,6 +54,7 @@ dependencies:
   camera: ^0.9.4+11
   path_provider: ^2.0.9
   multi_select_flutter: ^4.0.0
+  flutter_svg: ^1.0.3
 
 
 dev_dependencies:
@@ -84,6 +85,7 @@ flutter:
     - images/Dashboard_icom/
     - images/Chat_list/
     - images/message_icon/
+    - images/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

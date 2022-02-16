@@ -4,7 +4,9 @@ import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Allcategory/allcategory.dart';
 import 'package:jobs_app/Screen/Categoryjob/categoryjob.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
+import 'package:jobs_app/Screen/Searchpage/searchpage2.dart';
 import 'package:jobs_app/Screen/create_Job/createjob.dart';
 import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
@@ -68,7 +70,7 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
         backgroundColor: Color(0xFFE51D20),
         title: Text(
           box.get('name'),
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
         ),
         centerTitle: true,
         // shape: RoundedRectangleBorder(
@@ -81,32 +83,43 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
             child: Text(
               "হোমপেজ",
               style: TextStyle(
-                  color: Colors.white, fontFamily: 'Kalpurush', fontSize: 17),
+                  color: Colors.white, fontFamily: 'Kalpurush', fontSize: 16),
             )),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              "কানেক্ট",
-              style: TextStyle(fontFamily: 'Kalpurush'),
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
             ),
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: () {
+          InkWell(
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Searchpage(),
+                      builder: (context) => const Mainsearchpage(),
                     ));
               },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
+              child: Icon(Icons.search)),
+
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              icon: Icon(Icons.menu)),
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
+          // IconButton(
+          //     onPressed: () {
+          //       _key.currentState!.openEndDrawer();
+          //     },
+          //     icon: Icon(Icons.menu)),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -149,7 +162,7 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
           //   ],
           // ),
           Container(
-            height: size.height * 0.08,
+            height: size.height * 0.11,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: homeprovider.categorylist!.msg!.length,
@@ -173,11 +186,11 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           gradient: LinearGradient(
-                              colors: [Colors.red.shade500, Colors.red],
+                              colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight)),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
                             data.catName!,
@@ -185,6 +198,7 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                             style: TextStyle(
                                 color: Colors.white, fontFamily: 'Kalpurush'),
                           ),
+                          SizedBox(height: 5),
                         ],
                       ),
                     ),
@@ -208,13 +222,13 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
         Tab(
           child: Text(
             "My Feed",
-            style: TextStyle(),
+            style: TextStyle(fontFamily: 'Kalpurush'),
           ),
         ),
         Tab(
           child: Text(
             "Recent Feed",
-            style: TextStyle(),
+            style: TextStyle(fontFamily: 'Kalpurush'),
           ),
         )
       ],

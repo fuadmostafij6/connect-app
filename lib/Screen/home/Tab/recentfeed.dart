@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
@@ -25,6 +26,7 @@ class _RecentfeedpageState extends State<Recentfeedpage> {
         itemBuilder: (context, index) {
           var data = homeprovider.joblist!.msg![index];
           return JobListcard(
+            index: index,
             data: data,
           );
         },
@@ -35,7 +37,9 @@ class _RecentfeedpageState extends State<Recentfeedpage> {
 
 class JobListcard extends StatefulWidget {
   final Msg data;
-  const JobListcard({Key? key, required this.data}) : super(key: key);
+  final int index;
+  const JobListcard({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
   _JobListcardState createState() => _JobListcardState();
@@ -78,53 +82,75 @@ class _JobListcardState extends State<JobListcard> {
 
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: EdgeInsets.only(left: 15, top: 5),
             child: Text(
               widget.data.jobTitle!,
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Kalpurush'),
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               children: [
-                Text("কানেক্ট আইডি: ${widget.data.jobId}"),
+                Text(
+                  "কানেক্ট আইডি: ${widget.data.jobId}",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                Text("user: Tanvir Mahamud Shakil"),
+                Text(
+                  widget.data.createdByName!,
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush',
+                      color: Colors.red.withOpacity(0.7)),
+                ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               children: [
-                Text("Post: ${difference} day ago"),
+                Text(
+                  "Post: ${difference} day ago",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
                 SizedBox(
                   width: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5)),
-                  child: Text(categoryname),
+                  child: Text(
+                    widget.data.category!,
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                  ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Text(
               widget.data.description!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
             ),
           ),
           Container(
@@ -140,10 +166,6 @@ class _JobListcardState extends State<JobListcard> {
                 alignment: Alignment.center,
                 children: [
                   Image.asset('images/post.jpg'),
-                  Text(
-                    '21+',
-                    style: TextStyle(color: Colors.white, fontSize: 35),
-                  ),
                 ],
               ),
             ),
@@ -151,50 +173,98 @@ class _JobListcardState extends State<JobListcard> {
           Divider(
             height: 0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  padding: EdgeInsets.all(7),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ApplyjobPage(
-                              jobid: widget.data.jobId!,
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ApplyjobPage(
+                                jobid: widget.data.jobId!,
+                              ),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'images/svg/check-solid.svg',
+                                    height: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "প্রস্তাবনা দিন",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700]),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ));
-                    },
-                    child: Row(
-                      children: const [
-                        Icon(
-                          Icons.check,
-                          size: 17,
+                          ],
                         ),
-                        SizedBox(width: 5),
-                        Text("প্রস্তাবনা দিন"),
-                      ],
+                      ),
                     ),
-                  )),
-              InkWell(
-                onTap: () {
-                  share();
-                },
-                child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.share,
-                          size: 17,
+                  ),
+                ),
+                Container(
+                  color: Colors.grey[300],
+                  width: 1,
+                  child: VerticalDivider(
+                    color: Colors.black,
+                    thickness: 3,
+                    indent: 20,
+                    endIndent: 0,
+                    width: 1,
+                  ),
+                ),
+                Flexible(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        share();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'images/svg/share-solid.svg',
+                                  height: 15,
+                                  color: Colors.grey[700],
+                                ),
+                                SizedBox(width: 5),
+                                Text("শেয়ার",
+                                    style: TextStyle(
+                                        fontFamily: 'Kalpurush',
+                                        color: Colors.grey[700])),
+                              ],
+                            )),
+                          ],
                         ),
-                        SizedBox(width: 5),
-                        Text("শেয়ার"),
-                      ],
-                    )),
-              )
-            ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

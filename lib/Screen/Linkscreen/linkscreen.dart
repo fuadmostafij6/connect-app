@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/create_Job/createjob.dart';
 import 'package:provider/provider.dart';
@@ -122,7 +123,7 @@ class _LinkscreenpageState extends State<Linkscreenpage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => Mainsearchpage(),
                     ));
               },
               icon: Icon(Icons.search)),

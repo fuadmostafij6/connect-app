@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class Deshboard2page extends StatefulWidget {
@@ -18,7 +19,8 @@ class _Deshboard2pageState extends State<Deshboard2page> {
       key: _key,
       endDrawer: DrawerPage(),
       appBar: AppBar(
-        title: Text("ড্যাশবোর্ড"),
+        title: Text("ড্যাশবোর্ড",
+            style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
         elevation: 0,
         flexibleSpace: const Image(
           image: AssetImage(
@@ -30,25 +32,42 @@ class _Deshboard2pageState extends State<Deshboard2page> {
         centerTitle: true,
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text("কানেক্ট"),
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
+            ),
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: () {
+          InkWell(
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searchpage(),
+                      builder: (context) => const Mainsearchpage(),
                     ));
               },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
+              child: Icon(Icons.search)),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const Searchpage(),
+          //           ));
+          //     },
+          //     icon: Icon(Icons.search)),
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              icon: Icon(Icons.menu)),
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -146,20 +165,45 @@ class _Deshboard2pageState extends State<Deshboard2page> {
   }
 
   Widget datatable() {
-    return DataTable(
-        columns: [
-          DataColumn(label: Text('SN')),
-          DataColumn(label: Text('Link')),
-          DataColumn(label: Text('Count')),
-          DataColumn(label: Text('Message')),
-        ],
-        rows: List.generate(20, (index) {
-          return DataRow(cells: [
-            DataCell(Text((index + 1).toString())),
-            DataCell(Text('Category')),
-            DataCell(Text("8")),
-            DataCell(Text("Message"))
-          ]);
-        }));
+    return FittedBox(
+      child: DataTable(
+          columnSpacing: MediaQuery.of(context).size.width * 0.2,
+          headingRowColor:
+              MaterialStateColor.resolveWith((states) => Color(0xFFE51D20)),
+          columns: [
+            DataColumn(
+                label: Text('SN',
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: 'Kalpurush'))),
+            DataColumn(
+                label: Text('Link',
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: 'Kalpurush'))),
+            DataColumn(
+                label: Text('Count',
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: 'Kalpurush'))),
+            DataColumn(
+                label: Text('Message',
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: 'Kalpurush'))),
+          ],
+          rows: List.generate(20, (index) {
+            return DataRow(cells: [
+              DataCell(Text((index + 1).toString(),
+                  style:
+                      TextStyle(color: Colors.black, fontFamily: 'Kalpurush'))),
+              DataCell(Text('Category',
+                  style:
+                      TextStyle(color: Colors.black, fontFamily: 'Kalpurush'))),
+              DataCell(Text("8",
+                  style:
+                      TextStyle(color: Colors.black, fontFamily: 'Kalpurush'))),
+              DataCell(Text("Message",
+                  style:
+                      TextStyle(color: Colors.black, fontFamily: 'Kalpurush')))
+            ]);
+          })),
+    );
   }
 }

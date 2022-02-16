@@ -4,6 +4,8 @@ import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Profile/profileedit.dart';
+import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
+import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:multi_select_flutter/bottom_sheet/multi_select_bottom_sheet_field.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
@@ -58,7 +60,8 @@ class _ProfilePageState extends State<ProfilePage> {
       key: _key,
       endDrawer: DrawerPage(),
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Profile',
+            style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
         flexibleSpace: Image(
@@ -71,24 +74,33 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("কানেক্ট"),
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
+            ),
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Searchpage(),
-                //     ));
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Mainsearchpage(),
+                    ));
               },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
+              child: Icon(Icons.search)),
+
+          SizedBox(width: 5),
+          InkWell(
+              onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              icon: Icon(Icons.menu)),
+              child: Icon(Icons.menu)),
+          SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -134,7 +146,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       box.get('name'),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 18),
+                                          fontSize: 18,
+                                          fontFamily: 'Kalpurush'),
                                     ),
                                     Spacer(),
                                     InkWell(
@@ -162,7 +175,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               Container(
                                 child: Text(
                                   "@${box.get('name')}",
-                                  style: TextStyle(color: Color(0xFF484649)),
+                                  style: TextStyle(
+                                      color: Color(0xFF484649),
+                                      fontFamily: 'Kalpurush'),
                                 ),
                               ),
                               SizedBox(height: 5),
@@ -170,7 +185,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: Text(
                                   profile
                                       .profile!.msg!.userData!.profileTagline!,
-                                  style: TextStyle(color: Color(0xFFEB5456)),
+                                  style: TextStyle(
+                                      color: Color(0xFFEB5456),
+                                      fontFamily: 'Kalpurush'),
                                 ),
                               ),
 
@@ -178,13 +195,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   Icon(Icons.email),
                                   SizedBox(width: 5),
-                                  Text(box.get('email')),
+                                  Text(
+                                    box.get('email'),
+                                    style: TextStyle(fontFamily: 'Kalpurush'),
+                                  ),
                                   Spacer(),
                                   MaterialButton(
                                     elevation: 1,
                                     color: Colors.grey[100],
                                     onPressed: () {},
-                                    child: Text("Message"),
+                                    child: Text(
+                                      "Message",
+                                      style: TextStyle(fontFamily: 'Kalpurush'),
+                                    ),
                                   )
                                 ],
                               ),
@@ -193,7 +216,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   Icon(Icons.phone),
                                   SizedBox(width: 5),
-                                  Text(profile.profile!.msg!.userData!.phone!)
+                                  Text(
+                                    profile.profile!.msg!.userData!.phone!,
+                                    style: TextStyle(fontFamily: 'Kalpurush'),
+                                  )
                                 ],
                               ),
                               SizedBox(height: 5),
@@ -229,7 +255,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Row(
                       children: [
-                        Text("আপনার নির্বাচিত ক্যাটাগরি সমূহ"),
+                        Text(
+                          "আপনার নির্বাচিত ক্যাটাগরি সমূহ",
+                          style: TextStyle(fontFamily: 'Kalpurush'),
+                        ),
                         Spacer(),
                         Icon(Icons.edit, color: Color(0xFFE51F22))
                       ],
@@ -499,7 +528,8 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextStyle(
                   color: animaleint.contains(animals[index].id!)
                       ? Colors.white
-                      : Colors.black),
+                      : Colors.black,
+                  fontFamily: 'Kalpurush'),
             ),
           ),
         );
@@ -519,17 +549,26 @@ class _ProfilePageState extends State<ProfilePage> {
             Text(
               "মেম্বারশিপ এরিয়া",
               style: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  fontFamily: 'Kalpurush'),
             ),
             SizedBox(height: 10),
-            Text("বর্তমান মেম্বারশিপ : সিলভার "),
+            Text(
+              "বর্তমান মেম্বারশিপ : সিলভার ",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            ),
             SizedBox(height: 5),
-            Text("মেম্বারশিপ শুরু হইয়েছে : December 22, 2021"),
+            Text(
+              "মেম্বারশিপ শুরু হইয়েছে : December 22, 2021",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            ),
             SizedBox(height: 5),
-            Text("পরবর্তী পেমেন্ট তারিখ : February 20, 2022"),
+            Text(
+              "পরবর্তী পেমেন্ট তারিখ : February 20, 2022",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            ),
             SizedBox(height: 5),
             Divider(
               height: 0,
@@ -561,7 +600,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             size: 17,
                           ),
                           SizedBox(width: 5),
-                          Text("মেম্বারশিপ আপগ্রেড করুন"),
+                          Text(
+                            "মেম্বারশিপ আপগ্রেড করুন",
+                            style: TextStyle(fontFamily: 'Kalpurush'),
+                          ),
                         ],
                       ),
                     )),
