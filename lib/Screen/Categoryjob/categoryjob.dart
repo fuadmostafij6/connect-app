@@ -11,6 +11,9 @@ import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
+import '../Apply_job/applyjob2.dart';
+import '../home/Tab/myfeed.dart';
+
 class CategoryjobPage extends StatefulWidget {
   final String categoryid, categoryname;
   const CategoryjobPage(
@@ -263,8 +266,11 @@ class _JobListcardState extends State<JobListcard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
+                              builder: (context) => Applyjob2Page(
+                                 connectid: widget.data.jobId!,
+                                  id: widget.data.jobId!,
+                                  tile: widget.data.jobTitle!,
+                                  username: widget.data.createdBy!
                               ),
                             ));
                       },

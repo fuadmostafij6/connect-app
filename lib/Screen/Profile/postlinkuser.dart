@@ -8,6 +8,7 @@ import 'package:jobs_app/Provider/Profile/profile.dart';
 import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/Apply_job/applyjob2.dart';
 
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
@@ -414,8 +415,11 @@ class _JobListcardState extends State<JobListcard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
+                              builder: (context) => Applyjob2Page(
+                                   connectid: widget.data.jobId!,
+                                  id: widget.data.jobId!,
+                                  tile: widget.data.jobTitle!,
+                                  username: widget.data.createdByName!
                               ),
                             ));
                       },

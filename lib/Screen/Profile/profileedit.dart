@@ -6,7 +6,8 @@ class ProfileEditPage extends StatefulWidget {
   final String? name;
   final String? email;
   final String? number;
-  const ProfileEditPage({Key? key, this.name, this.email, this.number}) : super(key: key);
+  const ProfileEditPage({Key? key, this.name, this.email, this.number})
+      : super(key: key);
 
   @override
   _ProfileEditPageState createState() => _ProfileEditPageState();
@@ -41,64 +42,83 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ],
       ),
       body: Container(
+        color: Colors.grey[200],
+        padding: EdgeInsets.only(left: 5, right: 5),
         child: Column(
           children: [
-            TextfromPage(
-              initialValue: widget.name,
-              name: "আপনার নাম",
-              hinttext: "আপনার নাম",
-              onSaved: (value) {},
+            Card(
+              child: Container(
+                padding: EdgeInsets.only(top: 5),
+                child: TextfromPage(
+                  initialValue: widget.name,
+                  name: "আপনার নাম",
+                  hinttext: "আপনার নাম",
+                  onSaved: (value) {},
+                ),
+              ),
             ),
-            Row(
-              children: [
-                Flexible(
-                  child: TextfromPage(
-                    initialValue: widget.email,
-                    name: "আপনার ইমেইল",
-                    hinttext: "আপনার ইমেইল",
-                    onSaved: (value) {},
-                  ),
+            Card(
+              child: Container(
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: TextfromPage(
+                        initialValue: widget.email,
+                        name: "আপনার ইমেইল",
+                        hinttext: "আপনার ইমেইল",
+                        onSaved: (value) {},
+                      ),
+                    ),
+                    Container(
+                      width: 120,
+                      height: 71,
+                      child: TextfieldDropdown(
+                        name: "সিকিউরিটি",
+                        hinttext: "সিকিউরিটি",
+                        items: ["Private", 'Public'],
+                        onSaved: (value) {},
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: 120,
-                  height: 71,
-                  child: TextfieldDropdown(
-                
-                    name: "সিকিউরিটি",
-                    hinttext: "সিকিউরিটি",
-                    items: ["Private", 'Public'],
-                    onSaved: (value) {},
-                  ),
-                ),
-              ],
+              ),
             ),
-            Row(
-              children: [
-                Flexible(
-                  child: TextfromPage(
-                    initialValue: widget.number,
-                    name: "ফোন নম্বর",
-                    hinttext: "ফোন নম্বর",
-                    onSaved: (value) {},
-                  ),
+            Card(
+              child: Container(
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: TextfromPage(
+                        initialValue: widget.number,
+                        name: "ফোন নম্বর",
+                        hinttext: "ফোন নম্বর",
+                        onSaved: (value) {},
+                      ),
+                    ),
+                    Container(
+                      width: 120,
+                      height: 71,
+                      child: TextfieldDropdown(
+                        name: "সিকিউরিটি",
+                        hinttext: "সিকিউরিটি",
+                        items: ["Private", 'Public'],
+                        onSaved: (value) {},
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: 120,
-                  height: 71,
-                  child: TextfieldDropdown(
-                    name: "সিকিউরিটি",
-                    hinttext: "সিকিউরিটি",
-                    items: ["Private", 'Public'],
-                    onSaved: (value) {},
-                  ),
-                ),
-              ],
+              ),
             ),
-            MaterialButton(
-              elevation: 1,
-              color: Colors.grey[200],
-              onPressed: () {},
-              child: Text("আপডেট প্রোফাইল"),
+            Container(
+              padding: EdgeInsets.only(top: 5),
+              child: MaterialButton(
+                elevation: 1,
+                color: Colors.white,
+                onPressed: () {},
+                child: Text("আপডেট প্রোফাইল"),
+              ),
             )
           ],
         ),

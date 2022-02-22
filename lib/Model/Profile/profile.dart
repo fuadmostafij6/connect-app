@@ -22,8 +22,9 @@ class Profile {
 class Msg {
   UserData? userData;
   Membership? membership;
+  String? followaction;
 
-  Msg({this.userData, this.membership});
+  Msg({this.userData, this.membership, this.followaction});
 
   Msg.fromJson(Map<String, dynamic> json) {
     userData = json['user_data'] != null
@@ -32,6 +33,7 @@ class Msg {
     membership = json['membership'] != null
         ? new Membership.fromJson(json['membership'])
         : null;
+    followaction = json['followaction'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +44,7 @@ class Msg {
     if (this.membership != null) {
       data['membership'] = this.membership!.toJson();
     }
+    data['followaction'] = this.followaction;
     return data;
   }
 }
@@ -55,7 +58,7 @@ class UserData {
   String? userName;
   String? password;
   String? typeReg;
-  String? serviceArea;
+  List<String>? serviceArea;
   String? status;
   String? createdAt;
   String? pic;
@@ -99,7 +102,7 @@ class UserData {
     userName = json['user_name'];
     password = json['password'];
     typeReg = json['type_reg'];
-    serviceArea = json['service_area'];
+    serviceArea = json['service_area'].cast<String>();
     status = json['status'];
     createdAt = json['created_at'];
     pic = json['pic'];

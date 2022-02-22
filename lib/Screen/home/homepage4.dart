@@ -153,7 +153,10 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   // categorybox(),
-                  categorybox2(),
+                  Container(
+                    child: categorybox2(),
+                    color: Colors.grey[300],
+                  ),
                   // tabbarbox(),
                   Myfeedpage()
                 ],
@@ -310,10 +313,10 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
     );
   }
 
-  Widget tabbarview() {
-    return TabBarView(controller: tabController, children: [
-      Myfeedpage(),
-      Recentfeedpage(),
-    ]);
-  }
+  // Widget tabbarview() {
+  //   return TabBarView(controller: tabController, children: [
+  //     Myfeedpage(),
+  //     Recentfeedpage(),
+  //   ]);
+  // }
 }

@@ -5,8 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/Apply_job/applyjob2.dart';
 import 'package:jobs_app/Screen/Profile/postlinkuser.dart';
 import 'package:provider/provider.dart';
+
+import '../../JobpostDetails/jobpostdetails.dart';
 
 class Myfeedpage extends StatefulWidget {
   const Myfeedpage({Key? key}) : super(key: key);
@@ -49,6 +52,17 @@ class JobListcard extends StatefulWidget {
 
 class _JobListcardState extends State<JobListcard> {
   String categoryname = '';
+  Offset? tapXY;
+  // ↓ hold screen size, using first line in build() method
+  RenderBox? overlay;
+
+  RelativeRect get relRectSize =>
+      RelativeRect.fromSize(tapXY! & const Size(40, 40), overlay!.size);
+
+  // ↓ get the tap position Offset
+  void getPosition(TapDownDetails detail) {
+    tapXY = detail.globalPosition;
+  }
 
   void categorynamefind() {
     final homeprovider = Provider.of<HomeProvider>(context, listen: false);
@@ -81,6 +95,7 @@ class _JobListcardState extends State<JobListcard> {
         widget.data.createdAt!.month, widget.data.createdAt!.day);
     final date2 = DateTime.now();
     final difference = date2.difference(birthday).inDays;
+    overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox?;
 
     return Container(
       color: Colors.white,
@@ -170,9 +185,36 @@ class _JobListcardState extends State<JobListcard> {
             color: Colors.white,
             child: InkWell(
               onTap: () {
-                showDialog(
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JobPostDetailsPage(
+                      descripton: widget.data.description!,
+                      id: widget.data.jobId!,
+                      jobtitle: widget.data.jobTitle!,
+                      username: widget.data.createdByName!,
+                      catgeoryname: widget.data.category!,
+
+                    ),
+                  ),
+                );
+              },
+              onTapDown: getPosition,
+              onLongPress: () {
+                showMenu(
                   context: context,
-                  builder: (context) => ImagedialogBox(),
+                  position: relRectSize,
+                  items: [
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.download),
+                          SizedBox(width: 10),
+                          Text("Downloads"),
+                        ],
+                      ),
+                    )
+                  ],
                 );
               },
               child: Stack(
@@ -195,12 +237,21 @@ class _JobListcardState extends State<JobListcard> {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ApplyjobPage(
+                        //         jobid: widget.data.jobId!,
+                        //       ),
+                        //     ));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
-                              ),
+                              builder: (context) => Applyjob2Page(
+                                  connectid: widget.data.jobId!,
+                                  id: widget.data.jobId!,
+                                  tile: widget.data.jobTitle!,
+                                  username: widget.data.createdByName!),
                             ));
                       },
                       child: Container(

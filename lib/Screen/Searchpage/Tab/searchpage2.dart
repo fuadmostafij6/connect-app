@@ -4,10 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:jobs_app/Provider/Search/search.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/Apply_job/applyjob2.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 import 'package:jobs_app/Model/Search_Job/searchjob.dart';
+
+import '../../home/Tab/myfeed.dart';
 
 class Searchpage2 extends StatefulWidget {
   const Searchpage2({Key? key}) : super(key: key);
@@ -257,9 +260,11 @@ class _JobListcardState extends State<JobListcard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
-                              ),
+                              builder: (context) => Applyjob2Page(
+                                  connectid: widget.data.jobId!,
+                                  id: widget.data.jobId!,
+                                  tile: widget.data.jobTitle!,
+                                  username: widget.data.createdByName!),
                             ));
                       },
                       child: Container(

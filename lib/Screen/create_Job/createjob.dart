@@ -81,8 +81,12 @@ class _CreateJobpageState extends State<CreateJobpage> {
     final jbdetails = Provider.of<JobDetailsProvider>(context);
     var box = Hive.box('login');
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('লিংকঅ্যাপ'),
+        title: Text(
+          'লিংকঅ্যাপ',
+          style: TextStyle(fontFamily: 'Kalpurush'),
+        ),
         elevation: 0,
         backgroundColor: Color(0xFFE51D20),
 
@@ -115,42 +119,61 @@ class _CreateJobpageState extends State<CreateJobpage> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "আপনি যে কাজ/প্রজেক্ট-এর কানেকশন এবং লিংক দিতে চান তা এখানে লিপিবদ্ধ করুন",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        child: Container(
+          margin: EdgeInsets.only(left: 5, right: 5),
+          child: Column(
+            children: [
+              Card(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: const Text(
+                    "আপনি যে কাজ/প্রজেক্ট-এর কানেকশন এবং লিংক দিতে চান তা এখানে লিপিবদ্ধ করুন",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Kalpurush'),
+                  ),
+                ),
               ),
-            ),
-            dropdowntext(),
-            SizedBox(height: 10),
-            Textbox(),
-            SizedBox(height: 10),
-            textform(),
-            audiobox(),
-            SizedBox(height: 10),
-            filepicker(),
-            SizedBox(height: 10),
-            phoneTextbox(),
-            MaterialButton(
-              color: Color(0xFFE51D20),
-              onPressed: () {
-                jbdetails.newjobcreate(
-                    category: category,
-                    contactnumber: contactnumber ?? "",
-                    description: description ?? "",
-                    jobtite: jobtite ?? "",
-                    context: context,
-                    userid: box.get('userid'));
-              },
-              child: Text(
-                "সাবমিট করুন",
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
+              Card(
+                  child: Container(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: dropdowntext())),
+              // SizedBox(height: 10),
+              Card(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10), child: Textbox())),
+              // SizedBox(height: 10),
+              Card(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10), child: textform())),
+              Card(child: audiobox()),
+              // SizedBox(height: 10),
+              Card(child: filepicker()),
+              // SizedBox(height: 10),
+              Card(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: phoneTextbox())),
+              MaterialButton(
+                color: Color(0xFFE51D20),
+                onPressed: () {
+                  jbdetails.newjobcreate(
+                      category: category,
+                      contactnumber: contactnumber ?? "",
+                      description: description ?? "",
+                      jobtite: jobtite ?? "",
+                      context: context,
+                      userid: box.get('userid'));
+                },
+                child: Text(
+                  "সাবমিট করুন",
+                  style:
+                      TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -161,7 +184,11 @@ class _CreateJobpageState extends State<CreateJobpage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.only(left: 10), child: Text("(০২) শিরোনাম")),
+            margin: EdgeInsets.only(left: 10),
+            child: Text(
+              "শিরোনাম",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            )),
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
@@ -183,33 +210,42 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
   Widget dropdowntext() {
     final homeprovider = Provider.of<HomeProvider>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-            padding: EdgeInsets.all(10), child: Text("(০১) কাজের ক্যাটাগরি")),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          child: DropdownSearch<String>(
-            mode: Mode.MENU,
-            items:
-                homeprovider.categorylist!.msg!.map((e) => e.catName!).toList(),
-            dropdownSearchDecoration: InputDecoration(
-                isDense: true,
-                hintText: "ক্যাটাগরি",
-                contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-            onChanged: (value) {
-              for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-                if (homeprovider.categorylist!.msg![i].catName == value) {
-                  setState(() {
-                    category = homeprovider.categorylist!.msg![i].catId;
-                  });
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "কাজের ক্যাটাগরি",
+                style: TextStyle(fontFamily: 'Kalpurush'),
+              )),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: DropdownSearch<String>(
+              mode: Mode.MENU,
+              items: homeprovider.categorylist!.msg!
+                  .map((e) => e.catName!)
+                  .toList(),
+              dropdownSearchDecoration: InputDecoration(
+                  isDense: true,
+                  hintText: "ক্যাটাগরি",
+                  contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+              onChanged: (value) {
+                for (var i = 0;
+                    i < homeprovider.categorylist!.msg!.length;
+                    i++) {
+                  if (homeprovider.categorylist!.msg![i].catName == value) {
+                    setState(() {
+                      category = homeprovider.categorylist!.msg![i].catId;
+                    });
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -220,23 +256,35 @@ class _CreateJobpageState extends State<CreateJobpage> {
       children: [
         Container(
             margin: EdgeInsets.only(left: 10, top: 4),
-            child: Text("(০৫) ভিডিও  যুক্ত করুন (ঐচ্ছিক)")),
+            child: Text(
+              "ভিডিও  যুক্ত করুন (ঐচ্ছিক)",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            )),
         Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(5),
           child: Row(
             children: [
-              MaterialButton(
-                color: Colors.grey[300],
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VideoRecordCameraPage(),
-                      ));
-                },
-                child: Text("Video Record"),
-              ),
+              // MaterialButton(
+              //   color: Colors.grey[300],
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => VideoRecordCameraPage(),
+              //         ));
+              //   },
+              //   child: Text("Video Record"),
+              // ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoRecordCameraPage(),
+                        ));
+                  },
+                  icon: Icon(Icons.video_file)),
               SizedBox(width: 10),
               Expanded(child: Text(jbdetails.path))
             ],
@@ -252,7 +300,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
       children: [
         Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-            child: Text("(০৩) কাজের বর্ননা")),
+            child: Text(
+              "কাজের বর্ননা",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            )),
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
@@ -275,7 +326,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
       children: [
         Container(
             margin: EdgeInsets.only(left: 10),
-            child: Text("(০৬) কন্টাক নম্বর")),
+            child: Text(
+              "কন্টাক নম্বর",
+              style: TextStyle(fontFamily: 'Kalpurush'),
+            )),
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
@@ -300,30 +354,38 @@ class _CreateJobpageState extends State<CreateJobpage> {
     final minute = twodegit(duration.inMinutes.remainder(60));
     final secound = twodegit(duration.inSeconds.remainder(60));
     final isrecording = recorder.isRecoding;
-    final icon = isrecording
-        ? const Icon(
-            Icons.stop,
-            color: Colors.white,
-          )
-        : Icon(Icons.mic);
+    final icon = Icon(
+      Icons.mic,
+      color: isrecording ? Colors.red : Colors.black,
+    );
     Color? color = isrecording ? Colors.red : Colors.grey[300];
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("(০৪) অডিও  যুক্ত করুন (ঐচ্ছিক)"),
+          Text(
+            "অডিও  যুক্ত করুন (ঐচ্ছিক)",
+            style: TextStyle(fontFamily: 'Kalpurush'),
+          ),
           Row(
             children: [
-              MaterialButton(
-                color: color,
-                onPressed: () async {
-                  await recorder.tooglerecording();
-                  isrecording ? cancletimer() : starttimer();
-                  setState(() {});
-                },
-                child: icon,
-              ),
+              // MaterialButton(
+              //   color: color,
+              //   onPressed: () async {
+              //     await recorder.tooglerecording();
+              //     isrecording ? cancletimer() : starttimer();
+              //     setState(() {});
+              //   },
+              //   child: icon,
+              // ),
+              IconButton(
+                  onPressed: () async {
+                    await recorder.tooglerecording();
+                    isrecording ? cancletimer() : starttimer();
+                    setState(() {});
+                  },
+                  icon: icon),
               SizedBox(width: 10),
               Text("$minute:$secound"),
               SizedBox(width: 10),

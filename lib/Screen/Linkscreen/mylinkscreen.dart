@@ -14,7 +14,10 @@ import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
+import '../Apply_job/applyjob2.dart';
 import '../Profile/postlinkuser.dart';
+import '../create_Job/createjob.dart';
+import '../home/Tab/myfeed.dart';
 
 class MylinkListPage extends StatefulWidget {
   const MylinkListPage({Key? key}) : super(key: key);
@@ -47,6 +50,26 @@ class _MylinkListPageState extends State<MylinkListPage> {
     return Scaffold(
       key: _key,
       endDrawer: DrawerPage(),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "নতুন লিংক",
+            style: TextStyle(fontFamily: 'Kalpurush'),
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.red,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateJobpage(),
+                  ));
+            },
+            child: Icon(Icons.add),
+          ),
+        ],
+      ),
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         title: const Text('আমার লিংক সমূহ',
@@ -345,9 +368,11 @@ class _JobListcardState extends State<JobListcard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ApplyjobPage(
-                                jobid: widget.data.jobId!,
-                              ),
+                              builder: (context) => Applyjob2Page(
+                                  connectid: widget.data.jobId!,
+                                  id: widget.data.jobId!,
+                                  tile: widget.data.jobTitle!,
+                                  username: widget.data.createdByName!),
                             ));
                       },
                       child: Container(
