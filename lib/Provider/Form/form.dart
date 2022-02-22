@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:jobs_app/Const_value/snakbar.dart';
 import 'package:jobs_app/Screen/home/homescrren.dart';
 
+import '../../Const_value/apilink.dart';
 import '../../homepage.dart';
 
 class Fromprovider extends ChangeNotifier {
@@ -22,7 +23,7 @@ class Fromprovider extends ChangeNotifier {
       'Cookie': 'ci_session=b67a5884fdd7066529f93d63c65aa183fc877b25'
     };
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://launch1.goshrt.com/api/user/register'));
+        'POST', Uri.parse('$url/api/user/register'));
     request.fields.addAll({
       'full_name': name!,
       'email': email,
@@ -61,7 +62,7 @@ class Fromprovider extends ChangeNotifier {
       'Cookie': 'ci_session=7b8d5d53e011803fe34ede127514fe1dec213c21'
     };
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://launch1.goshrt.com/api/user/login'));
+        'POST', Uri.parse('$url/api/user/login'));
     request.fields.addAll({'email': email!, 'password': password});
 
     request.headers.addAll(headers);

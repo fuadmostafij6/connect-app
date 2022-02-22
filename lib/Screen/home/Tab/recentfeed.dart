@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:jobs_app/Model/job_List/joblist.dart';
 import 'package:jobs_app/Provider/home.dart';
@@ -162,7 +163,7 @@ class _JobListcardState extends State<JobListcard> {
               widget.data.description!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+              style: GoogleFonts.raleway(color: Colors.black),
             ),
           ),
           Container(

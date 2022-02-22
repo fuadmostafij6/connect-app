@@ -22,7 +22,8 @@ class _MyfeedpageState extends State<Myfeedpage> {
     return Container(
       color: Colors.grey[300],
       child: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         itemCount: homeprovider.joblist!.msg!.length,
         itemBuilder: (context, index) {
           var data = homeprovider.joblist!.msg![index];

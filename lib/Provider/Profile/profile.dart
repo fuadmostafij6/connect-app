@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/Following/following.dart';
 import 'package:jobs_app/Model/Postlinkuser/postlinkuser.dart';
 
+import '../../Const_value/apilink.dart';
 import '../../Model/Profile/profile.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +21,7 @@ class ProfileProvider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://launch1.goshrt.com/api/user/profile/${box.get('userid')}'));
+            '$url/api/user/profile/${box.get('userid')}'));
 
     request.headers.addAll(headers);
 

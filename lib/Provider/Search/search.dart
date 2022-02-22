@@ -8,6 +8,8 @@ import 'package:jobs_app/Model/Search_Job/searchjob.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_app/Model/Searchcategory/searchcategory.dart';
 
+import '../../Const_value/apilink.dart';
+
 class Searchprovider extends ChangeNotifier {
   SearchJob? searchJob;
 
@@ -19,7 +21,7 @@ class Searchprovider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://launch1.goshrt.com/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=1'));
+            '$url/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=1'));
 
     request.headers.addAll(headers);
 

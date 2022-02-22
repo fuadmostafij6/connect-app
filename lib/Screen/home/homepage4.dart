@@ -49,16 +49,25 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
     return Scaffold(
       key: _key,
       endDrawer: DrawerPage(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreateJobpage(),
-              ));
-        },
-        child: Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "নতুন লিংক",
+            style: TextStyle(fontFamily: 'Kalpurush'),
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.red,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateJobpage(),
+                  ));
+            },
+            child: Icon(Icons.add),
+          ),
+        ],
       ),
       appBar: AppBar(
         elevation: 0,
@@ -79,13 +88,13 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
         //       bottomLeft: Radius.circular(10),
         //       bottomRight: Radius.circular(10)),
         // ),
-        bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(20.0),
-            child: Text(
-              "হোমপেজ",
-              style: TextStyle(
-                  color: Colors.white, fontFamily: 'Kalpurush', fontSize: 14),
-            )),
+        // bottom: const PreferredSize(
+        //     preferredSize: Size.fromHeight(20.0),
+        //     child: Text(
+        //       "হোমপেজ",
+        //       style: TextStyle(
+        //           color: Colors.white, fontFamily: 'Kalpurush', fontSize: 14),
+        //     )),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,94 +149,141 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                categorybox(),
-                tabbarbox(),
-                Flexible(child: tabbarview())
-              ],
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  // categorybox(),
+                  categorybox2(),
+                  // tabbarbox(),
+                  Myfeedpage()
+                ],
+              ),
             ),
     );
   }
 
-  Widget categorybox() {
-    final homeprovider = Provider.of<HomeProvider>(context);
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     InkWell(
-          //       onTap: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (context) => Allcategorypage(),
-          //             ));
-          //       },
-          //       child: Container(
-          //           margin: EdgeInsets.only(bottom: 1),
-          //           child: Text("View All")),
-          //     )
-          //   ],
-          // ),
-          Container(
-            height: size.height * 0.11,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: homeprovider.categorylist!.msg!.length,
-              itemBuilder: (context, index) {
-                var data = homeprovider.categorylist!.msg![index];
-                return Card(
-                  child: InkWell(
+  // Widget categorybox() {
+  //   final homeprovider = Provider.of<HomeProvider>(context);
+  //   Size size = MediaQuery.of(context).size;
+  //   return Container(
+  //     width: double.infinity,
+  //     color: Colors.transparent,
+  //     child: Column(
+  //       children: [
+  //         // Row(
+  //         //   mainAxisAlignment: MainAxisAlignment.end,
+  //         //   children: [
+  //         //     InkWell(
+  //         //       onTap: () {
+  //         //         Navigator.push(
+  //         //             context,
+  //         //             MaterialPageRoute(
+  //         //               builder: (context) => Allcategorypage(),
+  //         //             ));
+  //         //       },
+  //         //       child: Container(
+  //         //           margin: EdgeInsets.only(bottom: 1),
+  //         //           child: Text("View All")),
+  //         //     )
+  //         //   ],
+  //         // ),
+  //         Container(
+  //           height: size.height * 0.11,
+  //           color: Colors.transparent,
+  //           child: ListView.builder(
+  //             scrollDirection: Axis.horizontal,
+  //             itemCount: homeprovider.categorylist!.msg!.length,
+  //             itemBuilder: (context, index) {
+  //               var data = homeprovider.categorylist!.msg![index];
+  //               return Card(
+  //                 color: Colors.transparent,
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     print(data.catId);
+  //                     Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => CategoryjobPage(
+  //                             categoryid: data.catId!,
+  //                             categoryname: data.catName!,
+  //                           ),
+  //                         ));
+  //                   },
+  //                   child: Container(
+  //                     width: size.width * 0.3,
+  //                     decoration: BoxDecoration(
+  //                         borderRadius: BorderRadius.circular(5),
+  //                         gradient: LinearGradient(
+  //                             colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
+  //                             begin: Alignment.topLeft,
+  //                             end: Alignment.bottomRight)),
+  //                     child: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                       children: [
+  //                         SizedBox(height: 4),
+  //                         SvgPicture.asset(
+  //                           'images/svg/compact-disc-solid.svg',
+  //                           height: 45,
+  //                           color: Colors.white,
+  //                         ),
+  //                         Text(
+  //                           data.catName!,
+  //                           overflow: TextOverflow.ellipsis,
+  //                           style: TextStyle(
+  //                               color: Colors.white, fontFamily: 'Kalpurush'),
+  //                         ),
+  //                         // SizedBox(height: 5),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget categorybox2() {
+    return Card(
+      child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+          itemCount: 8,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
                     onTap: () {
-                      print(data.catId);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CategoryjobPage(
-                              categoryid: data.catId!,
-                              categoryname: data.catName!,
-                            ),
+                            builder: (context) => Allcategorypage(),
                           ));
                     },
-                    child: Container(
-                      width: size.width * 0.3,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          gradient: LinearGradient(
-                              colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(height: 4),
-                          SvgPicture.asset(
-                            'images/svg/compact-disc-solid.svg',
-                            height: 45,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            data.catName!,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white, fontFamily: 'Kalpurush'),
-                          ),
-                          // SizedBox(height: 5),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        SvgPicture.asset(
+                          'images/svg/compact-disc-solid.svg',
+                          color: Colors.red,
+                          height: 48,
+                        ),
+                        SizedBox(height: 5),
+                        Text("বড়ো প্রকোপল্প",
+                            style: TextStyle(fontFamily: 'Kalpurush')),
+                      ],
                     ),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
+                  )
+                ],
+              ),
+            );
+          }),
     );
   }
 

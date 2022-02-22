@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_app/Const_value/snakbar.dart';
 
+import '../../Const_value/apilink.dart';
+
 class JobApplyprovider extends ChangeNotifier {
   Future jobapply(
       {String? jobid, userid, time, note, BuildContext? context}) async {
     var request = http.MultipartRequest('POST',
-        Uri.parse('https://launch1.goshrt.com/api/job/applicationcreate'));
+        Uri.parse('$url/api/job/applicationcreate'));
     request.fields.addAll({
       'job_id': jobid!,
       'user_id': userid,

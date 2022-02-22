@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("কাজ পেতে লগইন করুন",
-            style: TextStyle(fontFamily: 'Kalpurush')),
+            style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
         elevation: 0,
         flexibleSpace: const ClipRRect(
           borderRadius: BorderRadius.only(
@@ -62,10 +62,14 @@ class _LoginPageState extends State<LoginPage> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "কানেক্ট",
-              style: TextStyle(fontFamily: 'Kalpurush'),
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                maxLines: 1,
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
             ),
           ],
         ),

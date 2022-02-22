@@ -60,10 +60,14 @@ class _RegistationPageState extends State<RegistationPage> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "কানেক্ট",
-              style: TextStyle(fontFamily: 'Kalpurush'),
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "কানেক্ট",
+                maxLines: 1,
+                style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
+              ),
             ),
           ],
         ),
@@ -76,7 +80,7 @@ class _RegistationPageState extends State<RegistationPage> {
         ),
         title: const Text(
           'রেজিস্টেশন',
-          style: TextStyle(fontFamily: 'Kalpurush'),
+          style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
         ),
       ),
       body: SingleChildScrollView(
