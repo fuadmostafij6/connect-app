@@ -255,8 +255,8 @@ class _CreateJobpageState extends State<CreateJobpage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.only(left: 10, top: 4),
-            child: Text(
+            margin: const EdgeInsets.only(left: 10, top: 4),
+            child: const Text(
               "ভিডিও  যুক্ত করুন (ঐচ্ছিক)",
               style: TextStyle(fontFamily: 'Kalpurush'),
             )),
