@@ -2,40 +2,35 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:jobs_app/Const_value/snakbar.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 
-import '../../Const_value/apilink.dart';
+class UploadProvider extends ChangeNotifier {
+  bool loading = false;
 
-class JobApplyprovider extends ChangeNotifier {
-  Future jobapply(
-      {String? jobid, userid, time, note, BuildContext? context}) async {
+  Future uploaddile(String path) async {
+    var box = Hive.box('login');
+    loading = true;
     var request = http.MultipartRequest(
-        'POST', Uri.parse('$url/api/job/applicationcreate'));
-    request.fields.addAll({
-      'job_id': jobid!,
-      'user_id': userid,
-      'time': time,
-      'job_owner': '1',
-      'note': note
-    });
+        'POST', Uri.parse('$url/api/uploader/up/${box.get('userid')}'));
+    request.files.add(await http.MultipartFile.fromPath('file', path));
 
     http.StreamedResponse response = await request.send();
     var responsedata = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
-      print(responsedata.body);
       var json = jsonDecode(responsedata.body);
       if (json['error'] == 0) {
         Fluttertoast.showToast(
-            msg: json['msg'],
+            msg: "Upload Successfull",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
-      } else {
+      }else{
         Fluttertoast.showToast(
             msg: json['msg'],
             toastLength: Toast.LENGTH_SHORT,
@@ -45,7 +40,7 @@ class JobApplyprovider extends ChangeNotifier {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-
+      loading = false;
       notifyListeners();
     } else {
       print(responsedata.body);

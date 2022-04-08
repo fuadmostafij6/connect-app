@@ -332,33 +332,12 @@ class _JobListcardState extends State<JobListcard> {
             child: Row(
               children: [
                 Text(
-                  "কানেক্ট আইডি: ${widget.data.jobId}",
+                  "কানেক্ট আইডি: ${widget.data.jobId} ;",
                   style: TextStyle(
                       fontFamily: 'Kalpurush', color: Colors.grey[700]),
                 ),
                 SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  widget.data.createdByName!,
-                  style: TextStyle(
-                      fontFamily: 'Kalpurush',
-                      color: Colors.red.withOpacity(0.7)),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                Text(
-                  "Post: ${difference} day ago",
-                  style: TextStyle(
-                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
-                ),
-                SizedBox(
-                  width: 10,
+                  width: 5,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
@@ -370,6 +349,27 @@ class _JobListcardState extends State<JobListcard> {
                     style: TextStyle(
                         fontFamily: 'Kalpurush', color: Colors.grey[700]),
                   ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "Post: ${difference} day ago by",
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  widget.data.createdByName!,
+                  style: TextStyle(
+                      fontFamily: 'Kalpurush',
+                      color: Colors.red.withOpacity(0.7)),
                 ),
               ],
             ),
@@ -416,11 +416,10 @@ class _JobListcardState extends State<JobListcard> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Applyjob2Page(
-                                   connectid: widget.data.jobId!,
+                                  connectid: widget.data.jobId!,
                                   id: widget.data.jobId!,
                                   tile: widget.data.jobTitle!,
-                                  username: widget.data.createdByName!
-                              ),
+                                  username: widget.data.createdByName!),
                             ));
                       },
                       child: Container(

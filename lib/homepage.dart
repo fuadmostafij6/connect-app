@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Provider/Profile/profile.dart';
 import 'package:jobs_app/Screen/Deshboard/deshboard2.dart';
 import 'package:jobs_app/Screen/home/homepage4.dart';
+import 'package:provider/provider.dart';
 
+import 'Provider/UserPrevlies/userprevilies.dart';
 import 'Screen/Chat/chatlist.dart';
 import 'Screen/Deshboard/deshboard.dart';
 import 'Screen/Linkscreen/linkscreen.dart';
@@ -23,6 +26,14 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   PageController pageController = PageController();
   int pageindex = 0;
+
+  @override
+  void initState() {
+    Provider.of<UserPreviliesProvider>(context, listen: false)
+        .getuserprevilies();
+    Provider.of<ProfileProvider>(context, listen: false).getprofileinfo();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Provider/UserPrevlies/userprevilies.dart';
 import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
@@ -159,10 +160,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   ProfileEditPage(
-                                                email: box.get('name'),
+                                                company: profile.profile!.msg!
+                                                    .userData!.companyName,
                                                 name: box.get('name'),
                                                 number: profile.profile!.msg!
                                                     .userData!.phone!,
+                                                profiletag: profile
+                                                    .profile!
+                                                    .msg!
+                                                    .userData!
+                                                    .profileTagline,
                                               ),
                                             ));
                                       },
@@ -503,17 +510,26 @@ class _ProfilePageState extends State<ProfilePage> {
   List<int> animaleint = [];
 
   Widget categorybox() {
+    final userprevilies = Provider.of<UserPreviliesProvider>(context);
     return Wrap(
       children: List.generate(animals.length, (index) {
         return InkWell(
           onTap: () {
-            if (animaleint.contains(animals[index].id)) {
-              setState(() {
-                animaleint.remove(animals[index].id);
-              });
+            if (userprevilies.userPrevilies != null &&
+                userprevilies.userPrevilies!.msg!.category !=
+                    animaleint.length) {
+              if (animaleint.contains(animals[index].id)) {
+                setState(() {
+                  animaleint.remove(animals[index].id);
+                });
+              } else {
+                setState(() {
+                  animaleint.add(animals[index].id!);
+                });
+              }
             } else {
               setState(() {
-                animaleint.add(animals[index].id!);
+                animaleint.remove(animals[index].id);
               });
             }
           },

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:jobs_app/Provider/Profile/profile.dart';
 import 'package:jobs_app/Screen/Following/follower.dart';
 import 'package:jobs_app/Screen/Following/following.dart';
 import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
 import 'package:jobs_app/Screen/Profile/profileedit.dart';
+import 'package:provider/provider.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class _DrawerPageState extends State<DrawerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final profile = Provider.of<ProfileProvider>(context);
     var box = Hive.box('login');
     return SafeArea(
       child: Container(
@@ -155,9 +158,13 @@ class _DrawerPageState extends State<DrawerPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ProfileEditPage(
-                                      email: box.get('email'),
+                                      company: profile
+                                          .profile!.msg!.userData!.companyName,
                                       name: box.get('name'),
-                                      number: "",
+                                      number: profile
+                                          .profile!.msg!.userData!.phone!,
+                                      profiletag: profile.profile!.msg!
+                                          .userData!.profileTagline,
                                     ),
                                   ));
                             },
@@ -215,9 +222,12 @@ class _DrawerPageState extends State<DrawerPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ProfileEditPage(
-                            email: box.get('email'),
+                            company:
+                                profile.profile!.msg!.userData!.companyName,
                             name: box.get('name'),
-                            number: "",
+                            number: profile.profile!.msg!.userData!.phone!,
+                            profiletag:
+                                profile.profile!.msg!.userData!.profileTagline,
                           ),
                         ));
                   },

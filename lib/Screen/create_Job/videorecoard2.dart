@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,22 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
   bool isdiable = false;
   bool completevideo = false;
   String? path;
+  XFile? videoFile;
+
+  void onStopButtonPressed(BuildContext context) {
+    final jbdetails = Provider.of<JobDetailsProvider>(context, listen: false);
+    cameraController!.stopVideoRecording().then((XFile? file) {
+      if (mounted) {
+        setState(() {});
+      }
+      if (file != null) {
+        // showInSnackBar('Video recorded to ${file.path}');
+        videoFile = file;
+        jbdetails.getpath(videoFile!.path);
+        // _startVideoPlayer();
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -63,7 +80,7 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
     String twodegit(int n) => n.toString().padLeft(2, '0');
     final minute = twodegit(duration.inMinutes.remainder(60));
     final secound = twodegit(duration.inSeconds.remainder(60));
-    final jbdetails = Provider.of<JobDetailsProvider>(context);
+
     return FutureBuilder(
       future: initializedcontroller,
       builder: (context, snapshot) {
@@ -111,15 +128,13 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
                           : Container(
                               child: isdiable
                                   ? MaterialButton(
-                                      onPressed: () async {
+                                      onPressed: () {
+                                        onStopButtonPressed(context);
                                         setState(() {
-                                          cameraController!
-                                              .stopVideoRecording();
                                           cancletimer();
-                                          jbdetails.getpath(path!);
+
                                           isdiable = false;
                                           completevideo = true;
-                                          print(path);
                                         });
                                       },
                                       child: Icon(
@@ -132,10 +147,11 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
                                       onPressed: () async {
                                         try {
                                           await initializedcontroller;
-                                          path = join(
-                                              (await getApplicationDocumentsDirectory())
-                                                  .path,
-                                              '${DateTime.now()}.mp4');
+
+                                          // path = join(
+                                          //     (await getApplicationDocumentsDirectory())
+                                          //         .path,
+                                          //     'video.mp4');
                                           setState(() {
                                             cameraController!
                                                 .startVideoRecording();

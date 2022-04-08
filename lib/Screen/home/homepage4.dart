@@ -52,9 +52,14 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            "নতুন লিংক",
-            style: TextStyle(fontFamily: 'Kalpurush'),
+          Container(
+            color: Colors.red,
+            padding: EdgeInsets.only(left: 5, right: 5),
+            margin: EdgeInsets.only(bottom: 5),
+            child: Text(
+              "নতুন লিংক",
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.white),
+            ),
           ),
           FloatingActionButton(
             backgroundColor: Colors.red,

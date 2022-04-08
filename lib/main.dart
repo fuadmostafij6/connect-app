@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Provider/Upload/upload.dart';
+import 'package:jobs_app/Provider/UserPrevlies/userprevilies.dart';
 import 'package:provider/provider.dart';
 import 'Provider/Categorybyjob/categoryjob.dart';
 import 'Provider/Form/form.dart';
@@ -32,6 +34,8 @@ void main() async {
     ChangeNotifierProvider(create: (context) => JobDetailsProvider()),
     ChangeNotifierProvider(create: (context) => JobApplyprovider()),
     ChangeNotifierProvider(create: (context) => CategoryJobprovider()),
+    ChangeNotifierProvider(create: (context) => UploadProvider()),
+    ChangeNotifierProvider(create: (context) => UserPreviliesProvider())
   ], child: const MyApp()));
 }
 

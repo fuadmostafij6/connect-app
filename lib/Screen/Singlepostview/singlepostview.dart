@@ -1,57 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:jobs_app/Model/job_List/joblist.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Provider/home.dart';
-import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
 import 'package:jobs_app/Screen/Apply_job/applyjob2.dart';
+import 'package:jobs_app/Screen/JobpostDetails/jobpostdetails.dart';
 import 'package:jobs_app/Screen/Profile/postlinkuser.dart';
-import 'package:jobs_app/Screen/Singlepostview/singlepostview.dart';
 import 'package:provider/provider.dart';
 
-import '../../JobpostDetails/jobpostdetails.dart';
+import '../../Model/job_List/joblist.dart';
+import '../home/Tab/myfeed.dart';
 
-class Myfeedpage extends StatefulWidget {
-  const Myfeedpage({Key? key}) : super(key: key);
+class SinglePostView extends StatefulWidget {
+  final Msg data;
+  final int index;
+  const SinglePostView({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
-  _MyfeedpageState createState() => _MyfeedpageState();
+  State<SinglePostView> createState() => _SinglePostViewState();
 }
 
-class _MyfeedpageState extends State<Myfeedpage> {
+class _SinglePostViewState extends State<SinglePostView> {
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeProvider>(context);
-    return Container(
-      color: Colors.grey[300],
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: homeprovider.joblist!.msg!.length,
-        itemBuilder: (context, index) {
-          var data = homeprovider.joblist!.msg![index];
-          return JobListcard(
-            index: index,
-            data: data,
-          );
-        },
+    var box = Hive.box('login');
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: const Image(
+          image: AssetImage(
+            'images/Top Bar illustration Solid.png',
+          ),
+          fit: BoxFit.cover,
+        ),
+        backgroundColor: Color(0xFFE51D20),
+        centerTitle: true,
+        title: Text(
+          box.get('name'),
+          style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
+        ),
       ),
+      body: SingleChildScrollView(
+          child: JobListcard2(data: widget.data, index: widget.index)),
     );
   }
 }
 
-class JobListcard extends StatefulWidget {
+class JobListcard2 extends StatefulWidget {
   final Msg data;
   final int index;
-  const JobListcard({Key? key, required this.data, required this.index})
+  const JobListcard2({Key? key, required this.data, required this.index})
       : super(key: key);
 
   @override
-  _JobListcardState createState() => _JobListcardState();
+  _JobListcard2State createState() => _JobListcard2State();
 }
 
-class _JobListcardState extends State<JobListcard> {
+class _JobListcard2State extends State<JobListcard2> {
   String categoryname = '';
   Offset? tapXY;
   // ↓ hold screen size, using first line in build() method
@@ -103,12 +108,13 @@ class _JobListcardState extends State<JobListcard> {
       margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SinglePostView(data: widget.data,index: widget.index),
-                    ),
-                  );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) =>
+          //         SinglePostView(data: widget.data, index: widget.index),
+          //   ),
+          // );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,50 +192,92 @@ class _JobListcardState extends State<JobListcard> {
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Text(
                 widget.data.description!,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
               ),
             ),
-            Container(
-              color: Colors.white,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobPostDetailsPage(
-                        descripton: widget.data.description!,
-                        id: widget.data.jobId!,
-                        jobtitle: widget.data.jobTitle!,
-                        username: widget.data.createdByName!,
-                        catgeoryname: widget.data.category!,
-                      ),
-                    ),
-                  );
-                },
-                onTapDown: getPosition,
-                onLongPress: () {
-                  showMenu(
-                    context: context,
-                    position: relRectSize,
-                    items: [
-                      PopupMenuItem(
-                        child: Row(
+            Card(
+              child: Container(
+                height: 160,
+                child: PageView.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => JobPostDetailsPage(
+                                descripton: widget.data.description!,
+                                id: widget.data.jobId!,
+                                jobtitle: widget.data.jobTitle!,
+                                username: widget.data.createdByName!,
+                                catgeoryname: widget.data.category!,
+                              ),
+                            ),
+                          );
+                        },
+                        onTapDown: getPosition,
+                        onLongPress: () {
+                          showMenu(
+                            context: context,
+                            position: relRectSize,
+                            items: [
+                              PopupMenuItem(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.download),
+                                    SizedBox(width: 10),
+                                    Text("Downloads"),
+                                  ],
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                        child: Stack(
+                          fit: StackFit.expand,
+                          alignment: Alignment.center,
                           children: [
-                            Icon(Icons.download),
-                            SizedBox(width: 10),
-                            Text("Downloads"),
+                            Image.asset('images/post.jpg', fit: BoxFit.cover),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Card(
+              child: Container(
+                height: 150,
+                width: double.infinity,
                 child: Stack(
+                  fit: StackFit.expand,
                   alignment: Alignment.center,
                   children: [
-                    Image.asset('images/post.jpg'),
+                    Image.network(
+                      'https://i3.ytimg.com/vi/FjdJIZnh6-E/maxresdefault.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                    Icon(
+                      Icons.play_arrow,
+                      size: 55,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Icon(Icons.mic),
+                    SizedBox(width: 10),
+                    Text("অডিও শুনুন")
                   ],
                 ),
               ),
@@ -342,135 +390,6 @@ class _JobListcardState extends State<JobListcard> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ImagedialogBox extends StatefulWidget {
-  const ImagedialogBox({Key? key}) : super(key: key);
-
-  @override
-  _ImagedialogBoxState createState() => _ImagedialogBoxState();
-}
-
-class _ImagedialogBoxState extends State<ImagedialogBox> {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      child: Container(
-        height: 300,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 300,
-              width: double.infinity,
-              color: Colors.white,
-              child: PageView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Image.asset(
-                      'images/post.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DescriptionTextWidget extends StatefulWidget {
-  final String? text;
-
-  DescriptionTextWidget({@required this.text});
-
-  @override
-  _DescriptionTextWidgetState createState() => _DescriptionTextWidgetState();
-}
-
-class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
-  String? firstHalf;
-  String? secondHalf;
-
-  bool flag = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.text!.length > 80) {
-      firstHalf = widget.text!.substring(0, 80);
-      secondHalf = widget.text!.substring(80, widget.text!.length);
-    } else {
-      firstHalf = widget.text;
-      secondHalf = "";
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: secondHalf!.isEmpty
-          ? Text(
-              firstHalf!,
-              maxLines: 2,
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                flag
-                    ? Row(
-                        children: [
-                          Text(
-                            firstHalf!,
-                          ),
-                          Spacer(),
-                          InkWell(
-                              onTap: () {
-                                setState(() {
-                                  flag = !flag;
-                                });
-                              },
-                              child: Text(
-                                "    ...show more",
-                                style: TextStyle(
-                                    color: Color(0xFFE51D20).withOpacity(0.8)),
-                              ))
-                        ],
-                      )
-                    : Text(
-                        flag ? (firstHalf!) : (firstHalf! + secondHalf!),
-                      ),
-                InkWell(
-                  child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          flag ? "" : "show less",
-                          style: TextStyle(
-                              color: Color(0xFFE51D20).withOpacity(0.8)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      flag = !flag;
-                    });
-                  },
-                ),
-              ],
-            ),
     );
   }
 }

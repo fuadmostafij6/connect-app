@@ -6,18 +6,21 @@ import 'package:jobs_app/Model/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
+import 'package:jobs_app/Screen/JobpostDetails/jobpostdetails.dart';
 import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/Tab/searchpage2.dart';
+import 'package:jobs_app/Screen/Singlepostview/mainusersinglepostviw.dart';
+import 'package:jobs_app/Screen/create_Job/jobedit.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
 import '../Apply_job/applyjob2.dart';
 import '../Profile/postlinkuser.dart';
+import '../Singlepostview/singlepostview.dart';
 import '../create_Job/createjob.dart';
-import '../home/Tab/myfeed.dart';
 
 class MylinkListPage extends StatefulWidget {
   const MylinkListPage({Key? key}) : super(key: key);
@@ -53,9 +56,14 @@ class _MylinkListPageState extends State<MylinkListPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            "নতুন লিংক",
-            style: TextStyle(fontFamily: 'Kalpurush'),
+          Container(
+            color: Colors.red,
+            padding: EdgeInsets.only(left: 5, right: 5),
+            margin: EdgeInsets.only(bottom: 5),
+            child: Text(
+              "নতুন লিংক",
+              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.white),
+            ),
           ),
           FloatingActionButton(
             backgroundColor: Colors.red,
@@ -167,6 +175,12 @@ class JobListcard extends StatefulWidget {
 class _JobListcardState extends State<JobListcard> {
   String categoryname = '';
 
+  void refreshdara() {
+    var box = Hive.box('login');
+    Provider.of<Userjobpage>(context, listen: false)
+        .getuserjob(userid: box.get('userid'));
+  }
+
   void categorynamefind() {
     final homeprovider = Provider.of<HomeProvider>(context, listen: false);
     for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
@@ -194,6 +208,7 @@ class _JobListcardState extends State<JobListcard> {
 
   @override
   Widget build(BuildContext context) {
+    final userjob = Provider.of<Userjobpage>(context);
     DateTime birthday = DateTime(widget.data.createdAt!.year,
         widget.data.createdAt!.month, widget.data.createdAt!.day);
     final date2 = DateTime.now();
@@ -202,390 +217,439 @@ class _JobListcardState extends State<JobListcard> {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 15, top: 5),
-            child: Text(
-              widget.data.jobTitle!,
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Kalpurush'),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainuserSinglePostView(
+                  data: widget.data, index: widget.index),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                Text(
-                  "কানেক্ট আইডি: ${widget.data.jobId}",
-                  style: TextStyle(
-                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostLinkuserprofile(
-                            userid: widget.data.createdBy!,
-                          ),
-                        ));
-                  },
-                  child: Text(
-                    widget.data.createdByName!,
-                    style: TextStyle(
-                        fontFamily: 'Kalpurush',
-                        color: Colors.red.withOpacity(0.7)),
-                  ),
-                ),
-              ],
+          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => JobPostDetailsPage(
+          //       descripton: widget.data.description!,
+          //       id: widget.data.jobId!,
+          //       jobtitle: widget.data.jobTitle!,
+          //       username: widget.data.createdByName!,
+          //       catgeoryname: widget.data.category!,
+          //     ),
+          //   ),
+          // );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 15, top: 5),
+              child: Text(
+                widget.data.jobTitle!,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Kalpurush'),
+              ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                Text(
-                  "Post: ${difference} day ago",
-                  style: TextStyle(
-                      fontFamily: 'Kalpurush', color: Colors.grey[700]),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    widget.data.category!,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Text(
+                    "কানেক্ট আইডি: ${widget.data.jobId} ;",
                     style: TextStyle(
                         fontFamily: 'Kalpurush', color: Colors.grey[700]),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Text(
-              widget.data.description!,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
-            ),
-          ),
-          Container(
-            color: Colors.white,
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => ImagedialogBox(),
-                );
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset('images/post.jpg'),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Text(
+                      widget.data.category!,
+                      style: TextStyle(
+                          fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Flexible(
-                //   child: Material(
-                //     color: Colors.transparent,
-                //     child: InkWell(
-                //       onTap: () {
-                //         Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => ApplyjobPage(
-                //                 jobid: widget.data.jobId!,
-                //               ),
-                //             ));
-                //       },
-                //       child: Container(
-                //         padding: EdgeInsets.all(9),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             Container(
-                //               child: Row(
-                //                 children: [
-                //                   SvgPicture.asset(
-                //                     'images/svg/pen-solid.svg',
-                //                     height: 15,
-                //                     color: Colors.grey[700],
-                //                   ),
-                //                   SizedBox(width: 5),
-                //                   Text(
-                //                     "এডিট করুন",
-                //                     style: TextStyle(
-                //                         fontFamily: 'Kalpurush',
-                //                         color: Colors.grey[700]),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   color: Colors.grey[300],
-                //   width: 1,
-                //   child: VerticalDivider(
-                //     color: Colors.black,
-                //     thickness: 3,
-                //     indent: 20,
-                //     endIndent: 0,
-                //     width: 1,
-                //   ),
-                // ),
-                Flexible(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Applyjob2Page(
-                                  connectid: widget.data.jobId!,
-                                  id: widget.data.jobId!,
-                                  tile: widget.data.jobTitle!,
-                                  username: widget.data.createdByName!),
-                            ));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(9),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'images/svg/user-solid.svg',
-                                    height: 15,
-                                    color: Colors.grey[700],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "প্রার্থী",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Text(
+                    "Post: ${difference} day ago by",
+                    style: TextStyle(
+                        fontFamily: 'Kalpurush', color: Colors.grey[700]),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostLinkuserprofile(
+                              userid: widget.data.createdBy!,
                             ),
-                          ],
-                        ),
-                      ),
+                          ));
+                    },
+                    child: Text(
+                      widget.data.createdByName!,
+                      style: TextStyle(
+                          fontFamily: 'Kalpurush',
+                          color: Colors.red.withOpacity(0.7)),
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.grey[300],
-                  width: 1,
-                  child: VerticalDivider(
-                    color: Colors.black,
-                    thickness: 3,
-                    indent: 20,
-                    endIndent: 0,
-                    width: 1,
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Text(
+                widget.data.description!,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JobPostDetailsPage(
+                      descripton: widget.data.description!,
+                      id: widget.data.jobId!,
+                      jobtitle: widget.data.jobTitle!,
+                      username: widget.data.createdByName!,
+                      catgeoryname: widget.data.category!,
+                    ),
                   ),
+                );
+              },
+              child: Container(
+                color: Colors.white,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset('images/post.jpg'),
+                  ],
                 ),
-                // Flexible(
-                //   child: Material(
-                //     color: Colors.transparent,
-                //     child: InkWell(
-                //       onTap: () {
-                //         Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => ApplyjobPage(
-                //                 jobid: widget.data.jobId!,
-                //               ),
-                //             ));
-                //       },
-                //       child: Container(
-                //         padding: EdgeInsets.all(9),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             Container(
-                //               child: Row(
-                //                 children: [
-                //                   SvgPicture.asset(
-                //                     'images/svg/xmark-solid.svg',
-                //                     height: 15,
-                //                     color: Colors.grey[700],
-                //                   ),
-                //                   SizedBox(width: 5),
-                //                   Text(
-                //                     "রিমোভ করুন",
-                //                     style: TextStyle(
-                //                         fontFamily: 'Kalpurush',
-                //                         color: Colors.grey[700]),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   color: Colors.grey[300],
-                //   width: 1,
-                //   child: VerticalDivider(
-                //     color: Colors.black,
-                //     thickness: 3,
-                //     indent: 20,
-                //     endIndent: 0,
-                //     width: 1,
-                //   ),
-                // ),
-                Flexible(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        share();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(9),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
+              ),
+            ),
+            
+            Divider(
+              height: 0,
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Flexible(
+                  //   child: Material(
+                  //     color: Colors.transparent,
+                  //     child: InkWell(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => ApplyjobPage(
+                  //                 jobid: widget.data.jobId!,
+                  //               ),
+                  //             ));
+                  //       },
+                  //       child: Container(
+                  //         padding: EdgeInsets.all(9),
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Container(
+                  //               child: Row(
+                  //                 children: [
+                  //                   SvgPicture.asset(
+                  //                     'images/svg/pen-solid.svg',
+                  //                     height: 15,
+                  //                     color: Colors.grey[700],
+                  //                   ),
+                  //                   SizedBox(width: 5),
+                  //                   Text(
+                  //                     "এডিট করুন",
+                  //                     style: TextStyle(
+                  //                         fontFamily: 'Kalpurush',
+                  //                         color: Colors.grey[700]),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   color: Colors.grey[300],
+                  //   width: 1,
+                  //   child: VerticalDivider(
+                  //     color: Colors.black,
+                  //     thickness: 3,
+                  //     indent: 20,
+                  //     endIndent: 0,
+                  //     width: 1,
+                  //   ),
+                  // ),
+                  Flexible(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Applyjob2Page(
+                                    connectid: widget.data.jobId!,
+                                    id: widget.data.jobId!,
+                                    tile: widget.data.jobTitle!,
+                                    username: widget.data.createdByName!),
+                              ));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(9),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
                                 child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'images/svg/share-solid.svg',
-                                  height: 15,
-                                  color: Colors.grey[700],
+                                  children: [
+                                    SvgPicture.asset(
+                                      'images/svg/user-solid.svg',
+                                      height: 15,
+                                      color: Colors.grey[700],
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "প্রার্থী",
+                                      style: TextStyle(
+                                          fontFamily: 'Kalpurush',
+                                          color: Colors.grey[700]),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 5),
-                                Text("শেয়ার",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700])),
-                              ],
-                            )),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-
-                Container(
-                  color: Colors.grey[300],
-                  width: 1,
-                  child: VerticalDivider(
-                    color: Colors.black,
-                    thickness: 3,
-                    indent: 20,
-                    endIndent: 0,
+                  Container(
+                    color: Colors.grey[300],
                     width: 1,
+                    child: VerticalDivider(
+                      color: Colors.black,
+                      thickness: 3,
+                      indent: 20,
+                      endIndent: 0,
+                      width: 1,
+                    ),
                   ),
-                ),
-                Flexible(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 35,
-
-                        child: PopupMenuButton(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context) {
-                            return [
-                              PopupMenuItem(
+                  // Flexible(
+                  //   child: Material(
+                  //     color: Colors.transparent,
+                  //     child: InkWell(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => ApplyjobPage(
+                  //                 jobid: widget.data.jobId!,
+                  //               ),
+                  //             ));
+                  //       },
+                  //       child: Container(
+                  //         padding: EdgeInsets.all(9),
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Container(
+                  //               child: Row(
+                  //                 children: [
+                  //                   SvgPicture.asset(
+                  //                     'images/svg/xmark-solid.svg',
+                  //                     height: 15,
+                  //                     color: Colors.grey[700],
+                  //                   ),
+                  //                   SizedBox(width: 5),
+                  //                   Text(
+                  //                     "রিমোভ করুন",
+                  //                     style: TextStyle(
+                  //                         fontFamily: 'Kalpurush',
+                  //                         color: Colors.grey[700]),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(
+                  //   color: Colors.grey[300],
+                  //   width: 1,
+                  //   child: VerticalDivider(
+                  //     color: Colors.black,
+                  //     thickness: 3,
+                  //     indent: 20,
+                  //     endIndent: 0,
+                  //     width: 1,
+                  //   ),
+                  // ),
+                  Flexible(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          share();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(9),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
                                   child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                    'images/svg/xmark-solid.svg',
+                                    'images/svg/share-solid.svg',
                                     height: 15,
                                     color: Colors.grey[700],
                                   ),
                                   SizedBox(width: 5),
-                                  Text(
-                                    "রিমোভ করুন",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700]),
-                                  ),
+                                  Text("শেয়ার",
+                                      style: TextStyle(
+                                          fontFamily: 'Kalpurush',
+                                          color: Colors.grey[700])),
                                 ],
                               )),
-                              PopupMenuItem(
-                                  child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'images/svg/pen-solid.svg',
-                                    height: 15,
-                                    color: Colors.grey[700],
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "এডিট করুন",
-                                    style: TextStyle(
-                                        fontFamily: 'Kalpurush',
-                                        color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ))
-                            ];
-                          },
+                            ],
+                          ),
                         ),
-                        // child: Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Container(
-                        //         child: Row(
-                        //       children: [
-                        //         Icon(Icons.more_vert_outlined),
-                        //         SizedBox(width: 5),
-                        //         Text("আরো",
-                        //             style: TextStyle(
-                        //                 fontFamily: 'Kalpurush',
-                        //                 color: Colors.grey[700])),
-                        //       ],
-                        //     )),
-                        //   ],
-                        // ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+
+                  Container(
+                    color: Colors.grey[300],
+                    width: 1,
+                    child: VerticalDivider(
+                      color: Colors.black,
+                      thickness: 3,
+                      indent: 20,
+                      endIndent: 0,
+                      width: 1,
+                    ),
+                  ),
+                  Flexible(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          height: 35,
+
+                          child: PopupMenuButton(
+                            padding: EdgeInsets.zero,
+                            onSelected: (value) {
+                              if (value == 0) {
+                                userjob
+                                    .removejob(jobid: widget.data.jobId)
+                                    .then((value) => refreshdara());
+                              } else if (value == 1) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => JobeditPage(
+                                          data: widget.data,
+                                          index: widget.index),
+                                    ));
+                              }
+                            },
+                            itemBuilder: (context) {
+                              return [
+                                PopupMenuItem(
+                                    value: 0,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'images/svg/xmark-solid.svg',
+                                          height: 15,
+                                          color: Colors.grey[700],
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "রিমোভ করুন",
+                                          style: TextStyle(
+                                              fontFamily: 'Kalpurush',
+                                              color: Colors.grey[700]),
+                                        ),
+                                      ],
+                                    )),
+                                PopupMenuItem(
+                                    value: 1,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'images/svg/pen-solid.svg',
+                                          height: 15,
+                                          color: Colors.grey[700],
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          "এডিট করুন",
+                                          style: TextStyle(
+                                              fontFamily: 'Kalpurush',
+                                              color: Colors.grey[700]),
+                                        ),
+                                      ],
+                                    ))
+                              ];
+                            },
+                          ),
+                          // child: Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Container(
+                          //         child: Row(
+                          //       children: [
+                          //         Icon(Icons.more_vert_outlined),
+                          //         SizedBox(width: 5),
+                          //         Text("আরো",
+                          //             style: TextStyle(
+                          //                 fontFamily: 'Kalpurush',
+                          //                 color: Colors.grey[700])),
+                          //       ],
+                          //     )),
+                          //   ],
+                          // ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -11,8 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Model/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/Jobdetails/jobdetails.dart';
 import 'package:jobs_app/Provider/Upload/upload.dart';
+import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
@@ -25,25 +27,41 @@ import 'package:provider/provider.dart';
 import 'package:simple_timer/simple_timer.dart';
 import 'package:path/path.dart' as join;
 
-class CreateJobpage extends StatefulWidget {
-  const CreateJobpage({Key? key}) : super(key: key);
+class JobeditPage extends StatefulWidget {
+  final Msgs data;
+  final int index;
+  const JobeditPage({Key? key, required this.data, required this.index})
+      : super(key: key);
 
   @override
-  _CreateJobpageState createState() => _CreateJobpageState();
+  _JobeditPageState createState() => _JobeditPageState();
 }
 
-class _CreateJobpageState extends State<CreateJobpage> {
+class _JobeditPageState extends State<JobeditPage> {
   String? filename;
 
-  String? jobtite, description, category, userid, contactnumber;
+  // String? jobtite, description, category, userid, contactnumber;
+  TextEditingController jobtitle = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController category = TextEditingController();
+  TextEditingController userid = TextEditingController();
+  TextEditingController contactnumber = TextEditingController();
+  String? categoryname;
 
   final recorder = Soundrecord();
   final player = AudioPlay();
 
   bool audiorun = false;
+
   bool videoupload = false;
   bool imageupload = false;
   bool loading = false;
+
+  void refreshdara() {
+    var box = Hive.box('login');
+    Provider.of<Userjobpage>(context, listen: false)
+        .getuserjob(userid: box.get('userid'));
+  }
 
   Duration duration = Duration();
   Timer? timer;
@@ -52,7 +70,11 @@ class _CreateJobpageState extends State<CreateJobpage> {
   void initState() {
     recorder.init();
     player.playaudioinit();
+    jobtitle.text = widget.data.jobTitle!;
+    description.text = widget.data.description!;
+    categoryname = widget.data.category!;
 
+    contactnumber.text = widget.data.contactnumber!;
     super.initState();
   }
 
@@ -154,26 +176,28 @@ class _CreateJobpageState extends State<CreateJobpage> {
                   child: Container(
                       padding: EdgeInsets.only(top: 10), child: textform())),
               // Card(child: audiobox()),
-              // Card(child: videopicker()),
               // // SizedBox(height: 10),
+              // Card(child: videopicker()),
               // Card(child: filepicker()),
-              // SizedBox(height: 10),
               uploadbox(),
+              // SizedBox(height: 10),
               Card(
                   child: Container(
                       padding: EdgeInsets.only(top: 10),
                       child: phoneTextbox())),
-
               MaterialButton(
                 color: Color(0xFFE51D20),
                 onPressed: () {
-                  jbdetails.newjobcreate(
-                      category: category,
-                      contactnumber: contactnumber ?? "",
-                      description: description ?? "",
-                      jobtite: jobtite ?? "",
-                      context: context,
-                      userid: box.get('userid'));
+                  jbdetails
+                      .jobupdate(
+                          category: category.text,
+                          contactnumber: contactnumber.text,
+                          description: description.text,
+                          jobtite: jobtitle.text,
+                          context: context,
+                          jobid: widget.data.jobId,
+                          userid: box.get('userid'))
+                      .then((value) => refreshdara());
                 },
                 child: Text(
                   "সাবমিট করুন",
@@ -201,11 +225,12 @@ class _CreateJobpageState extends State<CreateJobpage> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
-            onChanged: (value) {
-              setState(() {
-                jobtite = value;
-              });
-            },
+            controller: jobtitle,
+            // onChanged: (value) {
+            //   setState(() {
+            //     jobtitle.text = value;
+            //   });
+            // },
             decoration: InputDecoration(
               isDense: true,
               hintText: "শিরোনাম",
@@ -219,6 +244,14 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
   Widget dropdowntext() {
     final homeprovider = Provider.of<HomeProvider>(context);
+    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
+      if (homeprovider.categorylist!.msg![i].catName == categoryname) {
+        setState(() {
+          category.text = homeprovider.categorylist!.msg![i].catId!;
+        });
+      }
+    }
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,11 +280,12 @@ class _CreateJobpageState extends State<CreateJobpage> {
                     i++) {
                   if (homeprovider.categorylist!.msg![i].catName == value) {
                     setState(() {
-                      category = homeprovider.categorylist!.msg![i].catId;
+                      category.text = homeprovider.categorylist!.msg![i].catId!;
                     });
                   }
                 }
               },
+              selectedItem: categoryname ?? "",
             ),
           ),
         ],
@@ -328,9 +362,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
+            controller: description,
             onChanged: (value) {
               setState(() {
-                description = value;
+                description.text = value;
               });
             },
             maxLines: 5,
@@ -354,9 +389,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
+            controller: contactnumber,
             onChanged: (value) {
               setState(() {
-                contactnumber = value;
+                contactnumber.text = value;
               });
             },
             decoration: const InputDecoration(
@@ -447,67 +483,67 @@ class _CreateJobpageState extends State<CreateJobpage> {
   // }
 
   // Widget videopicker() {
-  //   final upload = Provider.of<UploadProvider>(context);
-  //   final jbdetails = Provider.of<JobDetailsProvider>(context);
+  // final upload = Provider.of<UploadProvider>(context);
+  // final jbdetails = Provider.of<JobDetailsProvider>(context);
 
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Container(
-  //           margin: const EdgeInsets.only(left: 10, top: 4),
-  //           child: const Text(
-  //             "ভিডিও যুক্ত করুন (ঐচ্ছিক)",
-  //             style: TextStyle(
-  //               fontFamily: 'Kalpurush',
-  //             ),
-  //           )),
-  //       Container(
-  //         margin: const EdgeInsets.all(10),
-  //         padding: const EdgeInsets.all(5),
-  //         child: Row(
-  //           children: [
-  //             // MaterialButton(
-  //             //   color: Colors.grey[300],
-  //             //   onPressed: () {
-  //             //     Navigator.push(
-  //             //         context,
-  //             //         MaterialPageRoute(
-  //             //           builder: (context) => VideoRecordCameraPage(),
-  //             //         ));
-  //             //   },
-  //             //   child: Text("Video Record"),
-  //             // ),
-  //             IconButton(
-  //                 onPressed: () {
-  //                   Navigator.push(
-  //                       context,
-  //                       MaterialPageRoute(
-  //                         builder: (context) => VideoRecordCameraPage(),
-  //                       ));
-  //                 },
-  //                 icon: Icon(Icons.video_file)),
-  //             SizedBox(width: 10),
-  //             Expanded(child: Text(jbdetails.path)),
-  //             loading
-  //                 ? CircularProgressIndicator()
-  //                 : MaterialButton(
-  //                     onPressed: () {
+  // return Column(
+  //   crossAxisAlignment: CrossAxisAlignment.start,
+  //   children: [
+  //     Container(
+  //         margin: const EdgeInsets.only(left: 10, top: 4),
+  //         child: const Text(
+  //           "ভিডিও যুক্ত করুন (ঐচ্ছিক)",
+  //           style: TextStyle(
+  //             fontFamily: 'Kalpurush',
+  //           ),
+  //         )),
+  //     Container(
+  //       margin: const EdgeInsets.all(10),
+  //       padding: const EdgeInsets.all(5),
+  //       child: Row(
+  //         children: [
+  //           // MaterialButton(
+  //           //   color: Colors.grey[300],
+  //           //   onPressed: () {
+  //           //     Navigator.push(
+  //           //         context,
+  //           //         MaterialPageRoute(
+  //           //           builder: (context) => VideoRecordCameraPage(),
+  //           //         ));
+  //           //   },
+  //           //   child: Text("Video Record"),
+  //           // ),
+  //           IconButton(
+  //               onPressed: () {
+  //                 Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => VideoRecordCameraPage(),
+  //                     ));
+  //               },
+  //               icon: Icon(Icons.video_file)),
+  //           SizedBox(width: 10),
+  //           Expanded(child: Text(jbdetails.path)),
+  //           loading
+  //               ? CircularProgressIndicator()
+  //               : MaterialButton(
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       loading = true;
+  //                     });
+  //                     upload.uploaddile(jbdetails.path).then((value) {
   //                       setState(() {
-  //                         loading = true;
+  //                         loading = false;
   //                       });
-  //                       upload.uploaddile(jbdetails.path).then((value) {
-  //                         setState(() {
-  //                           loading = false;
-  //                         });
-  //                       });
-  //                     },
-  //                     child: Text("Upload"),
-  //                   )
-  //           ],
-  //         ),
+  //                     });
+  //                   },
+  //                   child: Text("Upload"),
+  //                 )
+  //         ],
   //       ),
-  //     ],
-  //   );
+  //     ),
+  //   ],
+  // );
   // }
 
   Widget uploadbox() {
