@@ -37,22 +37,24 @@ class JobDetailsProvider extends ChangeNotifier {
     }
   }
 
-  Future newjobcreate(
-      {String? jobtite,
-      description,
-      category,
-      userid,
-      contactnumber,
-      BuildContext? context}) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('https://launch1.goshrt.com/api/job/jobcreate'));
+  Future newjobcreate({
+    String? jobtite,
+    description,
+    category,
+    userid,
+    doc,
+    contactnumber,
+    BuildContext? context,
+  }) async {
+    var request =
+        http.MultipartRequest('POST', Uri.parse('$url/api/job/jobcreate'));
     request.fields.addAll({
       'job_title': jobtite!,
       'description': description,
       'category': category,
       'user_id': userid,
       'contactnumber': contactnumber,
-      'doc': ''
+      'doc': doc
     });
 
     http.StreamedResponse response = await request.send();
@@ -62,6 +64,7 @@ class JobDetailsProvider extends ChangeNotifier {
       if (jsonDecode(responsedata.body)['error'] == 0) {
         Message().scaffoldmessage(
             context!, jsonDecode(responsedata.body)['msg'].toString());
+        print(responsedata.body);
         notifyListeners();
       } else {
         print(responsedata.body);

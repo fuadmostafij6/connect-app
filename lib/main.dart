@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Provider/Message/message.dart';
 import 'package:jobs_app/Provider/Upload/upload.dart';
 import 'package:jobs_app/Provider/UserPrevlies/userprevilies.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,8 @@ import 'Provider/Form/form.dart';
 import 'package:path_provider/path_provider.dart';
 import 'Provider/Job_Apply/job_apply.dart';
 import 'Provider/Jobdetails/jobdetails.dart';
+import 'Provider/MemberPackage/memberpackage.dart';
+import 'Provider/Notification/notification.dart';
 import 'Provider/Profile/profile.dart';
 import 'Provider/Search/search.dart';
 import 'Provider/Userjob/userjob.dart';
@@ -35,7 +38,10 @@ void main() async {
     ChangeNotifierProvider(create: (context) => JobApplyprovider()),
     ChangeNotifierProvider(create: (context) => CategoryJobprovider()),
     ChangeNotifierProvider(create: (context) => UploadProvider()),
-    ChangeNotifierProvider(create: (context) => UserPreviliesProvider())
+    ChangeNotifierProvider(create: (context) => UserPreviliesProvider()),
+    ChangeNotifierProvider(create: ((context) => MessageProvider())),
+    ChangeNotifierProvider(create: ((context) => PackageProvider())),
+    ChangeNotifierProvider(create: ((context) => NotificationProvider()))
   ], child: const MyApp()));
 }
 

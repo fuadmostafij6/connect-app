@@ -731,6 +731,7 @@ class _Applyjob2PageState extends State<Applyjob2Page> {
         Container(
           margin: EdgeInsets.all(10),
           child: TextFormField(
+            
             onChanged: (value) {
               setState(() {
                 note = value;

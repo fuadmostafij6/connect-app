@@ -244,10 +244,10 @@ class _JobeditPageState extends State<JobeditPage> {
 
   Widget dropdowntext() {
     final homeprovider = Provider.of<HomeProvider>(context);
-    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-      if (homeprovider.categorylist!.msg![i].catName == categoryname) {
+    for (var i = 0; i < homeprovider.allcategory!.msg!.length; i++) {
+      if (homeprovider.allcategory!.msg![i].catName == categoryname) {
         setState(() {
-          category.text = homeprovider.categorylist!.msg![i].catId!;
+          category.text = homeprovider.allcategory!.msg![i].catId!;
         });
       }
     }
@@ -267,7 +267,7 @@ class _JobeditPageState extends State<JobeditPage> {
             child: DropdownSearch<String>(
               mode: Mode.MENU,
               hint: "কাজের ক্যাটাগরি",
-              items: homeprovider.categorylist!.msg!
+              items: homeprovider.allcategory!.msg!
                   .map((e) => e.catName!)
                   .toList(),
               dropdownSearchDecoration: InputDecoration(
@@ -276,11 +276,11 @@ class _JobeditPageState extends State<JobeditPage> {
                   contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
               onChanged: (value) {
                 for (var i = 0;
-                    i < homeprovider.categorylist!.msg!.length;
+                    i < homeprovider.allcategory!.msg!.length;
                     i++) {
-                  if (homeprovider.categorylist!.msg![i].catName == value) {
+                  if (homeprovider.allcategory!.msg![i].catName == value) {
                     setState(() {
-                      category.text = homeprovider.categorylist!.msg![i].catId!;
+                      category.text = homeprovider.allcategory!.msg![i].catId!;
                     });
                   }
                 }

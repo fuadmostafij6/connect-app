@@ -10,6 +10,7 @@ import 'package:jobs_app/Screen/Profile/postlinkuser.dart';
 import 'package:jobs_app/Screen/Singlepostview/singlepostview.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Const_value/apilink.dart';
 import '../../JobpostDetails/jobpostdetails.dart';
 
 class Myfeedpage extends StatefulWidget {
@@ -67,10 +68,10 @@ class _JobListcardState extends State<JobListcard> {
 
   void categorynamefind() {
     final homeprovider = Provider.of<HomeProvider>(context, listen: false);
-    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+    for (var i = 0; i < homeprovider.allcategory!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.allcategory!.msg![i].catId) {
         setState(() {
-          categoryname = homeprovider.categorylist!.msg![i].catName!;
+          categoryname = homeprovider.allcategory!.msg![i].catName!;
         });
       }
     }
@@ -104,11 +105,12 @@ class _JobListcardState extends State<JobListcard> {
       child: InkWell(
         onTap: () {
           Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SinglePostView(data: widget.data,index: widget.index),
-                    ),
-                  );
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  SinglePostView(data: widget.data, index: widget.index),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +231,7 @@ class _JobListcardState extends State<JobListcard> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image.asset('images/post.jpg'),
+                    widget.data.doc != null ? Image.network(jobimage + widget.data.doc!) : Image.asset('images/post.jpg'),
                   ],
                 ),
               ),

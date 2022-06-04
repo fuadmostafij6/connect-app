@@ -72,10 +72,10 @@ class _JobListcard2State extends State<JobListcard2> {
 
   void categorynamefind() {
     final homeprovider = Provider.of<HomeProvider>(context, listen: false);
-    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+    for (var i = 0; i < homeprovider.allcategory!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.allcategory!.msg![i].catId) {
         setState(() {
-          categoryname = homeprovider.categorylist!.msg![i].catName!;
+          categoryname = homeprovider.allcategory!.msg![i].catName!;
         });
       }
     }

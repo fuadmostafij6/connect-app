@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../Model/PackageList/packagelist.dart';
 import '../membershipbuy.dart';
 
 class Zerotkpage extends StatefulWidget {
-  const Zerotkpage({Key? key}) : super(key: key);
+  final Package msg;
+  const Zerotkpage({Key? key, required this.msg}) : super(key: key);
 
   @override
   _ZerotkpageState createState() => _ZerotkpageState();
@@ -16,17 +18,14 @@ class _ZerotkpageState extends State<Zerotkpage> {
       color: Colors.white,
       child: Column(
         children: [
-          detailsbox(name: "Follow", value: "0"),
+          detailsbox(name: "Post Limit", value: "${widget.msg.privilege!.postLimit}"),
           Divider(),
-          detailsbox(name: "post Limit", value: "1"),
+          detailsbox(name: "Apply Limit", value: "${widget.msg.privilege!.applyLimit}"),
           Divider(),
-          detailsbox(name: "Application", value: "0"),
+          detailsbox(name: "phone", value: "${widget.msg.privilege!.phone}"),
           Divider(),
-          detailsbox(name: "Category", value: "0"),
+          detailsbox(name: "Category", value: "${widget.msg.privilege!.category}"),
           Divider(),
-          detailsbox(name: "Call", value: 'x'),
-          Divider(),
-          detailsbox(name: "Validation", value: "1 day"),
           Divider(),
           MaterialButton(
             color: Colors.grey[200],
@@ -34,7 +33,7 @@ class _ZerotkpageState extends State<Zerotkpage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MemeberShipBuyPage(),
+                    builder: (context) => MemeberShipBuyPage(price: widget.msg.price!),
                   ));
             },
             child: Text('নির্বাচন করুন'),

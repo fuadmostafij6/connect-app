@@ -5,6 +5,7 @@ import 'package:jobs_app/Screen/Deshboard/deshboard2.dart';
 import 'package:jobs_app/Screen/home/homepage4.dart';
 import 'package:provider/provider.dart';
 
+import 'Provider/MemberPackage/memberpackage.dart';
 import 'Provider/UserPrevlies/userprevilies.dart';
 import 'Screen/Chat/chatlist.dart';
 import 'Screen/Deshboard/deshboard.dart';
@@ -32,6 +33,7 @@ class _HomepageState extends State<Homepage> {
     Provider.of<UserPreviliesProvider>(context, listen: false)
         .getuserprevilies();
     Provider.of<ProfileProvider>(context, listen: false).getprofileinfo();
+    Provider.of<PackageProvider>(context, listen: false).getpackagelist();
     super.initState();
   }
 

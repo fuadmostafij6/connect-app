@@ -61,7 +61,7 @@ class _AllcategorypageState extends State<Allcategorypage> {
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: GridView.builder(
                   shrinkWrap: true,
-                  itemCount: homeprovider.categorylist!.msg!.length,
+                  itemCount: homeprovider.allcategory!.msg!.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                   ),
@@ -81,8 +81,7 @@ class _AllcategorypageState extends State<Allcategorypage> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                  homeprovider
-                                      .categorylist!.msg![index].catName!,
+                                  homeprovider.allcategory!.msg![index].catName!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Model/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/Userjob/userjob.dart';
 import 'package:jobs_app/Provider/home.dart';
@@ -183,10 +184,10 @@ class _JobListcardState extends State<JobListcard> {
 
   void categorynamefind() {
     final homeprovider = Provider.of<HomeProvider>(context, listen: false);
-    for (var i = 0; i < homeprovider.categorylist!.msg!.length; i++) {
-      if (widget.data.category == homeprovider.categorylist!.msg![i].catId) {
+    for (var i = 0; i < homeprovider.allcategory!.msg!.length; i++) {
+      if (widget.data.category == homeprovider.allcategory!.msg![i].catId) {
         setState(() {
-          categoryname = homeprovider.categorylist!.msg![i].catName!;
+          categoryname = homeprovider.allcategory!.msg![i].catName!;
         });
       }
     }
@@ -340,12 +341,13 @@ class _JobListcardState extends State<JobListcard> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image.asset('images/post.jpg'),
+                    widget.data.doc != null
+                        ? Image.network(jobimage + widget.data.doc!)
+                        : Image.asset('images/post.jpg'),
                   ],
                 ),
               ),
             ),
-            
             Divider(
               height: 0,
             ),

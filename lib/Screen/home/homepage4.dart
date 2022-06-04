@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Allcategory/allcategory.dart';
 import 'package:jobs_app/Screen/Categoryjob/categoryjob.dart';
@@ -255,14 +256,16 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
   // }
 
   Widget categorybox2() {
+    final homeprovider = Provider.of<HomeProvider>(context);
     return Card(
       child: GridView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-          itemCount: 8,
+          itemCount: homeprovider.allcategory!.msg!.length,
           itemBuilder: (BuildContext context, int index) {
+            var data = homeprovider.allcategory!.msg![index];
             return Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -272,18 +275,26 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Allcategorypage(),
+                            builder: (context) => CategoryjobPage(
+                                categoryid: data.catId!,
+                                categoryname: data.catName!),
                           ));
                     },
                     child: Column(
                       children: [
-                        SvgPicture.asset(
-                          'images/svg/compact-disc-solid.svg',
-                          color: Colors.red,
-                          height: 48,
-                        ),
+                        Container(
+                            height: 50,
+                            width: 50,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.network(
+                                otherimage + data.image!,
+                                fit: BoxFit.cover,
+                              ),
+                            )),
                         SizedBox(height: 5),
-                        Text("বড়ো প্রকোপল্প",
+                        Text(data.catName!,
+                            maxLines: 1,
                             style: TextStyle(fontFamily: 'Kalpurush')),
                       ],
                     ),

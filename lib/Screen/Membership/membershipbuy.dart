@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 
 import '../../Const_value/textfielddropdown.dart';
 import '../../Const_value/textfrom.dart';
+import '../Amarpay/amarpay.dart';
 import '../SSlcommerz/sslcommerz.dart';
 import '../Searchpage/searchpage.dart';
 
 class MemeberShipBuyPage extends StatefulWidget {
-  const MemeberShipBuyPage({Key? key}) : super(key: key);
+  final String price;
+  const MemeberShipBuyPage({Key? key, required this.price}) : super(key: key);
 
   @override
   _MemeberShipBuyPageState createState() => _MemeberShipBuyPageState();
@@ -78,7 +81,7 @@ class _MemeberShipBuyPageState extends State<MemeberShipBuyPage> {
             TextfromPage(
               name: "মেম্বারশিপ মুল্য",
               hinttext: "মেম্বারশিপ মুল্য",
-              initialValue: "500",
+              initialValue: widget.price,
               enabled: false,
               onSaved: (value) {},
             ),
@@ -115,7 +118,7 @@ class _MemeberShipBuyPageState extends State<MemeberShipBuyPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SslcommerzPage(),
+                      builder: (context) => AmarpayPage(),
                     ));
               },
               child: Text(

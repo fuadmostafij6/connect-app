@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/chatlist.dart';
-import 'package:jobs_app/Screen/Chat/chatdetails.dart';
 import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
-import 'package:jobs_app/Screen/Searchpage/searchpage.dart';
 
 class ChatListpage extends StatefulWidget {
   const ChatListpage({Key? key}) : super(key: key);
@@ -20,12 +18,12 @@ class _ChatListpageState extends State<ChatListpage> {
     var box = Hive.box('login');
     return Scaffold(
       key: _key,
-      endDrawer: DrawerPage(),
+      endDrawer: const DrawerPage(),
       appBar: AppBar(
-        title: Text('বার্তা সমূহ',
+        title: const Text('বার্তা সমূহ',
             style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
         elevation: 0,
-        backgroundColor: Color(0xFFE51D20),
+        backgroundColor: const Color(0xFFE51D20),
         flexibleSpace: const Image(
           image: AssetImage(
             'images/Top Bar illustration Solid.png',
@@ -38,8 +36,8 @@ class _ChatListpageState extends State<ChatListpage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
+              padding: const EdgeInsets.only(left: 10),
+              child: const Text(
                 "কানেক্ট",
                 style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
               ),
@@ -56,15 +54,15 @@ class _ChatListpageState extends State<ChatListpage> {
                       builder: (context) => const Mainsearchpage(),
                     ));
               },
-              child: Icon(Icons.search)),
+              child: const Icon(Icons.search)),
 
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           InkWell(
               onTap: () {
                 _key.currentState!.openEndDrawer();
               },
-              child: Icon(Icons.menu)),
-          SizedBox(width: 10),
+              child: const Icon(Icons.menu)),
+          const SizedBox(width: 10),
           // IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         ],
       ),
@@ -73,16 +71,16 @@ class _ChatListpageState extends State<ChatListpage> {
         itemBuilder: (context, index) {
           var data = chatlist[index];
           return Container(
-              margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.all(10),
-              color: Color(0xFFF4F4F4),
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.all(10),
+              color: const Color(0xFFF4F4F4),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatdetailsPage(),
-                      ));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => ChatdetailsPage(),
+                  //     ));
                 },
                 child: Row(
                   children: [
@@ -92,7 +90,7 @@ class _ChatListpageState extends State<ChatListpage> {
                     ),
                     Flexible(
                       child: Container(
-                        margin: EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(left: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,21 +99,21 @@ class _ChatListpageState extends State<ChatListpage> {
                               children: [
                                 Text(
                                   data.name!,
-                                  style: TextStyle(
-                                      color: Color(0xFF000000),
+                                  style: const TextStyle(
+                                      color: const Color(0xFF000000),
                                       fontSize: 15,
                                       fontFamily: 'Kalpurush'),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 Text(
                                   data.date!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color(0xFF919195),
                                       fontFamily: 'Kalpurush'),
                                 )
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             data.audiostatus == 1
                                 ? Row(
                                     children: [
@@ -123,8 +121,8 @@ class _ChatListpageState extends State<ChatListpage> {
                                         'images/message_icon/recording_mic_pulse.png',
                                         height: 20,
                                       ),
-                                      SizedBox(width: 5),
-                                      Text(
+                                      const SizedBox(width: 5),
+                                      const Text(
                                         "0:14",
                                         style: TextStyle(
                                             color: Color(0xFF8E8E93),
@@ -142,7 +140,7 @@ class _ChatListpageState extends State<ChatListpage> {
                                           : Container(),
                                       Text(
                                         data.lastmessage!,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Color(0xFF8E8E93),
                                             fontFamily: 'Kalpurush'),
                                       )

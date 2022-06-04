@@ -9,14 +9,13 @@ import 'package:jobs_app/Model/job_List/joblist.dart';
 import '../Const_value/apilink.dart';
 
 class HomeProvider extends ChangeNotifier {
-  Categorylist? categorylist;
+  Allcategory? allcategory;
 
   Future getcategorylist() async {
     var headers = {
       'Cookie': 'ci_session=a9b0e8c8aefadafed1587e7f256e8e4f719f3809'
     };
-    var request = http.Request(
-        'GET', Uri.parse('$url/api/job/catlisting'));
+    var request = http.Request('GET', Uri.parse('$url/api/job/catlisting'));
 
     request.headers.addAll(headers);
 
@@ -24,7 +23,7 @@ class HomeProvider extends ChangeNotifier {
     var responsedata = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
-      categorylist = Categorylist.fromJson(jsonDecode(responsedata.body));
+      allcategory = allcategoryFromJson(responsedata.body);
       print(responsedata.body);
       notifyListeners();
     } else {
@@ -42,7 +41,7 @@ class HomeProvider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            '$url/api/job/listing?user_id=${box.get('userid')}&limit=20&offset=0'));
+            '$url/api/job/listing?user_id=${box.get('userid')}&limit=20000&offset=0'));
 
     request.headers.addAll(headers);
 

@@ -270,9 +270,9 @@ class _DeshboardpageState extends State<Deshboardpage> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        itemCount: homeprovider.categorylist!.msg!.length,
+        itemCount: homeprovider.allcategory!.msg!.length,
         itemBuilder: (context, index) {
-          var data = homeprovider.categorylist!.msg![index];
+          var data = homeprovider.allcategory!.msg![index];
           return Column(
             children: [
               Container(

@@ -48,6 +48,8 @@ class _CreateJobpageState extends State<CreateJobpage> {
   Duration duration = Duration();
   Timer? timer;
 
+  List<String> uploadlist = [];
+
   @override
   void initState() {
     recorder.init();
@@ -173,6 +175,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                       description: description ?? "",
                       jobtite: jobtite ?? "",
                       context: context,
+                      doc: "",
                       userid: box.get('userid'));
                 },
                 child: Text(
@@ -234,7 +237,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
             child: DropdownSearch<String>(
               mode: Mode.MENU,
               hint: "কাজের ক্যাটাগরি",
-              items: homeprovider.categorylist!.msg!
+              items: homeprovider.allcategory!.msg!
                   .map((e) => e.catName!)
                   .toList(),
               dropdownSearchDecoration: InputDecoration(
@@ -243,11 +246,11 @@ class _CreateJobpageState extends State<CreateJobpage> {
                   contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
               onChanged: (value) {
                 for (var i = 0;
-                    i < homeprovider.categorylist!.msg!.length;
+                    i < homeprovider.allcategory!.msg!.length;
                     i++) {
-                  if (homeprovider.categorylist!.msg![i].catName == value) {
+                  if (homeprovider.allcategory!.msg![i].catName == value) {
                     setState(() {
-                      category = homeprovider.categorylist!.msg![i].catId;
+                      category = homeprovider.allcategory!.msg![i].catId;
                     });
                   }
                 }
@@ -577,8 +580,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
                         if (result != null) {
                           File file = File(result.files.single.path!);
+
                           setState(() {
                             filename = result.files.single.name;
+                            uploadlist.add(join.basename(file.path));
                           });
                           upload.uploaddile(file.path);
                         } else {
@@ -621,6 +626,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                           String path = join.join(
                               (await getTemporaryDirectory()).path,
                               'audio_example.aac');
+                          uploadlist.add(join.basename(path));
                           upload.uploaddile(path).then((value) {
                             setState(() {
                               audiorun = false;
@@ -649,6 +655,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                               setState(() {
                                 loading = true;
                               });
+                              uploadlist.add(join.basename(jbdetails.path));
                               upload.uploaddile(jbdetails.path).then((value) {
                                 setState(() {
                                   loading = false;
