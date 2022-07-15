@@ -78,6 +78,7 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                     ),
             ),
           ),
+
           Container(
             decoration: BoxDecoration(
                 border: Border(
@@ -94,11 +95,11 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
               },
               icon: index == 3
                   ? Image.asset(
-                      'images/Dashboard.png',
+                      'images/Chat (1).png',
                       height: 30,
                     )
                   : Image.asset(
-                      'images/signal-status.png',
+                      'images/Chat.png',
                       height: 20,
                     ),
             ),
@@ -118,32 +119,6 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
                   widget.pageindex(3);
                 });
               },
-              icon: index == 4
-                  ? Image.asset(
-                      'images/Chat (1).png',
-                      height: 30,
-                    )
-                  : Image.asset(
-                      'images/Chat.png',
-                      height: 20,
-                    ),
-            ),
-          ),
-
-          Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide(
-                        color: index == 5
-                            ? Color(0xFFE51D20)
-                            : Colors.transparent))),
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  index = 5;
-                  widget.pageindex(4);
-                });
-              },
               icon: index == 5
                   ? Image.asset(
                       'images/user.png',
@@ -159,14 +134,14 @@ class _ButtomNavigationbarPageState extends State<ButtomNavigationbarPage> {
             decoration: BoxDecoration(
                 border: Border(
                     top: BorderSide(
-                        color: index == 6
+                        color: index == 5
                             ? Color(0xFFE51D20)
                             : Colors.transparent))),
             child: IconButton(
               onPressed: () {
                 setState(() {
-                  index = 6;
-                  widget.pageindex(5);
+                  index = 5;
+                  widget.pageindex(4);
                 });
               },
               icon: index == 6

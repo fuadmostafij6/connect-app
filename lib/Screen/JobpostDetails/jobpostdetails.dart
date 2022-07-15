@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
+import 'package:path/path.dart' as path;
+
+import '../Linkscreen/mylinkscreen.dart';
+import '../VideoPlay/videoplayer.dart';
 
 class JobPostDetailsPage extends StatefulWidget {
-  final String jobtitle, id, username, descripton, catgeoryname;
+  final String jobtitle, id, username, descripton, catgeoryname, doc;
   const JobPostDetailsPage(
       {Key? key,
       required this.jobtitle,
       required this.id,
       required this.username,
       required this.descripton,
-      required this.catgeoryname})
+      required this.catgeoryname,
+      required this.doc})
       : super(key: key);
 
   @override
@@ -22,10 +28,23 @@ class _JobPostDetailsPageState extends State<JobPostDetailsPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'images/post.jpg',
-            fit: BoxFit.cover,
-          ),
+          // Image.asset(
+          //   'images/post.jpg',
+          //   fit: BoxFit.cover,
+          // ),
+          if (path.extension(widget.doc) == ".jpg" ||
+              path.extension(widget.doc) == ".png" ||
+              path.extension(widget.doc) == ".JPG")
+            Image.network(
+              jobimage + widget.doc,
+              fit: BoxFit.cover,
+            ),
+          if (path.extension(widget.doc) == ".mp4")
+            ChewieDemo(
+              videourl: jobimage + widget.doc,
+            ),
+          if (path.extension(widget.doc) == ".pdf") PdfView(data: widget.doc),
+
           Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -157,6 +157,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                           newpass: newpassword.text,
                           oldpass: oldpassword.text,
                           phone: phone.text,
+                          servicearea: [],
                           profiletag: profiletag.text,
                         )
                         .then((value) => profile.getprofileinfo());

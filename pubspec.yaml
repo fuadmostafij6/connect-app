@@ -59,6 +59,9 @@ dependencies:
   sqflite: ^2.0.2
   awesome_dialog: ^2.1.2
   aamarpay: ^1.0.1
+  chewie: ^1.3.3
+  flutter_pdfview: ^1.2.2
+  audioplayers: ^0.20.1
 
 
 dev_dependencies:

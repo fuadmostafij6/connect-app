@@ -95,23 +95,23 @@ class _CategoryjobPageState extends State<CategoryjobPage> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : categoryjob.joblist!.msg!.isEmpty
-              ? Center(
-                  child: Text('No Job Found'),
-                )
-              : Container(
-                  color: Colors.grey[300],
-                  child: ListView.builder(
-                    itemCount: categoryjob.joblist!.msg!.length,
-                    itemBuilder: (context, index) {
-                      var data = categoryjob.joblist!.msg![index];
-                      return JobListcard(
-                        data: data,
-                        index: index,
-                      );
-                    },
-                  ),
-                ),
+          : Container(
+              color: Colors.grey[300],
+              child: categoryjob.joblist == null
+                  ? Center(
+                      child: Text("No Job Found"),
+                    )
+                  : ListView.builder(
+                      itemCount: categoryjob.joblist!.msg!.length,
+                      itemBuilder: (context, index) {
+                        var data = categoryjob.joblist!.msg![index];
+                        return JobListcard(
+                          data: data,
+                          index: index,
+                        );
+                      },
+                    ),
+            ),
     );
   }
 }
@@ -267,11 +267,10 @@ class _JobListcardState extends State<JobListcard> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Applyjob2Page(
-                                 connectid: widget.data.jobId!,
+                                  connectid: widget.data.jobId!,
                                   id: widget.data.jobId!,
                                   tile: widget.data.jobTitle!,
-                                  username: widget.data.createdBy!
-                              ),
+                                  username: widget.data.createdBy!),
                             ));
                       },
                       child: Container(

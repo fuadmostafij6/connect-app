@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +16,10 @@ import 'package:jobs_app/Screen/Menu/menu.dart';
 import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
+import '../../Const_value/apilink.dart';
+import '../../Provider/Follow/follow.dart';
 
 class PostLinkuserprofile extends StatefulWidget {
   final String userid;
@@ -34,6 +40,33 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
         .getpostlinkuser(userid: widget.userid, mainuserid: box.get('userid'));
     await Provider.of<Userjobpage>(context, listen: false)
         .getuserjob(userid: widget.userid);
+    followstatus();
+  }
+
+  String? status = '';
+
+  Future followstatus() async {
+    var box = Hive.box('login');
+    var headers = {
+      'Cookie': 'ci_session=8b60b892cb6cdac140e0edd7f17a76733b8087b3'
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            '$url/api/follow/followstatus?user_id=${box.get('userid')}&user_profile_id=${widget.userid}'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(await response.stream.bytesToString());
+      setState(() {
+        status = json['msg'];
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 
   @override
@@ -51,6 +84,7 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
   Widget build(BuildContext context) {
     final userjob = Provider.of<Userjobpage>(context);
     final profile = Provider.of<ProfileProvider>(context);
+    final follow = Provider.of<FollowProvider>(context);
     var box = Hive.box('login');
     return Scaffold(
       key: _key,
@@ -115,7 +149,9 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
                                     ? CircleAvatar(
                                         radius: 40,
                                         backgroundImage: NetworkImage(
-                                            "https://launch1.goshrt.com/uploads/${profile.postlinkuser!.msg!.userData!.pic}"),
+                                            otherimage +
+                                                profile.postlinkuser!.msg!
+                                                    .userData!.pic!),
                                       )
                                     : CircleAvatar(
                                         radius: 40,
@@ -159,38 +195,47 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
                                             fontFamily: 'kalpurush',
                                             color: Colors.red),
                                       ),
-                                    InkWell(
-                                      onTap: () {
-                                        profile
-                                            .followaction(
-                                                action: 'remove',
-                                                userid: box.get('userid'),
-                                                userprofileid: profile
-                                                    .postlinkuser!
-                                                    .msg!
-                                                    .userData!
-                                                    .userId)
-                                            .then((value) => loaddata());
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.red,
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            profile.postlinkuser!.msg!
-                                                        .followaction ==
-                                                    "add"
-                                                ? 'অনুসরুন বাদ দিন '
-                                                : "অনুসরুন করুন",
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(width: 5),
+                                        InkWell(
+                                          onTap: () {
+                                            if (status ==
+                                                "User can follow this user") {
+                                              follow
+                                                  .followacton(
+                                                      profileid: widget.userid
+                                                          .toString(),
+                                                      status: 'add')
+                                                  .then((value) =>
+                                                      followstatus());
+                                            } else {
+                                              follow
+                                                  .followacton(
+                                                      profileid: widget.userid
+                                                          .toString(),
+                                                      status: 'remove')
+                                                  .then((value) =>
+                                                      followstatus());
+                                            }
+                                          },
+                                          child: Text(
+                                            status == ""
+                                                ? ""
+                                                : status ==
+                                                        "User can follow this user"
+                                                    ? "অনুসরুন করুন"
+                                                    : "অনুসরুন বাতিল করুন",
                                             style: TextStyle(
                                                 color: Colors.red,
                                                 fontFamily: 'kalpurush'),
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        )
+                                      ],
                                     )
                                   ],
                                 )

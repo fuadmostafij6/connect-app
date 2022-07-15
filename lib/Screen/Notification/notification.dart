@@ -99,7 +99,7 @@ class _NotificationPageState extends State<NotificationPage> {
               );
             } else {
               return Center(
-                child: CircularProgressIndicator(),
+                child: Text("no Notification"),
               );
             }
           }),

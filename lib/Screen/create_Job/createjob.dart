@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -23,7 +24,10 @@ import 'package:jobs_app/Screen/create_Job/videorecord.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_timer/simple_timer.dart';
-import 'package:path/path.dart' as join;
+import 'package:path/path.dart' as join1;
+
+import '../../Provider/Job_Apply/job_apply.dart';
+import '../../Provider/Userjob/userjob.dart';
 
 class CreateJobpage extends StatefulWidget {
   const CreateJobpage({Key? key}) : super(key: key);
@@ -45,13 +49,19 @@ class _CreateJobpageState extends State<CreateJobpage> {
   bool imageupload = false;
   bool loading = false;
 
+  String? audioname;
+
   Duration duration = Duration();
   Timer? timer;
 
-  List<String> uploadlist = [];
+  String image = '';
+  String audio = '';
+  String video = '';
 
   @override
   void initState() {
+    var rng = Random();
+    audioname = rng.nextInt(1000 * 100000).toString();
     recorder.init();
     player.playaudioinit();
 
@@ -169,14 +179,26 @@ class _CreateJobpageState extends State<CreateJobpage> {
               MaterialButton(
                 color: Color(0xFFE51D20),
                 onPressed: () {
-                  jbdetails.newjobcreate(
-                      category: category,
-                      contactnumber: contactnumber ?? "",
-                      description: description ?? "",
-                      jobtite: jobtite ?? "",
-                      context: context,
-                      doc: "",
-                      userid: box.get('userid'));
+                  jbdetails
+                      .newjobcreate(
+                          category: category,
+                          contactnumber: contactnumber ?? "",
+                          description: description ?? "",
+                          jobtite: jobtite ?? "",
+                          context: context,
+                          image: image,
+                          audio: audio,
+                          video: video,
+                          userid: box.get('userid'))
+                      .then((value) =>
+                          Provider.of<Userjobpage>(context, listen: false)
+                              .getuserjob(userid: box.get('userid')));
+
+                  // List<String> d = [];
+                  // uploadlist.forEach((element) {
+                  //   d.add("${"$element"}");
+                  // });
+                  // print(d);
                 },
                 child: Text(
                   "সাবমিট করুন",
@@ -536,9 +558,8 @@ class _CreateJobpageState extends State<CreateJobpage> {
                     flex: 1,
                     child: InkWell(
                       onTap: () async {
-                        await recorder.tooglerecording();
+                        await recorder.tooglerecording("${audioname!}.aac");
                         isrecording ? cancletimer() : starttimer();
-
                         setState(() {
                           videoupload = false;
                         });
@@ -583,7 +604,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
                           setState(() {
                             filename = result.files.single.name;
-                            uploadlist.add(join.basename(file.path));
+                            image = join1.basename(file.path);
                           });
                           upload.uploaddile(file.path);
                         } else {
@@ -604,11 +625,15 @@ class _CreateJobpageState extends State<CreateJobpage> {
                     ? MaterialButton(
                         color: Colors.red,
                         onPressed: () async {
+                          String path = join1.join(
+                              (await getTemporaryDirectory()).path,
+                              "${audioname}.aac");
+                          print(path);
                           await player.toogleaudioplayer(
-                            whenfinish: () {
-                              setState(() {});
-                            },
-                          );
+                              whenfinish: () {
+                                setState(() {});
+                              },
+                              path: path);
 
                           setState(() {});
                         },
@@ -623,10 +648,11 @@ class _CreateJobpageState extends State<CreateJobpage> {
                     ? MaterialButton(
                         color: Colors.red,
                         onPressed: () async {
-                          String path = join.join(
+                          String path = join1.join(
                               (await getTemporaryDirectory()).path,
-                              'audio_example.aac');
-                          uploadlist.add(join.basename(path));
+                              "${audioname}.aac");
+                          print(path);
+                          audio = join1.basename(path);
                           upload.uploaddile(path).then((value) {
                             setState(() {
                               audiorun = false;
@@ -655,7 +681,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                               setState(() {
                                 loading = true;
                               });
-                              uploadlist.add(join.basename(jbdetails.path));
+                              video = join1.basename(jbdetails.path);
                               upload.uploaddile(jbdetails.path).then((value) {
                                 setState(() {
                                   loading = false;

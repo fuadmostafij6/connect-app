@@ -37,7 +37,7 @@ class CategoryJobprovider extends ChangeNotifier {
         joblist = joblistFromJson(responsedata.body);
         notifyListeners();
       } else {
-        joblist!.msg!.clear();
+        joblist = null;
         notifyListeners();
       }
     } else {

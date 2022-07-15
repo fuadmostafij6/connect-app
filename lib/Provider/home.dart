@@ -49,7 +49,12 @@ class HomeProvider extends ChangeNotifier {
     var responsedata = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
-      joblist = Joblist.fromJson(jsonDecode(responsedata.body));
+      var data = jsonDecode(responsedata.body);
+      if (data['error'] == 1) {
+        joblist = null;
+      } else {
+        joblist = Joblist.fromJson(jsonDecode(responsedata.body));
+      }
     } else {
       print(responsedata.body);
     }

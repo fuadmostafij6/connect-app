@@ -50,7 +50,7 @@ class Msgs {
     DateTime? createdAt;
     String? status;
     String? createdBy;
-    dynamic doc;
+    List<String>? doc;
     String? createdByName;
 
     factory Msgs.fromJson(Map<String, dynamic> json) => Msgs(
@@ -62,7 +62,7 @@ class Msgs {
         createdAt: DateTime.parse(json["created_at"]),
         status: json["status"],
         createdBy: json["created_by"],
-        doc: json["doc"],
+        doc: json["doc"] == null ? null : List<String>.from(json["doc"].map((x) => x)),
         createdByName: json["created_by_name"],
     );
 
@@ -75,7 +75,7 @@ class Msgs {
         "created_at": createdAt!.toIso8601String(),
         "status": status,
         "created_by": createdBy,
-        "doc": doc,
+         "doc": doc == null ? null : List<dynamic>.from(doc!.map((x) => x)),
         "created_by_name": createdByName,
     };
 }

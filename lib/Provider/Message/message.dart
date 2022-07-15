@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Model/Messagelist/messagelist.dart';
+
+import '../../Model/MessageBox/messageboxlist.dart';
 
 class MessageProvider extends ChangeNotifier {
   Future messagesend(
@@ -55,6 +60,30 @@ class MessageProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       return messagelistFromJson(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<MessageBoxlist?> messageboxlist() async {
+    var box = Hive.box('login');
+    var headers = {
+      'Cookie': 'ci_session=290806897eaac0b2c7f11c12a8ff56873fda1d72'
+    };
+    var request = http.Request(
+        'GET', Uri.parse('$url/api/message/all?user_id=${box.get('userid')}'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(await response.stream.bytesToString());
+      if (json['error'] == 1) {
+        return null;
+      } else {
+        return messageBoxlistFromJson(await response.stream.bytesToString());
+      }
     } else {
       print(response.reasonPhrase);
     }

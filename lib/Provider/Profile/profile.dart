@@ -143,7 +143,7 @@ class ProfileProvider extends ChangeNotifier {
       profiletag,
       oldpass,
       newpass,
-      confirmpass}) async {
+      confirmpass, List<String>? servicearea}) async {
     var box = Hive.box('login');
     var request =
         http.MultipartRequest('POST', Uri.parse('$url/api/user/profileupdate'));
@@ -153,7 +153,7 @@ class ProfileProvider extends ChangeNotifier {
       'company_name': company,
       'phone': phone,
       'user_name': '',
-      'service_area': '[' ']',
+      'service_area': servicearea.toString(),
       'profile_tagline': profiletag,
       'pic': '',
       'oldpass': oldpass,

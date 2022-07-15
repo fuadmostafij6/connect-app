@@ -79,4 +79,11 @@ class JobApplyprovider extends ChangeNotifier {
       print(responsedata.body);
     }
   }
+
+  // String audiorendomname = '';
+
+  // void audioname(String name) {
+  //   audiorendomname = name;
+  //   print("jhsdvjsdvcsdvcs${name}");
+  // }
 }

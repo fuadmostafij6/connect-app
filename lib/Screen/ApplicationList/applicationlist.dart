@@ -43,39 +43,48 @@ class _ApplicationListState extends State<ApplicationList> {
         centerTitle: true,
         leadingWidth: 70,
       ),
-      body: loading
+      body: job.applicationList == null
           ? Center(
-              child: CircularProgressIndicator(),
+              child: Text("No Data Found"),
             )
-          : ListView.builder(
-              itemCount: job.applicationList!.msg!.length,
-              itemBuilder: ((context, index) {
-                var data = job.applicationList!.msg![index];
-                return Card(
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          : loading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemCount: job.applicationList!.msg!.length,
+                  itemBuilder: ((context, index) {
+                    var data = job.applicationList!.msg![index];
+                    return Card(
+                      child: Row(
                         children: [
-                          Text("Time: ${data.time!}"),
-                          Text("Doc: ${data.doc}"),
-                          Text("Price: ${data.price}"),
-                          Text("Status: ${data.status}"),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Time: ${data.time!}"),
+                              Text("Doc: ${data.doc}"),
+                              Text("Price: ${data.price}"),
+                              Text("Status: ${data.status}"),
+                            ],
+                          ),
+                          Spacer(),
+                          IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => ChatdetailsPage(
+                                              applyid: data.applyId.toString(),
+                                              jobid: data.jobId.toString(),
+                                              recvid: data.userId.toString(),
+                                              senderid: data.ownerId.toString(),
+                                            ))));
+                              },
+                              icon: Icon(Icons.messenger))
                         ],
                       ),
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => ChatdetailsPage(applyid: data.applyId.toString(),jobid: data.jobId.toString(),recvid: data.userId.toString(),senderid: data.ownerId.toString(),))));
-                          },
-                          icon: Icon(Icons.messenger))
-                    ],
-                  ),
-                );
-              })),
+                    );
+                  })),
     );
   }
 }

@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
-final pathtosaveautio = 'audio_example.aac';
+import '../../Provider/Job_Apply/job_apply.dart';
+
+// final pathtosaveautio = 'audio_example.aac';
 
 class Soundrecord {
   FlutterSoundRecorder? _soundRecorder;
@@ -34,9 +39,11 @@ class Soundrecord {
     isrecordiniti = false;
   }
 
-  Future record() async {
+  Future record(String name) async {
+    
     if (!isrecordiniti) return;
-    await _soundRecorder!.startRecorder(toFile: pathtosaveautio);
+    await _soundRecorder!
+        .startRecorder(toFile: name);
   }
 
   Future stop() async {
@@ -44,9 +51,9 @@ class Soundrecord {
     await _soundRecorder!.stopRecorder();
   }
 
-  Future tooglerecording() async {
+  Future tooglerecording(String name) async {
     if (_soundRecorder!.isStopped) {
-      await record();
+      await record(name);
     } else {
       await stop();
     }

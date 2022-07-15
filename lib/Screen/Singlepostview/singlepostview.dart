@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/applyjob2.dart';
 import 'package:jobs_app/Screen/JobpostDetails/jobpostdetails.dart';
@@ -9,7 +10,10 @@ import 'package:jobs_app/Screen/Profile/postlinkuser.dart';
 import 'package:provider/provider.dart';
 
 import '../../Model/job_List/joblist.dart';
+import '../Linkscreen/mylinkscreen.dart';
+import '../VideoPlay/videoplayer.dart';
 import '../home/Tab/myfeed.dart';
+import 'package:path/path.dart' as path;
 
 class SinglePostView extends StatefulWidget {
   final Msg data;
@@ -195,93 +199,73 @@ class _JobListcard2State extends State<JobListcard2> {
                 style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
               ),
             ),
-            Card(
-              child: Container(
-                height: 160,
-                child: PageView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => JobPostDetailsPage(
-                                descripton: widget.data.description!,
-                                id: widget.data.jobId!,
-                                jobtitle: widget.data.jobTitle!,
-                                username: widget.data.createdByName!,
-                                catgeoryname: widget.data.category!,
+            widget.data.doc == null
+                ? Container()
+                : Container(
+                    height: 160,
+                    width: double.infinity,
+                    color: Colors.red,
+                    child: PageView.builder(
+                      itemCount: widget.data.doc!.length,
+                      itemBuilder: ((context, index) {
+                        var data = widget.data.doc![index];
+                        if (path.extension(data) == ".jpg" ||
+                            path.extension(data) == ".png" ||
+                            path.extension(data) == ".JPG") {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => JobPostDetailsPage(
+                                    doc: data,
+                                    descripton: widget.data.description!,
+                                    id: widget.data.jobId!,
+                                    jobtitle: widget.data.jobTitle!,
+                                    username: widget.data.createdByName!,
+                                    catgeoryname: widget.data.category!,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              child: Image.network(
+                                jobimage + data,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           );
-                        },
-                        onTapDown: getPosition,
-                        onLongPress: () {
-                          showMenu(
-                            context: context,
-                            position: relRectSize,
-                            items: [
-                              PopupMenuItem(
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.download),
-                                    SizedBox(width: 10),
-                                    Text("Downloads"),
-                                  ],
-                                ),
-                              )
-                            ],
+                        } else if (path.extension(data) == ".mp4") {
+                          return ChewieDemo(
+                            videourl: jobimage + data,
                           );
-                        },
-                        child: Stack(
-                          fit: StackFit.expand,
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset('images/post.jpg', fit: BoxFit.cover),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Card(
-              child: Container(
-                height: 150,
-                width: double.infinity,
-                child: Stack(
-                  fit: StackFit.expand,
-                  alignment: Alignment.center,
-                  children: [
-                    Image.network(
-                      'https://i3.ytimg.com/vi/FjdJIZnh6-E/maxresdefault.jpg',
-                      fit: BoxFit.cover,
+                        } else if (path.extension(data) == ".pdf") {
+                          return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JobPostDetailsPage(
+                                      doc: data,
+                                      descripton: widget.data.description!,
+                                      id: widget.data.jobId!,
+                                      jobtitle: widget.data.jobTitle!,
+                                      username: widget.data.createdByName!,
+                                      catgeoryname: widget.data.category!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: PdfView(data: data));
+                        } else {
+                          return Image.asset(
+                            'images/post.jpg',
+                            fit: BoxFit.cover,
+                          );
+                        }
+                      }),
                     ),
-                    Icon(
-                      Icons.play_arrow,
-                      size: 55,
-                      color: Colors.red,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Icon(Icons.mic),
-                    SizedBox(width: 10),
-                    Text("অডিও শুনুন")
-                  ],
-                ),
-              ),
-            ),
+                  ),
             Divider(
               height: 0,
             ),

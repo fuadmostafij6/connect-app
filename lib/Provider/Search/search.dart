@@ -55,7 +55,7 @@ class Searchprovider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://launch1.goshrt.com/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=$type'));
+            '$url/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=$type'));
 
     request.headers.addAll(headers);
 
@@ -87,7 +87,7 @@ class Searchprovider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://launch1.goshrt.com/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=$type'));
+            '$url/api/search/filter?key_word=$keyword&user_id=${box.get('userid')}&type=$type'));
 
     request.headers.addAll(headers);
 

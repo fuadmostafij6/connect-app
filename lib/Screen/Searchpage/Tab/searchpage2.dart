@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Provider/Search/search.dart';
 import 'package:jobs_app/Provider/home.dart';
 import 'package:jobs_app/Screen/Apply_job/apply_job.dart';
@@ -10,7 +11,12 @@ import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 import 'package:jobs_app/Model/Search_Job/searchjob.dart';
 
+import '../../JobpostDetails/jobpostdetails.dart';
+import '../../Linkscreen/mylinkscreen.dart';
+import '../../VideoPlay/videoplayer.dart';
+import '../../create_Job/audioplay.dart';
 import '../../home/Tab/myfeed.dart';
+import 'package:path/path.dart' as path;
 
 class Searchpage2 extends StatefulWidget {
   const Searchpage2({Key? key}) : super(key: key);
@@ -143,8 +149,13 @@ class _JobListcardState extends State<JobListcard> {
         chooserTitle: 'Example Chooser Title');
   }
 
+    final player = AudioPlay();
+
+
+
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -240,7 +251,93 @@ class _JobListcardState extends State<JobListcard> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset('images/post.jpg'),
+           
+                widget.data.doc == null
+                      ? Container()
+                      : Container(
+                          height: 160,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            itemCount: widget.data.doc!.length,
+                            itemBuilder: ((context, index) {
+                              var data = widget.data.doc![index];
+                              if (path.extension(data) == ".jpg" ||
+                                  path.extension(data) == ".png" ||
+                                  path.extension(data) == ".JPG" ||
+                                  path.extension(data) == ".jpeg") {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobPostDetailsPage(
+                                          doc: data,
+                                          descripton: widget.data.description!,
+                                          id: widget.data.jobId!,
+                                          jobtitle: widget.data.jobTitle!,
+                                          username: widget.data.createdByName!,
+                                          catgeoryname: widget.data.category!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Image.network(
+                                      jobimage + data,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              } else if (path.extension(data) == ".mp4") {
+                                return ChewieDemo(
+                                  videourl: jobimage + data,
+                                );
+                              } else if (path.extension(data) == ".pdf") {
+                                return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobPostDetailsPage(
+                                            doc: data,
+                                            descripton:
+                                                widget.data.description!,
+                                            id: widget.data.jobId!,
+                                            jobtitle: widget.data.jobTitle!,
+                                            username:
+                                                widget.data.createdByName!,
+                                            catgeoryname: widget.data.category!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: PdfView(data: data));
+                              } else if (path.extension(data) == ".aac") {
+                                print(jobimage + data);
+                                return Container(
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        await player.toogleaudioplayer(
+                                          whenfinish: () {
+                                            setState(() {});
+                                          },
+                                          path: jobimage + data
+                                        );
+                                        // playaudio(jobimage + data);
+                                      },
+                                      icon: Icon(Icons.mic)),
+                                );
+                              } else {
+                                return Image.asset(
+                                  'images/post.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              }
+                            }),
+                          ),
+                        )
                 ],
               ),
             ),

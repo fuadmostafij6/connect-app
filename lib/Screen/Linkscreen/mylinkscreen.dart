@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,10 +21,17 @@ import 'package:jobs_app/Screen/create_Job/jobedit.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
+import '../../Provider/Pdf/pdf.dart';
+import '../ApplicationList/applicationlist.dart';
 import '../Apply_job/applyjob2.dart';
 import '../Profile/postlinkuser.dart';
 import '../Singlepostview/singlepostview.dart';
+import '../VideoPlay/videoplayer.dart';
+import '../create_Job/audioplay.dart';
 import '../create_Job/createjob.dart';
+import 'package:path/path.dart' as path;
+
+import '../jobpdf.dart';
 
 class MylinkListPage extends StatefulWidget {
   const MylinkListPage({Key? key}) : super(key: key);
@@ -201,8 +211,11 @@ class _JobListcardState extends State<JobListcard> {
         chooserTitle: 'Example Chooser Title');
   }
 
+  final player = AudioPlay();
+
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -227,18 +240,6 @@ class _JobListcardState extends State<JobListcard> {
                   data: widget.data, index: widget.index),
             ),
           );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => JobPostDetailsPage(
-          //       descripton: widget.data.description!,
-          //       id: widget.data.jobId!,
-          //       jobtitle: widget.data.jobTitle!,
-          //       username: widget.data.createdByName!,
-          //       catgeoryname: widget.data.category!,
-          //     ),
-          //   ),
-          // );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,31 +322,101 @@ class _JobListcardState extends State<JobListcard> {
                 style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JobPostDetailsPage(
-                      descripton: widget.data.description!,
-                      id: widget.data.jobId!,
-                      jobtitle: widget.data.jobTitle!,
-                      username: widget.data.createdByName!,
-                      catgeoryname: widget.data.category!,
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                color: Colors.white,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    widget.data.doc != null
-                        ? Image.network(jobimage + widget.data.doc!)
-                        : Image.asset('images/post.jpg'),
-                  ],
-                ),
+            Container(
+              color: Colors.white,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // widget.data.doc != null
+                  //     ? Image.network(jobimage + widget.data.doc!)
+                  //     : Image.asset('images/post.jpg'),
+                  widget.data.doc == null
+                      ? Container()
+                      : Container(
+                          height: 160,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            itemCount: widget.data.doc!.length,
+                            itemBuilder: ((context, index) {
+                              var data = widget.data.doc![index];
+                              if (path.extension(data) == ".jpg" ||
+                                  path.extension(data) == ".png" ||
+                                  path.extension(data) == ".JPG" ||
+                                  path.extension(data) == ".jpeg") {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobPostDetailsPage(
+                                          doc: data,
+                                          descripton: widget.data.description!,
+                                          id: widget.data.jobId!,
+                                          jobtitle: widget.data.jobTitle!,
+                                          username: widget.data.createdByName!,
+                                          catgeoryname: widget.data.category!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Image.network(
+                                      jobimage + data,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              } else if (path.extension(data) == ".mp4") {
+                                return ChewieDemo(
+                                  videourl: jobimage + data,
+                                );
+                              } else if (path.extension(data) == ".pdf") {
+                                return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobPostDetailsPage(
+                                            doc: data,
+                                            descripton:
+                                                widget.data.description!,
+                                            id: widget.data.jobId!,
+                                            jobtitle: widget.data.jobTitle!,
+                                            username:
+                                                widget.data.createdByName!,
+                                            catgeoryname: widget.data.category!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: PdfView(data: data));
+                              } else if (path.extension(data) == ".aac") {
+                                print(jobimage + data);
+                                return Container(
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        await player.toogleaudioplayer(
+                                          whenfinish: () {
+                                            setState(() {});
+                                          },
+                                          path: jobimage + data
+                                        );
+                                        // playaudio(jobimage + data);
+                                      },
+                                      icon: Icon(Icons.mic)),
+                                );
+                              } else {
+                                return Image.asset(
+                                  'images/post.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              }
+                            }),
+                          ),
+                        )
+                ],
               ),
             ),
             Divider(
@@ -355,59 +426,6 @@ class _JobListcardState extends State<JobListcard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // Flexible(
-                  //   child: Material(
-                  //     color: Colors.transparent,
-                  //     child: InkWell(
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(
-                  //               builder: (context) => ApplyjobPage(
-                  //                 jobid: widget.data.jobId!,
-                  //               ),
-                  //             ));
-                  //       },
-                  //       child: Container(
-                  //         padding: EdgeInsets.all(9),
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: [
-                  //             Container(
-                  //               child: Row(
-                  //                 children: [
-                  //                   SvgPicture.asset(
-                  //                     'images/svg/pen-solid.svg',
-                  //                     height: 15,
-                  //                     color: Colors.grey[700],
-                  //                   ),
-                  //                   SizedBox(width: 5),
-                  //                   Text(
-                  //                     "এডিট করুন",
-                  //                     style: TextStyle(
-                  //                         fontFamily: 'Kalpurush',
-                  //                         color: Colors.grey[700]),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   color: Colors.grey[300],
-                  //   width: 1,
-                  //   child: VerticalDivider(
-                  //     color: Colors.black,
-                  //     thickness: 3,
-                  //     indent: 20,
-                  //     endIndent: 0,
-                  //     width: 1,
-                  //   ),
-                  // ),
                   Flexible(
                     child: Material(
                       color: Colors.transparent,
@@ -416,11 +434,7 @@ class _JobListcardState extends State<JobListcard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Applyjob2Page(
-                                    connectid: widget.data.jobId!,
-                                    id: widget.data.jobId!,
-                                    tile: widget.data.jobTitle!,
-                                    username: widget.data.createdByName!),
+                                builder: (context) => ApplicationList(),
                               ));
                         },
                         child: Container(
@@ -463,59 +477,6 @@ class _JobListcardState extends State<JobListcard> {
                       width: 1,
                     ),
                   ),
-                  // Flexible(
-                  //   child: Material(
-                  //     color: Colors.transparent,
-                  //     child: InkWell(
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(
-                  //               builder: (context) => ApplyjobPage(
-                  //                 jobid: widget.data.jobId!,
-                  //               ),
-                  //             ));
-                  //       },
-                  //       child: Container(
-                  //         padding: EdgeInsets.all(9),
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: [
-                  //             Container(
-                  //               child: Row(
-                  //                 children: [
-                  //                   SvgPicture.asset(
-                  //                     'images/svg/xmark-solid.svg',
-                  //                     height: 15,
-                  //                     color: Colors.grey[700],
-                  //                   ),
-                  //                   SizedBox(width: 5),
-                  //                   Text(
-                  //                     "রিমোভ করুন",
-                  //                     style: TextStyle(
-                  //                         fontFamily: 'Kalpurush',
-                  //                         color: Colors.grey[700]),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   color: Colors.grey[300],
-                  //   width: 1,
-                  //   child: VerticalDivider(
-                  //     color: Colors.black,
-                  //     thickness: 3,
-                  //     indent: 20,
-                  //     endIndent: 0,
-                  //     width: 1,
-                  //   ),
-                  // ),
                   Flexible(
                     child: Material(
                       color: Colors.transparent,
@@ -549,7 +510,6 @@ class _JobListcardState extends State<JobListcard> {
                       ),
                     ),
                   ),
-
                   Container(
                     color: Colors.grey[300],
                     width: 1,
@@ -568,7 +528,6 @@ class _JobListcardState extends State<JobListcard> {
                         onTap: () {},
                         child: Container(
                           height: 35,
-
                           child: PopupMenuButton(
                             padding: EdgeInsets.zero,
                             onSelected: (value) {
@@ -627,22 +586,6 @@ class _JobListcardState extends State<JobListcard> {
                               ];
                             },
                           ),
-                          // child: Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Container(
-                          //         child: Row(
-                          //       children: [
-                          //         Icon(Icons.more_vert_outlined),
-                          //         SizedBox(width: 5),
-                          //         Text("আরো",
-                          //             style: TextStyle(
-                          //                 fontFamily: 'Kalpurush',
-                          //                 color: Colors.grey[700])),
-                          //       ],
-                          //     )),
-                          //   ],
-                          // ),
                         ),
                       ),
                     ),
@@ -654,5 +597,43 @@ class _JobListcardState extends State<JobListcard> {
         ),
       ),
     );
+  }
+}
+
+class PdfView extends StatefulWidget {
+  final String data;
+  const PdfView({Key? key, required this.data}) : super(key: key);
+
+  @override
+  State<PdfView> createState() => _PdfViewState();
+}
+
+class _PdfViewState extends State<PdfView> {
+  File? pdffile;
+
+  Future loadpdf() async {
+    var file = await Provider.of<PdfProvider>(context, listen: false)
+        .loadNetwork(jobimage + widget.data);
+    setState(() {
+      pdffile = file;
+    });
+  }
+
+  @override
+  void initState() {
+    loadpdf();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: ((context) => JobPdfView(path: pdffile!.path))));
+        },
+        child: JobPdfView(path: pdffile!.path));
   }
 }

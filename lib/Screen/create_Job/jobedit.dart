@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -25,7 +26,9 @@ import 'package:jobs_app/Screen/create_Job/videorecord.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_timer/simple_timer.dart';
-import 'package:path/path.dart' as join;
+import 'package:path/path.dart' as join1;
+
+import '../../Provider/Job_Apply/job_apply.dart';
 
 class JobeditPage extends StatefulWidget {
   final Msgs data;
@@ -39,6 +42,12 @@ class JobeditPage extends StatefulWidget {
 
 class _JobeditPageState extends State<JobeditPage> {
   String? filename;
+
+  String? audioname;
+
+  String image = '';
+  String audio = '';
+  String video = '';
 
   // String? jobtite, description, category, userid, contactnumber;
   TextEditingController jobtitle = TextEditingController();
@@ -68,6 +77,8 @@ class _JobeditPageState extends State<JobeditPage> {
 
   @override
   void initState() {
+    var rng = Random();
+    audioname = rng.nextInt(1000 * 100000).toString();
     recorder.init();
     player.playaudioinit();
     jobtitle.text = widget.data.jobTitle!;
@@ -196,6 +207,9 @@ class _JobeditPageState extends State<JobeditPage> {
                           jobtite: jobtitle.text,
                           context: context,
                           jobid: widget.data.jobId,
+                          image: image,
+                          audio: audio,
+                          video: video,
                           userid: box.get('userid'))
                       .then((value) => refreshdara());
                 },
@@ -569,7 +583,7 @@ class _JobeditPageState extends State<JobeditPage> {
                     flex: 1,
                     child: InkWell(
                       onTap: () async {
-                        await recorder.tooglerecording();
+                        await recorder.tooglerecording("${audioname}.aac");
                         isrecording ? cancletimer() : starttimer();
 
                         setState(() {
@@ -615,6 +629,7 @@ class _JobeditPageState extends State<JobeditPage> {
                           File file = File(result.files.single.path!);
                           setState(() {
                             filename = result.files.single.name;
+                            image = join1.basename(file.path);
                           });
                           upload.uploaddile(file.path);
                         } else {
@@ -635,10 +650,14 @@ class _JobeditPageState extends State<JobeditPage> {
                     ? MaterialButton(
                         color: Colors.red,
                         onPressed: () async {
+                           String path = join1.join(
+                              (await getTemporaryDirectory()).path,
+                              "${audioname}.aac");
                           await player.toogleaudioplayer(
                             whenfinish: () {
                               setState(() {});
                             },
+                            path: path
                           );
 
                           setState(() {});
@@ -654,12 +673,12 @@ class _JobeditPageState extends State<JobeditPage> {
                     ? MaterialButton(
                         color: Colors.red,
                         onPressed: () async {
-                          String path = join.join(
-                              (await getTemporaryDirectory()).path,
-                              'audio_example.aac');
+                          String path = join1.join(
+                              (await getTemporaryDirectory()).path, "${audioname}.aac");
                           upload.uploaddile(path).then((value) {
                             setState(() {
                               audiorun = false;
+                              audio = join1.basename(path);
                             });
                           });
                         },
@@ -688,6 +707,7 @@ class _JobeditPageState extends State<JobeditPage> {
                               upload.uploaddile(jbdetails.path).then((value) {
                                 setState(() {
                                   loading = false;
+                                  video = join1.basename(jbdetails.path);
                                 });
                               });
                             },

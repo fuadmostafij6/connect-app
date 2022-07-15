@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +13,11 @@ import 'package:provider/provider.dart';
 
 import '../../../Const_value/apilink.dart';
 import '../../JobpostDetails/jobpostdetails.dart';
+import '../../Linkscreen/mylinkscreen.dart';
+import '../../VideoPlay/videoplayer.dart';
+import 'package:path/path.dart' as path;
+
+import '../../create_Job/audioplay.dart';
 
 class Myfeedpage extends StatefulWidget {
   const Myfeedpage({Key? key}) : super(key: key);
@@ -26,18 +32,22 @@ class _MyfeedpageState extends State<Myfeedpage> {
     final homeprovider = Provider.of<HomeProvider>(context);
     return Container(
       color: Colors.grey[300],
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: homeprovider.joblist!.msg!.length,
-        itemBuilder: (context, index) {
-          var data = homeprovider.joblist!.msg![index];
-          return JobListcard(
-            index: index,
-            data: data,
-          );
-        },
-      ),
+      child: homeprovider.joblist == null
+          ? Center(
+              child: Text("No Job Found"),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: homeprovider.joblist!.msg!.length,
+              itemBuilder: (context, index) {
+                var data = homeprovider.joblist!.msg![index];
+                return JobListcard(
+                  index: index,
+                  data: data,
+                );
+              },
+            ),
     );
   }
 }
@@ -58,6 +68,12 @@ class _JobListcardState extends State<JobListcard> {
   // ↓ hold screen size, using first line in build() method
   RenderBox? overlay;
 
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  Future playaudio(String url) async {
+    await audioPlayer.play(url);
+  }
+
   RelativeRect get relRectSize =>
       RelativeRect.fromSize(tapXY! & const Size(40, 40), overlay!.size);
 
@@ -77,6 +93,8 @@ class _JobListcardState extends State<JobListcard> {
     }
   }
 
+  final player = AudioPlay();
+
   Future<void> share() async {
     await FlutterShare.share(
         title: 'Example share',
@@ -87,6 +105,7 @@ class _JobListcardState extends State<JobListcard> {
 
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -195,45 +214,173 @@ class _JobListcardState extends State<JobListcard> {
             ),
             Container(
               color: Colors.white,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobPostDetailsPage(
-                        descripton: widget.data.description!,
-                        id: widget.data.jobId!,
-                        jobtitle: widget.data.jobTitle!,
-                        username: widget.data.createdByName!,
-                        catgeoryname: widget.data.category!,
-                      ),
-                    ),
-                  );
-                },
-                onTapDown: getPosition,
-                onLongPress: () {
-                  showMenu(
-                    context: context,
-                    position: relRectSize,
-                    items: [
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(Icons.download),
-                            SizedBox(width: 10),
-                            Text("Downloads"),
-                          ],
-                        ),
-                      )
-                    ],
-                  );
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    widget.data.doc != null ? Image.network(jobimage + widget.data.doc!) : Image.asset('images/post.jpg'),
-                  ],
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  widget.data.doc == null
+                      ? Container()
+                      : Container(
+                          height: 160,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            itemCount: widget.data.doc!.length,
+                            itemBuilder: ((context, index) {
+                              var data = widget.data.doc![index];
+                              if (path.extension(data) == ".jpg" ||
+                                  path.extension(data) == ".png" ||
+                                  path.extension(data) == ".JPG" ||
+                                  path.extension(data) == ".jpeg") {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            JobPostDetailsPage(
+                                          doc: data,
+                                          descripton: widget.data.description!,
+                                          id: widget.data.jobId!,
+                                          jobtitle: widget.data.jobTitle!,
+                                          username: widget.data.createdByName!,
+                                          catgeoryname: widget.data.category!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Image.network(
+                                      jobimage + data,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              } else if (path.extension(data) == ".mp4") {
+                                return ChewieDemo(
+                                  videourl: jobimage + data,
+                                );
+                              } else if (path.extension(data) == ".pdf") {
+                                return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              JobPostDetailsPage(
+                                            doc: data,
+                                            descripton:
+                                                widget.data.description!,
+                                            id: widget.data.jobId!,
+                                            jobtitle: widget.data.jobTitle!,
+                                            username:
+                                                widget.data.createdByName!,
+                                            catgeoryname: widget.data.category!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: PdfView(data: data));
+                              } else if (path.extension(data) == ".aac") {
+                                print(jobimage + data);
+                                return Container(
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        await player.toogleaudioplayer(
+                                            whenfinish: () {
+                                              setState(() {});
+                                            },
+                                            path: jobimage + data);
+                                        // playaudio(jobimage + data);
+                                      },
+                                      icon: Icon(Icons.mic)),
+                                );
+                              } else {
+                                return Image.asset(
+                                  'images/post.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              }
+                            }),
+                          ),
+                        )
+                  // : Container(
+                  //     height: 160,
+                  //     width: double.infinity,
+
+                  //     child: PageView.builder(
+                  //       itemCount: widget.data.doc!.length,
+                  //       itemBuilder: ((context, index) {
+                  //         var data = widget.data.doc![index];
+                  //         if (path.extension(data) == ".jpg" ||
+                  //             path.extension(data) == ".png" ||
+                  //             path.extension(data) == ".JPG") {
+                  //           return InkWell(
+                  //             onTap: () {
+                  //               Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                   builder: (context) =>
+                  //                       JobPostDetailsPage(
+                  //                     doc: data,
+                  //                     descripton: widget.data.description!,
+                  //                     id: widget.data.jobId!,
+                  //                     jobtitle: widget.data.jobTitle!,
+                  //                     username: widget.data.createdByName!,
+                  //                     catgeoryname: widget.data.category!,
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             },
+                  //             child: Container(
+                  //               child: Image.network(
+                  //                 jobimage + data,
+                  //                 fit: BoxFit.cover,
+                  //               ),
+                  //             ),
+                  //           );
+                  //         } else if (path.extension(data) == ".mp4") {
+                  //           return ChewieDemo(
+                  //             videourl: jobimage + data,
+                  //           );
+                  //         } else if (path.extension(data) == ".pdf") {
+                  //           return InkWell(
+                  //               onTap: () {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                     builder: (context) =>
+                  //                         JobPostDetailsPage(
+                  //                       doc: data,
+                  //                       descripton:
+                  //                           widget.data.description!,
+                  //                       id: widget.data.jobId!,
+                  //                       jobtitle: widget.data.jobTitle!,
+                  //                       username:
+                  //                           widget.data.createdByName!,
+                  //                       catgeoryname: widget.data.category!,
+                  //                     ),
+                  //                   ),
+                  //                 );
+                  //               },
+                  //               child: PdfView(data: data));
+                  //         } else if (path.extension(data) == ".aac") {
+                  //             return Container(
+
+                  //               child: IconButton(
+                  //                   onPressed: () {
+                  //                     playaudio(jobimage + data);
+                  //                   },
+                  //                   icon: Icon(Icons.mic)),
+                  //             );
+                  //           } else {
+                  //           return Image.asset(
+                  //             'images/post.jpg',
+                  //             fit: BoxFit.cover,
+                  //           );
+                  //         }
+                  //       }),
+                  //     ),
+                  //   )
+                ],
               ),
             ),
             Divider(

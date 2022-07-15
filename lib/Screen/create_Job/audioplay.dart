@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:flutter_sound_lite/public/flutter_sound_player.dart';
-import 'package:path/path.dart';
+
 import 'package:path_provider/path_provider.dart';
 
 final fileUri =
@@ -12,9 +12,9 @@ class AudioPlay {
 
   bool get isaudioplay => _flutterSoundPlayer!.isPlaying;
 
-  Future<void> playaudio(VoidCallback whenfinish) async {
-    String path =
-        join((await getTemporaryDirectory()).path, 'audio_example.aac');
+  Future<void> playaudio(VoidCallback whenfinish, path) async {
+    // String path =
+    //     join((await getTemporaryDirectory()).path, 'audio_example.aac');
     await _flutterSoundPlayer!.startPlayer(
       fromURI: path,
       whenFinished: whenfinish,
@@ -26,9 +26,9 @@ class AudioPlay {
     await _flutterSoundPlayer!.stopPlayer();
   }
 
-  Future toogleaudioplayer({required VoidCallback whenfinish}) async {
+  Future toogleaudioplayer({required VoidCallback whenfinish, path}) async {
     if (_flutterSoundPlayer!.isStopped) {
-      await playaudio(whenfinish);
+      await playaudio(whenfinish,path);
     } else {
       await stopaudio();
     }

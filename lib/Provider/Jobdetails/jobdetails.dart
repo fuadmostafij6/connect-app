@@ -42,19 +42,27 @@ class JobDetailsProvider extends ChangeNotifier {
     description,
     category,
     userid,
-    doc,
+    image,
+    audio,
+    video,
     contactnumber,
     BuildContext? context,
   }) async {
+    print(image);
+    print(audio);
+    print(video);
     var request =
         http.MultipartRequest('POST', Uri.parse('$url/api/job/jobcreate'));
+
     request.fields.addAll({
       'job_title': jobtite!,
       'description': description,
       'category': category,
       'user_id': userid,
       'contactnumber': contactnumber,
-      'doc': doc
+      'image': image,
+      'audio': audio,
+      'video': video
     });
 
     http.StreamedResponse response = await request.send();
@@ -83,6 +91,9 @@ class JobDetailsProvider extends ChangeNotifier {
       description,
       category,
       userid,
+      image,
+    audio,
+    video,
       contactnumber,
       BuildContext? context}) async {
     var request =
@@ -93,7 +104,9 @@ class JobDetailsProvider extends ChangeNotifier {
       'description': description,
       'category': category,
       'contactnumber': contactnumber,
-      'doc': '["DSC05994.JPG"]'
+      'image': image,
+      'audio': audio,
+      'video': video
     });
 
     http.StreamedResponse response = await request.send();

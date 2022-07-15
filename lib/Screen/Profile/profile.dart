@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jobs_app/Const_value/apilink.dart';
 import 'package:jobs_app/Provider/UserPrevlies/userprevilies.dart';
 import 'package:jobs_app/Screen/Form/login.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
@@ -16,6 +17,7 @@ import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:provider/provider.dart';
 
 import '../../Provider/Profile/profile.dart';
+import '../../Provider/home.dart';
 import '../Membership/membeshipiteam.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -28,16 +30,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool loading = false;
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-
-  late List<Animal> animals = [
-    Animal(id: 1, name: "বড় প্রকল্প সমূহ"),
-    Animal(id: 2, name: "জমি/প্রপার্টি"),
-    Animal(id: 3, name: "ব্যাংকিং ও বিনিয়োগ"),
-    Animal(id: 4, name: "প্রিন্সিপাল"),
-    Animal(id: 5, name: "বিদেশী প্রিন্সিপাল"),
-    Animal(id: 6, name: "মেশিনারিজ"),
-    Animal(id: 7, name: "সার্ভিসেস"),
-  ];
 
   @override
   void initState() {
@@ -126,14 +118,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircleAvatar(
-                              backgroundImage: AssetImage(
-                                'images/Chat_list/2.jpg',
-                              ),
-                              radius: 50,
-                              backgroundColor: Color(0xFFFF5428),
-                            )
+                          children: [
+                            profile.profile!.msg!.userData!.pic != null
+                                ? CircleAvatar(
+                                    backgroundImage: NetworkImage(otherimage +
+                                        profile.profile!.msg!.userData!.pic!),
+                                    radius: 50,
+                                    backgroundColor: Color(0xFFFF5428),
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                      'images/Chat_list/2.jpg',
+                                    ),
+                                    radius: 50,
+                                    backgroundColor: Color(0xFFFF5428),
+                                  )
                           ],
                         ),
                         SizedBox(height: 10),
@@ -269,237 +268,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(fontFamily: 'Kalpurush'),
                         ),
                         Spacer(),
-                        Icon(Icons.edit, color: Color(0xFFE51F22))
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => CategoryDialog());
+                            },
+                            icon: Icon(Icons.edit, color: Color(0xFFE51F22)))
                       ],
                     ),
                   ),
                   categorybox(),
-                  // MultiSelectChipField(
-
-                  //   items: animals
-                  //       .map((animal) =>
-                  //           MultiSelectItem<Animal>(animal, animal.name!))
-                  //       .toList(),
-                  //   initialValue: [animals[4], animals[7], animals[9]],
-                  //   title: Text("Animals"),
-                  //   headerColor: Colors.blue.withOpacity(0.5),
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: Colors.blue, width: 1.8),
-                  //   ),
-                  //   selectedChipColor: Colors.blue.withOpacity(0.5),
-                  //   selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                  //   onTap: (values) {
-                  //     //_selectedAnimals4 = values;
-                  //   },
-                  // ),
-                  // MultiSelectChipDisplay(
-                  //   decoration: BoxDecoration(color: Colors.grey[200]),
-                  //   items: animals
-                  //       .map((animal) =>
-                  //           MultiSelectItem<Animal>(animal, animal.name!))
-                  //       .toList(),
-                  //   onTap: (p0) {
-                  //     print(p0);
-                  //   },
-                  // ),
-                  // MultiSelectBottomSheetField(
-                  //   initialChildSize: 0.4,
-                  //   listType: MultiSelectListType.LIST,
-                  //   searchable: true,
-                  //   buttonText: Text("Favorite Animals"),
-                  //   title: Text("Animals"),
-                  //   items: animals
-                  //       .map((animal) =>
-                  //           MultiSelectItem<Animal>(animal, animal.name!))
-                  //       .toList(),
-                  //   onConfirm: (values) {
-                  //     // _selectedAnimals2 = values;
-                  //   },
-                  //   chipDisplay: MultiSelectChipDisplay(
-                  //     onTap: (value) {
-                  //       setState(() {
-                  //         // _selectedAnimals2.remove(value);
-                  //       });
-                  //     },
-                  //   ),
-                  // ),
-
-                  // Container(
-                  //   margin: EdgeInsets.all(20),
-                  //   child: Column(
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           Text("আপনার নির্বাচিত ক্যাটাগরি সমূহ"),
-                  //           Spacer(),
-                  //           Icon(Icons.edit, color: Color(0xFFE51F22))
-                  //         ],
-                  //       ),
-                  //       SizedBox(height: 10),
-                  //       Column(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //             children: [
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text(
-                  //                   "বড় প্রকল্প সমূহ",
-                  //                   style: TextStyle(fontSize: 11),
-                  //                 ),
-                  //               ),
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text("জমি/প্রপার্টি",
-                  //                     style: TextStyle(fontSize: 11)),
-                  //               ),
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text("ব্যাংকিং ও বিনিয়োগ",
-                  //                     style: TextStyle(fontSize: 11)),
-                  //               ),
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text("প্রিন্সিপাল",
-                  //                     style: TextStyle(fontSize: 11)),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //           SizedBox(height: 10),
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //             children: [
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text(
-                  //                   "বিদেশী প্রিন্সিপাল",
-                  //                   style: TextStyle(fontSize: 11),
-                  //                 ),
-                  //               ),
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text("মেশিনারিজ",
-                  //                     style: TextStyle(fontSize: 11)),
-                  //               ),
-                  //               Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 decoration: BoxDecoration(
-                  //                     color: Color(0xFFDBDBDB),
-                  //                     borderRadius: BorderRadius.circular(20)),
-                  //                 child: Text("সার্ভিসেস",
-                  //                     style: TextStyle(fontSize: 11)),
-                  //               ),
-                  //             ],
-                  //           )
-                  //         ],
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                  // Container(
-                  //   height: size.height * 0.2,
-                  //   width: double.infinity,
-                  //   margin: EdgeInsets.all(10),
-                  //   decoration: BoxDecoration(
-                  //       color: Color(0xFFFEF3F3),
-                  //       borderRadius: BorderRadius.circular(10)),
-                  //   child: Container(
-                  //     margin: EdgeInsets.all(10),
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           "মেম্বারশিপ এরিয়া",
-                  //           style: TextStyle(
-                  //               fontSize: 18, fontWeight: FontWeight.bold),
-                  //         ),
-                  //         SizedBox(height: 5),
-                  //         Text("বর্তমান মেম্বারশিপ : সিলভার "),
-                  //         SizedBox(height: 5),
-                  //         Text("মেম্বারশিপ শুরু হইয়েছে : December 22, 2021"),
-                  //         SizedBox(height: 5),
-                  //         Text("পরবর্তী পেমেন্ট তারিখ : February 20, 2022"),
-                  //         SizedBox(height: 5),
-                  //         InkWell(
-                  //           onTap: () {
-                  //             Navigator.push(
-                  //                 context,
-                  //                 MaterialPageRoute(
-                  //                   builder: (context) =>
-                  //                       Membershipiteam2page(),
-                  //                 ));
-                  //           },
-                  //           child: Container(
-                  //             padding: EdgeInsets.all(10),
-                  //             decoration: BoxDecoration(
-                  //                 color: Color(0xFFE94244),
-                  //                 borderRadius: BorderRadius.circular(5)),
-                  //             child: Text(
-                  //               "মেম্বারশিপ আপগ্রেড করুন",
-                  //               style: TextStyle(color: Colors.white),
-                  //             ),
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   padding: EdgeInsets.all(10),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       InkWell(
-                  //         onTap: () {
-                  //           box.clear();
-                  //           Navigator.pushAndRemoveUntil(
-                  //               context,
-                  //               MaterialPageRoute(
-                  //                   builder: (context) => LoginPage()),
-                  //               (route) => false);
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.all(10),
-                  //           decoration: BoxDecoration(
-                  //               color: Color(0xFFE94244),
-                  //               borderRadius: BorderRadius.circular(5)),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             children: const [
-                  //               Text(
-                  //                 "লগ আউট",
-                  //                 style: TextStyle(color: Colors.white),
-                  //               ),
-                  //               SizedBox(width: 10),
-                  //               Icon(
-                  //                 Icons.arrow_forward,
-                  //                 color: Colors.white,
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                   membershiparea()
                 ],
               ),
@@ -507,29 +286,32 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  List<int> animaleint = [];
+  List<String> animaleint = [];
 
   Widget categorybox() {
+    final homeprovider = Provider.of<HomeProvider>(context);
     final userprevilies = Provider.of<UserPreviliesProvider>(context);
     return Wrap(
-      children: List.generate(animals.length, (index) {
+      children: List.generate(homeprovider.allcategory!.msg!.length, (index) {
         return InkWell(
           onTap: () {
             if (userprevilies.userPrevilies != null &&
                 userprevilies.userPrevilies!.msg!.category !=
                     animaleint.length) {
-              if (animaleint.contains(animals[index].id)) {
+              if (animaleint
+                  .contains(homeprovider.allcategory!.msg![index].catId)) {
                 setState(() {
-                  animaleint.remove(animals[index].id);
+                  animaleint
+                      .remove(homeprovider.allcategory!.msg![index].catId);
                 });
               } else {
                 setState(() {
-                  animaleint.add(animals[index].id!);
+                  animaleint.add(homeprovider.allcategory!.msg![index].catId!);
                 });
               }
             } else {
               setState(() {
-                animaleint.remove(animals[index].id);
+                animaleint.remove(homeprovider.allcategory!.msg![index].catId);
               });
             }
           },
@@ -538,13 +320,15 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: animaleint.contains(animals[index].id!)
+                color: animaleint
+                        .contains(homeprovider.allcategory!.msg![index].catId)
                     ? Colors.indigo
                     : Colors.grey[200]),
             child: Text(
-              animals[index].name!,
+              homeprovider.allcategory!.msg![index].catName!,
               style: TextStyle(
-                  color: animaleint.contains(animals[index].id!)
+                  color: animaleint
+                          .contains(homeprovider.allcategory!.msg![index].catId)
                       ? Colors.white
                       : Colors.black,
                   fontFamily: 'Kalpurush'),
@@ -657,4 +441,105 @@ class Animal {
     this.id,
     this.name,
   });
+}
+
+class CategoryDialog extends StatefulWidget {
+  const CategoryDialog({Key? key}) : super(key: key);
+
+  @override
+  State<CategoryDialog> createState() => _CategoryDialogState();
+}
+
+class _CategoryDialogState extends State<CategoryDialog> {
+  List<String> animaleint2 = [];
+
+  @override
+  Widget build(BuildContext context) {
+    final homeprovider = Provider.of<HomeProvider>(context);
+    final userprevilies = Provider.of<UserPreviliesProvider>(context);
+    final profile = Provider.of<ProfileProvider>(context);
+    return Dialog(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Wrap(
+                children: List.generate(homeprovider.allcategory!.msg!.length,
+                    (index) {
+                  return InkWell(
+                    onTap: () {
+                      if (userprevilies.userPrevilies != null &&
+                          userprevilies.userPrevilies!.msg!.category !=
+                              animaleint2.length) {
+                        if (animaleint2.contains(
+                            homeprovider.allcategory!.msg![index].catId)) {
+                          setState(() {
+                            animaleint2.remove(
+                                homeprovider.allcategory!.msg![index].catId);
+                          });
+                        } else {
+                          setState(() {
+                            animaleint2.add(
+                                homeprovider.allcategory!.msg![index].catId!);
+                          });
+                        }
+                      } else {
+                        setState(() {
+                          animaleint2.remove(
+                              homeprovider.allcategory!.msg![index].catId);
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: animaleint2.contains(
+                                  homeprovider.allcategory!.msg![index].catId)
+                              ? Colors.indigo
+                              : Colors.grey[200]),
+                      child: Text(
+                        homeprovider.allcategory!.msg![index].catName!,
+                        style: TextStyle(
+                            color: animaleint2.contains(
+                                    homeprovider.allcategory!.msg![index].catId)
+                                ? Colors.white
+                                : Colors.black,
+                            fontFamily: 'Kalpurush'),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            MaterialButton(
+              color: Colors.red,
+              onPressed: () {
+                profile
+                    .profileupdate(
+                      company: "",
+                      confirmpass: "",
+                      name: "",
+                      newpass: "",
+                      oldpass: "",
+                      phone: "",
+                      servicearea: animaleint2,
+                      profiletag: "",
+                    )
+                    .then((value) => profile.getprofileinfo());
+              },
+              child: Text(
+                "সাবমিট",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/Message/messagelist.dart';
 import 'package:jobs_app/Model/Messagelist/messagelist.dart';
 import 'package:jobs_app/Provider/Message/message.dart';
@@ -26,6 +27,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
   @override
   Widget build(BuildContext context) {
     final mess = Provider.of<MessageProvider>(context);
+    var box = Hive.box('login');
     return StreamBuilder<Messagelist?>(
         stream: mess.streammessage(
             applyid: widget.applyid,
@@ -210,6 +212,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
   }
 
   Widget listmessage2(Messagelist? data) {
+    var box = Hive.box('login');
     final mess = Provider.of<MessageProvider>(context);
     data!.msg!.sort((a, b) => b.messageId!.compareTo(a.messageId!));
     return ListView.builder(
@@ -220,7 +223,6 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
           var m = data.msg![index];
           return m.receiverUserId == widget.recvid ? rigthside(m) : leftside(m);
         }));
-    ;
   }
 
   // Widget listmessage() {
@@ -540,9 +542,12 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
 
   Widget leftside(Msg m) {
     return Container(
+      margin: EdgeInsets.only(bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          CircleAvatar(backgroundImage: NetworkImage(m.pic!)),
+          SizedBox(width: 10),
           Container(
               margin: EdgeInsets.all(2),
               constraints: BoxConstraints(maxWidth: 250),
@@ -552,7 +557,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
                   borderRadius: BorderRadius.circular(5)),
               child: Text(
                 m.msg!,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               )),
         ],
       ),
