@@ -28,7 +28,7 @@ class Msg {
   String? createdAt;
   String? status;
   String? createdBy;
-  String? doc;
+  List? doc;
 
   Msg(
       {this.jobId,

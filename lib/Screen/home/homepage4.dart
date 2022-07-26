@@ -13,6 +13,14 @@ import 'package:jobs_app/Screen/create_Job/createjob.dart';
 import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../Provider/Profile/profile.dart';
+import '../Following/follower.dart';
+import '../Following/following.dart';
+import '../Form/login.dart';
+import '../Membership/membershipiteam2.dart';
+import '../Profile/profileedit.dart';
 
 class Homepage4 extends StatefulWidget {
   const Homepage4({Key? key}) : super(key: key);
@@ -30,7 +38,27 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
     await Provider.of<HomeProvider>(context, listen: false).getjoblist();
   }
 
-  bool loading = false;
+  bool loading = true;
+
+  void redirectpage(Widget pagename) {
+    Navigator.push(context, _createRoute(pagename));
+  }
+
+  Route _createRoute(Widget pagename) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => pagename,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // const begin = Offset(0.0, 1.0);
+        // const end = Offset.zero;
+        // const curve = Curves.ease;
+
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -47,6 +75,7 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('login');
+    final profile = Provider.of<ProfileProvider>(context);
     return Scaffold(
       key: _key,
       endDrawer: DrawerPage(),
@@ -55,9 +84,9 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
         children: [
           Container(
             color: Colors.red,
-            padding: EdgeInsets.only(left: 5, right: 5),
-            margin: EdgeInsets.only(bottom: 5),
-            child: Text(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            margin: const EdgeInsets.only(bottom: 5),
+            child: const Text(
               "নতুন লিংক",
               style: TextStyle(fontFamily: 'Kalpurush', color: Colors.white),
             ),
@@ -68,10 +97,10 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CreateJobpage(),
+                    builder: (context) => const CreateJobpage(),
                   ));
             },
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ],
       ),
@@ -83,10 +112,10 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
           ),
           fit: BoxFit.cover,
         ),
-        backgroundColor: Color(0xFFE51D20),
+        backgroundColor: const Color(0xFFE51D20),
         title: Text(
           box.get('name'),
-          style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
+          style: const TextStyle(fontSize: 16, fontFamily: 'Kalpurush'),
         ),
         centerTitle: true,
         // shape: RoundedRectangleBorder(
@@ -106,8 +135,8 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
+              padding: const EdgeInsets.only(left: 10),
+              child: const Text(
                 "কানেক্ট",
                 maxLines: 1,
                 style: TextStyle(fontFamily: 'Kalpurush', fontSize: 22),
@@ -134,9 +163,9 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                       builder: (context) => const Mainsearchpage(),
                     ));
               },
-              child: Icon(Icons.search)),
+              child: const Icon(Icons.search)),
 
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           InkWell(
               onTap: () {
                 _key.currentState!.openEndDrawer();
@@ -259,10 +288,10 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
     final homeprovider = Provider.of<HomeProvider>(context);
     return Card(
       child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4),
           itemCount: homeprovider.allcategory!.msg!.length,
           itemBuilder: (BuildContext context, int index) {
             var data = homeprovider.allcategory!.msg![index];
@@ -282,20 +311,20 @@ class _Homepage4State extends State<Homepage4> with TickerProviderStateMixin {
                     },
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                             height: 50,
                             width: 50,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: Image.network(
-                                otherimage + data.image!,
+                                categoryImage + data.image!,
                                 fit: BoxFit.cover,
                               ),
                             )),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(data.catName!,
                             maxLines: 1,
-                            style: TextStyle(fontFamily: 'Kalpurush')),
+                            style: const TextStyle(fontFamily: 'Kalpurush')),
                       ],
                     ),
                   )

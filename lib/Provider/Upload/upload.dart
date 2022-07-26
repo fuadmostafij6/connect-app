@@ -23,7 +23,7 @@ class UploadProvider extends ChangeNotifier {
       var json = jsonDecode(responsedata.body);
       if (json['error'] == 0) {
         Fluttertoast.showToast(
-            msg: "Upload Successfull",
+            msg: "Upload Successful",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -31,6 +31,7 @@ class UploadProvider extends ChangeNotifier {
             textColor: Colors.white,
             fontSize: 16.0);
       }else{
+        print(json['msg'] + "msgggg");
         Fluttertoast.showToast(
             msg: json['msg'],
             toastLength: Toast.LENGTH_SHORT,

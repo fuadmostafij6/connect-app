@@ -10,6 +10,10 @@ import 'package:http/http.dart' as http;
 
 class Userjobpage extends ChangeNotifier {
   Userjob? userjob;
+  bool _error = false;
+  String _errorMessage = "";
+  bool get error => _error;
+  String get errrMessege => _errorMessage;
 
   Future getuserjob({String? userid}) async {
     var box = Hive.box('login');
@@ -26,10 +30,14 @@ class Userjobpage extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       if (jsonDecode(responsedata.body)['error'] == 0) {
+        _error = false;
         userjob = Userjob.fromJson(jsonDecode(responsedata.body));
         notifyListeners();
       } else {
-        print(responsedata.body);
+        _error = true;
+        _errorMessage = "No job found";
+
+        print(responsedata.body.toString()+"ada");
       }
     } else {
       print(responsedata.body);

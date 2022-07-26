@@ -39,6 +39,7 @@ class Msg {
         this.status,
         this.createdBy,
         this.doc,
+        this.sharelink,
         this.canapply,
         this.createdByName,
     });
@@ -52,6 +53,7 @@ class Msg {
     String? status;
     String? createdBy;
     List<String>? doc;
+    String? sharelink;
     int? canapply;
     String? createdByName;
 
@@ -64,7 +66,8 @@ class Msg {
         createdAt: DateTime.parse(json["created_at"]),
         status: json["status"],
         createdBy: json["created_by"],
-        doc: json["doc"] == null ? null : List<String>.from(json["doc"].map((x) => x)),
+        doc: List<String>.from(json["doc"].map((x) => x)),
+        sharelink: json["sharelink"],
         canapply: json["canapply"],
         createdByName: json["created_by_name"],
     );
@@ -78,7 +81,8 @@ class Msg {
         "created_at": createdAt!.toIso8601String(),
         "status": status,
         "created_by": createdBy,
-        "doc": doc == null ? null : List<dynamic>.from(doc!.map((x) => x)),
+        "doc": List<dynamic>.from(doc!.map((x) => x)),
+        "sharelink": sharelink,
         "canapply": canapply,
         "created_by_name": createdByName,
     };

@@ -32,7 +32,7 @@ class MessageProvider extends ChangeNotifier {
       print(response.reasonPhrase);
     }
   }
-
+  Messagelist ? messagelist;
   Stream<Messagelist?> streammessage(
       {Duration? refreshTime,
       String? recvid,
@@ -59,6 +59,7 @@ class MessageProvider extends ChangeNotifier {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+
       return messagelistFromJson(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);

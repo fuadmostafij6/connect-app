@@ -34,6 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     loading = true;
+
+
     Provider.of<ProfileProvider>(context, listen: false)
         .getprofileinfo()
         .then((value) {
@@ -47,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final profile = Provider.of<ProfileProvider>(context);
+  //animaleint.add(profile.profile.msg!.userData.serviceArea);
     Size size = MediaQuery.of(context).size;
     var box = Hive.box('login');
     return Scaffold(
@@ -286,49 +289,64 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  List<String> animaleint = [];
+  List<int> animaleint = [];
+  
 
   Widget categorybox() {
     final homeprovider = Provider.of<HomeProvider>(context);
     final userprevilies = Provider.of<UserPreviliesProvider>(context);
+    final profile = Provider.of<ProfileProvider>(context);
+
+    print(animaleint);
+    for(int i=0; i< profile.services.length; i++)
+      {
+        animaleint.add(profile.services[i]);
+      }
+    print(animaleint);
+
     return Wrap(
       children: List.generate(homeprovider.allcategory!.msg!.length, (index) {
+
         return InkWell(
           onTap: () {
-            if (userprevilies.userPrevilies != null &&
-                userprevilies.userPrevilies!.msg!.category !=
-                    animaleint.length) {
-              if (animaleint
-                  .contains(homeprovider.allcategory!.msg![index].catId)) {
+            print(homeprovider.allcategory!.msg![index].catId);
+            // if (userprevilies.userPrevilies != null &&
+            //     userprevilies.userPrevilies!.msg!.category !=
+            //         animaleint.length) {
+              if (animaleint.contains(int.parse(homeprovider.allcategory!.msg![index].catId!))) {
                 setState(() {
-                  animaleint
-                      .remove(homeprovider.allcategory!.msg![index].catId);
+                  animaleint.remove(int.parse(homeprovider.allcategory!.msg![index].catId!));
                 });
               } else {
                 setState(() {
-                  animaleint.add(homeprovider.allcategory!.msg![index].catId!);
+                  animaleint.add(int.parse(homeprovider.allcategory!.msg![index].catId!));
                 });
               }
-            } else {
-              setState(() {
-                animaleint.remove(homeprovider.allcategory!.msg![index].catId);
-              });
-            }
+            // } else {
+            //   setState(() {
+            //     animaleint.remove(homeprovider.allcategory!.msg![index].catId!);
+            //   });
+            // }
           },
           child: Container(
-            margin: EdgeInsets.all(5),
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: animaleint
-                        .contains(homeprovider.allcategory!.msg![index].catId)
+                color:
+
+
+                profile.services
+                    .contains(int.parse(homeprovider.allcategory!.msg![index].catId!))
                     ? Colors.indigo
                     : Colors.grey[200]),
             child: Text(
               homeprovider.allcategory!.msg![index].catName!,
               style: TextStyle(
-                  color: animaleint
-                          .contains(homeprovider.allcategory!.msg![index].catId)
+                  color:
+
+                  profile.services
+                      .contains(int.parse(homeprovider.allcategory!.msg![index].catId!))
                       ? Colors.white
                       : Colors.black,
                   fontFamily: 'Kalpurush'),
@@ -453,11 +471,14 @@ class CategoryDialog extends StatefulWidget {
 class _CategoryDialogState extends State<CategoryDialog> {
   List<String> animaleint2 = [];
 
+
+
   @override
   Widget build(BuildContext context) {
     final homeprovider = Provider.of<HomeProvider>(context);
     final userprevilies = Provider.of<UserPreviliesProvider>(context);
     final profile = Provider.of<ProfileProvider>(context);
+
     return Dialog(
       child: Container(
         padding: EdgeInsets.all(10),
@@ -470,9 +491,9 @@ class _CategoryDialogState extends State<CategoryDialog> {
                     (index) {
                   return InkWell(
                     onTap: () {
-                      if (userprevilies.userPrevilies != null &&
-                          userprevilies.userPrevilies!.msg!.category !=
-                              animaleint2.length) {
+                      // if (userprevilies.userPrevilies != null &&
+                      //     userprevilies.userPrevilies!.msg!.category !=
+                      //         animaleint2.length) {
                         if (animaleint2.contains(
                             homeprovider.allcategory!.msg![index].catId)) {
                           setState(() {
@@ -485,12 +506,12 @@ class _CategoryDialogState extends State<CategoryDialog> {
                                 homeprovider.allcategory!.msg![index].catId!);
                           });
                         }
-                      } else {
-                        setState(() {
-                          animaleint2.remove(
-                              homeprovider.allcategory!.msg![index].catId);
-                        });
-                      }
+                      // } else {
+                      //   setState(() {
+                      //     animaleint2.remove(
+                      //         homeprovider.allcategory!.msg![index].catId);
+                      //   });
+                      // }
                     },
                     child: Container(
                       margin: EdgeInsets.all(5),
@@ -530,7 +551,10 @@ class _CategoryDialogState extends State<CategoryDialog> {
                       servicearea: animaleint2,
                       profiletag: "",
                     )
-                    .then((value) => profile.getprofileinfo());
+                    .then((value){
+                  profile.getprofileinfo();
+                  Navigator.pop(context);
+                });
               },
               child: Text(
                 "সাবমিট",

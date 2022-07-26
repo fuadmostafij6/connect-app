@@ -1,30 +1,30 @@
 // To parse this JSON data, do
 //
-//     final profile = profileFromJson(jsonString);
+//     final userProfileModel = userProfileModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+UserProfileModel userProfileModelFromJson(String str) => UserProfileModel.fromJson(json.decode(str));
 
-String profileToJson(Profile data) => json.encode(data.toJson());
+String userProfileModelToJson(UserProfileModel data) => json.encode(data.toJson());
 
-class Profile {
-  Profile({
+class UserProfileModel {
+  UserProfileModel({
     this.error,
     this.msg,
   });
 
-  int? error;
-  Msg? msg;
+  int ?error;
+  Msg ?msg;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) => UserProfileModel(
     error: json["error"],
     msg: Msg.fromJson(json["msg"]),
   );
 
   Map<String, dynamic> toJson() => {
     "error": error,
-    "msg": msg!.toJson(),
+    "msg": msg?.toJson(),
   };
 }
 
@@ -64,18 +64,18 @@ class Membership {
     this.createdAt,
   });
 
-  String? membershipId;
-  String? userId;
-  String? packageId;
-  String? packageName;
-  String? startDate;
-  String? endDate;
-  String? status;
-  String? payHistoryId;
-  String? paymentStatus;
-  String? paymentDetails;
-  String? nextBillDate;
-  String? createdAt;
+  String ?membershipId;
+  String ?userId;
+  String ?packageId;
+  String ?packageName;
+  String ?startDate;
+  String ?endDate;
+  String ?status;
+  String ?payHistoryId;
+  String ?paymentStatus;
+  String ?paymentDetails;
+  String ?nextBillDate;
+  String ?createdAt;
 
   factory Membership.fromJson(Map<String, dynamic> json) => Membership(
     membershipId: json["membership_id"],
@@ -133,23 +133,23 @@ class UserData {
   });
 
   String? userId;
-  String? fullName;
-  String? companyName;
-  String? phone;
-  String? email;
+  String ?fullName;
+  String ?companyName;
+  String ?phone;
+  String ?email;
   dynamic userName;
-  String? password;
+  String ?password;
   dynamic typeReg;
-  List<int>? serviceArea;
+  List<String>? serviceArea;
   String? status;
   DateTime? createdAt;
   dynamic pic;
   String? nidStatus;
-  String? nidFront;
-  String? nidBack;
+  String ?nidFront;
+  String ?nidBack;
   dynamic address;
-  String? verifiedMember;
-  String? profileTagline;
+  String ?verifiedMember;
+  String ?profileTagline;
   dynamic nidName;
   dynamic favorite;
 
@@ -162,7 +162,7 @@ class UserData {
     userName: json["user_name"],
     password: json["password"],
     typeReg: json["type_reg"],
-    serviceArea: List<int>.from(json["service_area"].map((x) => x)),
+    serviceArea: List<String>.from(json["service_area"].map((x) => x)),
     status: json["status"],
     createdAt: DateTime.parse(json["created_at"]),
     pic: json["pic"],

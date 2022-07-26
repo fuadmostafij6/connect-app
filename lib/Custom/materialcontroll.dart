@@ -157,7 +157,7 @@ class _CustomMaterialControlsState extends State<CustomMaterialControls>
                       DeviceOrientation.portraitUp,
                     ]).then((value) => Navigator.pop(context));
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
                   )),

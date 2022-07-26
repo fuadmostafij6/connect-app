@@ -9,7 +9,7 @@ import 'package:jobs_app/Screen/Linkscreen/applicationlist.dart';
 import 'package:jobs_app/Screen/Membership/membershipiteam2.dart';
 import 'package:jobs_app/Screen/Profile/profileedit.dart';
 import 'package:provider/provider.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class DrawerPage extends StatefulWidget {
   const DrawerPage({Key? key}) : super(key: key);
 
@@ -18,16 +18,20 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
-  int btntab = 1;
+  var box = Hive.box('login');
+  ProfileProvider profileProvider =ProfileProvider();
 
   @override
   Widget build(BuildContext context) {
     final profile = Provider.of<ProfileProvider>(context);
-    var box = Hive.box('login');
+    print(profile.profile!.msg!.userData!.companyName);
+    print(profile.profile!.msg!.userData!.phone);
+    print(profile.profile!.msg!.userData!.profileTagline);
+
     return SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,
-        child: Drawer(
+        child:Drawer(
           // child: Container(
           //   child: Column(
           //     mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +124,7 @@ class _DrawerPageState extends State<DrawerPage> {
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       gradient: LinearGradient(
                           colors: [Color(0xFFE51D20), Color(0xFFE51D20)],
                           begin: Alignment.topCenter,
@@ -129,29 +133,26 @@ class _DrawerPageState extends State<DrawerPage> {
                     onTap: () {},
                     child: Row(
                       children: [
-                        SizedBox(width: 25),
-                        Container(
-                            child: CircleAvatar(
+                        const SizedBox(width: 25),
+                        const CircleAvatar(
                           minRadius: 35,
                           backgroundImage: AssetImage(
                             "images/Chat_list/2.jpg",
                           ),
-                        )),
-                        SizedBox(width: 10),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                box.get('name'),
-                                style: TextStyle(
-                                    fontFamily: 'Kalpurush',
-                                    color: Colors.white,
-                                    fontSize: 18),
-                              ),
-                            ],
-                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              box.get('name'),
+                              style: const TextStyle(
+                                  fontFamily: 'Kalpurush',
+                                  color: Colors.white,
+                                  fontSize: 18),
+                            ),
+                          ],
                         ),
                         Spacer(),
                         IconButton(
@@ -170,7 +171,7 @@ class _DrawerPageState extends State<DrawerPage> {
                                     ),
                                   ));
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.edit,
                               color: Colors.white,
                             ))
@@ -188,7 +189,7 @@ class _DrawerPageState extends State<DrawerPage> {
                 button(
                   name2: "বাংলা",
                   onTap: () {
-                    redirectpage(Membershipiteam2page());
+                    // redirectpage(Membershipiteam2page());
                   },
                   name: 'Language',
                 ),
@@ -217,15 +218,15 @@ class _DrawerPageState extends State<DrawerPage> {
                   name: 'Following',
                 ),
                 Divider(),
-                button(
-                  icon: Icons.arrow_forward_ios,
-                  onTap: () {
-                    redirectpage(ApplicationList());
-                  },
-                  name: 'Application List',
-                ),
-
-                Divider(),
+                // button(
+                //   icon: Icons.arrow_forward_ios,
+                //   onTap: () {
+                //     redirectpage(const ApplicationList(details: "", id: '', title: "",));
+                //   },
+                //   name: 'Application List',
+                // ),
+                //
+                // Divider(),
                 button(
                   icon: Icons.arrow_forward_ios,
                   onTap: () {
@@ -234,11 +235,11 @@ class _DrawerPageState extends State<DrawerPage> {
                         MaterialPageRoute(
                           builder: (context) => ProfileEditPage(
                             company:
-                                profile.profile!.msg!.userData!.companyName,
+                            profile.profile!.msg!.userData!.companyName,
                             name: box.get('name'),
                             number: profile.profile!.msg!.userData!.phone!,
                             profiletag:
-                                profile.profile!.msg!.userData!.profileTagline,
+                            profile.profile!.msg!.userData!.profileTagline,
                           ),
                         ));
                   },
@@ -256,21 +257,35 @@ class _DrawerPageState extends State<DrawerPage> {
 
                 button(
                   icon: Icons.arrow_forward_ios,
-                  onTap: () {},
+                  onTap: () async{
+                    Uri url = Uri.parse("https://new.goshrt.com/");
+                    if (await canLaunchUrl(url)){
+                      await launchUrl(url);
+                    }
+                  },
                   name: 'FAQ',
                 ),
                 Divider(),
                 button(
                   icon: Icons.arrow_forward_ios,
-                  onTap: () {},
+                  onTap: () async{
+                    Uri url = Uri.parse("https://new.goshrt.com/");
+                    if (await canLaunchUrl(url)){
+                      await launchUrl(url);
+                    }
+                  },
                   name: 'About',
                 ),
                 Divider(),
                 button(
+                  name: "website",
                   icon: Icons.arrow_forward_ios,
-                  onTap: () {},
-                  name: 'Website',
-                ),
+                  onTap: ()async{
+                    Uri url = Uri.parse("https://new.goshrt.com/");
+                    if (await canLaunchUrl(url)){
+                      await launchUrl(url);
+                    }
+                  },),
                 Divider(),
 
                 button(
@@ -279,7 +294,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
-                        (route) => false);
+                            (route) => false);
                   },
                   name: 'Log Out',
                 ),
@@ -287,7 +302,7 @@ class _DrawerPageState extends State<DrawerPage> {
               ],
             ),
           ),
-        ),
+        )
       ),
     );
   }

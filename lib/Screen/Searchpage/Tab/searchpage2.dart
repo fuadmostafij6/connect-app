@@ -361,7 +361,7 @@ class _JobListcardState extends State<JobListcard> {
                                   connectid: widget.data.jobId!,
                                   id: widget.data.jobId!,
                                   tile: widget.data.jobTitle!,
-                                  username: widget.data.createdByName!),
+                                  username: widget.data.createdByName!, image: widget.data.doc![0],),
                             ));
                       },
                       child: Container(

@@ -17,7 +17,7 @@ class JobDetailsProvider extends ChangeNotifier {
     var headers = {
       'Cookie': 'ci_session=f5d17f81d2aedb8b50e0a834752b1a4849af7a8a'
     };
-    var request = http.Request('GET', Uri.parse('$url/api/job/single/$jobid'));
+    var request = http.Request('GET', Uri.parse('$url/api/job/single/$jobid/1'));
 
     request.headers.addAll(headers);
 

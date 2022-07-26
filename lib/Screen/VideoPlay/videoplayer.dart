@@ -33,7 +33,7 @@ class _ChewieDemoState extends State<ChewieDemo> {
   @override
   void initState() {
     super.initState();
-    print(widget.videourl);
+    print(widget.videourl+"video");
     // Showads().showonlyvideoads(context);
     //     SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.landscapeLeft,

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../Model/job_List/joblist.dart';
 import '../Linkscreen/mylinkscreen.dart';
 import '../VideoPlay/videoplayer.dart';
+import '../create_Job/audioplay.dart';
 import '../home/Tab/myfeed.dart';
 import 'package:path/path.dart' as path;
 
@@ -87,14 +89,15 @@ class _JobListcard2State extends State<JobListcard2> {
 
   Future<void> share() async {
     await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
-        linkUrl: 'https://flutter.dev/',
+        title: widget.data.jobTitle!,
+        text: widget.data.description,
+        linkUrl: widget.data.sharelink,
         chooserTitle: 'Example Chooser Title');
   }
-
+final player = AudioPlay();
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -199,53 +202,32 @@ class _JobListcard2State extends State<JobListcard2> {
                 style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
               ),
             ),
-            widget.data.doc == null
-                ? Container()
-                : Container(
-                    height: 160,
-                    width: double.infinity,
-                    color: Colors.red,
-                    child: PageView.builder(
-                      itemCount: widget.data.doc!.length,
-                      itemBuilder: ((context, index) {
-                        var data = widget.data.doc![index];
-                        if (path.extension(data) == ".jpg" ||
-                            path.extension(data) == ".png" ||
-                            path.extension(data) == ".JPG") {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => JobPostDetailsPage(
-                                    doc: data,
-                                    descripton: widget.data.description!,
-                                    id: widget.data.jobId!,
-                                    jobtitle: widget.data.jobTitle!,
-                                    username: widget.data.createdByName!,
-                                    catgeoryname: widget.data.category!,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              child: Image.network(
-                                jobimage + data,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          );
-                        } else if (path.extension(data) == ".mp4") {
-                          return ChewieDemo(
-                            videourl: jobimage + data,
-                          );
-                        } else if (path.extension(data) == ".pdf") {
-                          return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => JobPostDetailsPage(
+            Container(
+              color: Colors.white,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  widget.data.doc == null
+                      ? Container()
+                      : ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+
+                    itemCount: widget.data.doc!.length,
+                    itemBuilder: ((context, index) {
+                      var data = widget.data.doc![index];
+
+                      if (path.extension(data) == ".jpg" ||
+                          path.extension(data) == ".png" ||
+                          path.extension(data) == ".JPG" ||
+                          path.extension(data) == ".jpeg") {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    JobPostDetailsPage(
                                       doc: data,
                                       descripton: widget.data.description!,
                                       id: widget.data.jobId!,
@@ -253,19 +235,142 @@ class _JobListcard2State extends State<JobListcard2> {
                                       username: widget.data.createdByName!,
                                       catgeoryname: widget.data.category!,
                                     ),
-                                  ),
-                                );
-                              },
-                              child: PdfView(data: data));
-                        } else {
-                          return Image.asset(
-                            'images/post.jpg',
+                              ),
+                            );
+                          },
+                          child: Image.network(
+                            jobimage + data,
                             fit: BoxFit.cover,
-                          );
-                        }
-                      }),
-                    ),
-                  ),
+                          ),
+                        );
+                      } else if (path.extension(data) == ".mp4") {
+                        return ChewieDemo(
+                          videourl: jobimage + data,
+                        );
+                      } else if (path.extension(data) == ".pdf") {
+                        return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobPostDetailsPage(
+                                        doc: data,
+                                        descripton:
+                                        widget.data.description!,
+                                        id: widget.data.jobId!,
+                                        jobtitle: widget.data.jobTitle!,
+                                        username:
+                                        widget.data.createdByName!,
+                                        catgeoryname: widget.data.category!,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: PdfView(data: data));
+                      } else if (path.extension(data) == ".aac") {
+                        print(jobimage + data);
+                        return Container(
+                          child: IconButton(
+                              onPressed: () async {
+                                await player.toogleaudioplayer(
+                                    whenfinish: () {
+                                      setState(() {});
+                                    },
+                                    path: jobimage + data);
+                                // playaudio(jobimage + data);
+                              },
+                              icon: const Icon(Icons.mic)),
+                        );
+                      } else {
+                        return Image.asset(
+                          'images/post.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    }),
+                  )
+                  // : Container(
+                  //     height: 160,
+                  //     width: double.infinity,
+
+                  //     child: PageView.builder(
+                  //       itemCount: widget.data.doc!.length,
+                  //       itemBuilder: ((context, index) {
+                  //         var data = widget.data.doc![index];
+                  //         if (path.extension(data) == ".jpg" ||
+                  //             path.extension(data) == ".png" ||
+                  //             path.extension(data) == ".JPG") {
+                  //           return InkWell(
+                  //             onTap: () {
+                  //               Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                   builder: (context) =>
+                  //                       JobPostDetailsPage(
+                  //                     doc: data,
+                  //                     descripton: widget.data.description!,
+                  //                     id: widget.data.jobId!,
+                  //                     jobtitle: widget.data.jobTitle!,
+                  //                     username: widget.data.createdByName!,
+                  //                     catgeoryname: widget.data.category!,
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             },
+                  //             child: Container(
+                  //               child: Image.network(
+                  //                 jobimage + data,
+                  //                 fit: BoxFit.cover,
+                  //               ),
+                  //             ),
+                  //           );
+                  //         } else if (path.extension(data) == ".mp4") {
+                  //           return ChewieDemo(
+                  //             videourl: jobimage + data,
+                  //           );
+                  //         } else if (path.extension(data) == ".pdf") {
+                  //           return InkWell(
+                  //               onTap: () {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                     builder: (context) =>
+                  //                         JobPostDetailsPage(
+                  //                       doc: data,
+                  //                       descripton:
+                  //                           widget.data.description!,
+                  //                       id: widget.data.jobId!,
+                  //                       jobtitle: widget.data.jobTitle!,
+                  //                       username:
+                  //                           widget.data.createdByName!,
+                  //                       catgeoryname: widget.data.category!,
+                  //                     ),
+                  //                   ),
+                  //                 );
+                  //               },
+                  //               child: PdfView(data: data));
+                  //         } else if (path.extension(data) == ".aac") {
+                  //             return Container(
+
+                  //               child: IconButton(
+                  //                   onPressed: () {
+                  //                     playaudio(jobimage + data);
+                  //                   },
+                  //                   icon: Icon(Icons.mic)),
+                  //             );
+                  //           } else {
+                  //           return Image.asset(
+                  //             'images/post.jpg',
+                  //             fit: BoxFit.cover,
+                  //           );
+                  //         }
+                  //       }),
+                  //     ),
+                  //   )
+                ],
+              ),
+            ),
             Divider(
               height: 0,
             ),
@@ -292,7 +397,7 @@ class _JobListcard2State extends State<JobListcard2> {
                                     connectid: widget.data.jobId!,
                                     id: widget.data.jobId!,
                                     tile: widget.data.jobTitle!,
-                                    username: widget.data.createdByName!),
+                                    username: widget.data.createdByName!, image: widget.data.doc![0],),
                               ));
                         },
                         child: Container(

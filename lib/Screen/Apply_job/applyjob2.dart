@@ -14,22 +14,27 @@ import 'package:path/path.dart' as join;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../Const_value/apilink.dart';
 import '../../Db/Model/draftdbmodel.dart';
 import '../../Db/db/draftdb.dart';
 import '../../Model/job_List/joblist.dart';
 import '../../Provider/Jobdetails/jobdetails.dart';
+import '../Linkscreen/mylinkscreen.dart';
+import '../VideoPlay/videoplayer.dart';
 import '../create_Job/audioplay.dart';
 import '../create_Job/soundrecord.dart';
 import '../create_Job/videorecoard2.dart';
+import 'package:path/path.dart' as path;
 
 class Applyjob2Page extends StatefulWidget {
   final String tile, connectid, username, id;
+  final String? image;
   const Applyjob2Page(
       {Key? key,
       required this.tile,
       required this.connectid,
       required this.username,
-      required this.id})
+      required this.id,  this.image})
       : super(key: key);
 
   @override
@@ -62,7 +67,9 @@ class _Applyjob2PageState extends State<Applyjob2Page> {
         time: time ?? "",
         videopath: videopath ?? "",
         jobid: widget.id);
-    sqldraftDB!.insertdata(jobcreated);
+    sqldraftDB!.insertdata(jobcreated).then((value) {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -75,7 +82,7 @@ class _Applyjob2PageState extends State<Applyjob2Page> {
   }
 
   void addtime() {
-    final addsecunt = 1;
+    const addsecunt = 1;
     setState(() {
       final secount = duration.inSeconds + addsecunt;
       duration = Duration(seconds: secount);
@@ -147,16 +154,42 @@ class _Applyjob2PageState extends State<Applyjob2Page> {
               clipper: Customshape(),
               child: Stack(
                 children: [
-                  Container(
+                  widget.image! =="no.jpg"?
+
+
+                  SizedBox(
                     height: 350,
                     width: MediaQuery.of(context).size.width,
                     child: Image.asset(
                       'images/post.jpg',
                       fit: BoxFit.cover,
                     ),
-                  ),
+                  ):
+                  path.extension(widget.image!) == ".jpg" ||
+                      path.extension(widget.image!) == ".png" ||
+                      path.extension(widget.image!) == ".JPG" ||
+                      path.extension(widget.image!) == ".jpeg"?
+                  SizedBox(
+                    height: 350,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.network(
+                      jobimage+widget.image!,
+                      fit: BoxFit.cover,
+                    ),
+                  ):path.extension(widget.image!) == ".mp4"?ChewieDemo(
+                    videourl: jobimage + widget.image!,
+                  ):path.extension(widget.image!) == ".pdf"? PdfView(data: widget.image!):
+
+                  SizedBox(
+                        height: 350,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.asset(
+                          'images/post.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                   Container(
-                      padding: EdgeInsets.only(top: 30),
+                      padding: const EdgeInsets.only(top: 30),
                       child: IconButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -270,7 +303,8 @@ class _Applyjob2PageState extends State<Applyjob2Page> {
                             onPressed: () {
                               jobapply.jobapply(
                                   context: context,
-                                  jobid: widget.id,
+                                  jobid: widget.connectid,
+                                  ownerId: widget.id,
                                   note: note,
                                   time: time,
                                   userid: box.get('userid'));

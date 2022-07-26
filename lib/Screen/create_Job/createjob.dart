@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jobs_app/Provider/Jobdetails/jobdetails.dart';
 import 'package:jobs_app/Provider/Upload/upload.dart';
 import 'package:jobs_app/Provider/home.dart';
@@ -30,6 +31,7 @@ import '../../Provider/Job_Apply/job_apply.dart';
 import '../../Provider/Userjob/userjob.dart';
 
 class CreateJobpage extends StatefulWidget {
+
   const CreateJobpage({Key? key}) : super(key: key);
 
   @override
@@ -67,7 +69,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
 
     super.initState();
   }
-
+  PickedFile? videoFIle;
   void addtime() {
     final addsecunt = 1;
     setState(() {
@@ -85,6 +87,18 @@ class _CreateJobpageState extends State<CreateJobpage> {
     setState(() {
       audiorun = true;
     });
+  }
+  _video()async{
+    PickedFile? theVideo = await ImagePicker.platform.pickVideo(
+        source: ImageSource.camera
+
+    );
+    if(theVideo!=null){
+      setState((){
+        videoFIle = theVideo;
+        print(videoFIle!.path);
+      });
+    }
   }
 
   @override
@@ -192,7 +206,10 @@ class _CreateJobpageState extends State<CreateJobpage> {
                           userid: box.get('userid'))
                       .then((value) =>
                           Provider.of<Userjobpage>(context, listen: false)
-                              .getuserjob(userid: box.get('userid')));
+                              .getuserjob(userid: box.get('userid'))).then((value) => {
+                                
+                                Navigator.pop(context)
+                  });
 
                   // List<String> d = [];
                   // uploadlist.forEach((element) {
@@ -200,7 +217,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                   // });
                   // print(d);
                 },
-                child: Text(
+                child: const Text(
                   "সাবমিট করুন",
                   style:
                       TextStyle(color: Colors.white, fontFamily: 'Kalpurush'),
@@ -582,11 +599,13 @@ class _CreateJobpageState extends State<CreateJobpage> {
                           audiorun = false;
                           videoupload = true;
                         });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => VideoRecordCameraPage(),
-                            ));
+                        _video();
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => VideoRecordCameraPage(),
+                        //     ));
                       },
                       child: Container(
                         child: Icon(Icons.video_file),
@@ -612,7 +631,7 @@ class _CreateJobpageState extends State<CreateJobpage> {
                         }
                       },
                       child: Container(
-                        child: Icon(Icons.image),
+                        child: const Icon(Icons.image),
                       ),
                     )),
               ],
@@ -664,31 +683,42 @@ class _CreateJobpageState extends State<CreateJobpage> {
                       )
                     : Container(),
                 videoupload
-                    ? Expanded(
-                        child: Text(
-                          jbdetails.path,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      )
+                    ?
+
+                Expanded(
+                  child: Text(
+                    videoFIle!.path==""?"":videoFIle!.path ,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                )
                     : Container(),
                 videoupload
                     ? loading
                         ? CircularProgressIndicator()
                         : MaterialButton(
                             color: Colors.red,
-                            onPressed: () {
+                            onPressed: () async{
+
+                              //video = join1.basename(videoFIle!.path);
+
+                              print(videoFIle!.path+ "ffafaf");
+                             //  String dir = (await getApplicationDocumentsDirectory()).path;
+                             //  String newPath = join1.join(dir, '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}-${DateTime.now().hour}-${DateTime.now().minute}-${DateTime.now().second}.mp4');
+                             // File newpath = await File(videoFIle!.path).copy(newPath);
                               setState(() {
                                 loading = true;
+                                //video = join1.basename(jbdetails.path);
+                                video = join1.basename(videoFIle!.path);
                               });
-                              video = join1.basename(jbdetails.path);
-                              upload.uploaddile(jbdetails.path).then((value) {
+                              print(video+ "ffafaf");
+                              upload.uploaddile(videoFIle!.path).then((value) {
                                 setState(() {
                                   loading = false;
                                 });
                               });
                             },
-                            child: Text(
+                            child: const Text(
                               "Upload",
                               style: TextStyle(color: Colors.white),
                             ),

@@ -144,7 +144,7 @@ class UserData {
     dynamic userName;
     String? password;
     String? typeReg;
-    List<String>? serviceArea;
+    List<int>? serviceArea;
     String? status;
     DateTime? createdAt;
     String? pic;
@@ -166,7 +166,7 @@ class UserData {
         userName: json["user_name"],
         password: json["password"],
         typeReg: json["type_reg"],
-        serviceArea: List<String>.from(json["service_area"].map((x) => x)),
+        serviceArea: List<int>.from(json["service_area"].map((x) => x)),
         status: json["status"],
         createdAt: DateTime.parse(json["created_at"]),
         pic: json["pic"],

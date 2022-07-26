@@ -11,9 +11,14 @@ import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/home/Tab/recentfeed.dart';
 import 'package:provider/provider.dart';
 
+import '../../Const_value/apilink.dart';
 import '../Apply_job/applyjob2.dart';
+import '../JobpostDetails/jobpostdetails.dart';
+import '../Linkscreen/mylinkscreen.dart';
+import '../VideoPlay/videoplayer.dart';
+import '../create_Job/audioplay.dart';
 import '../home/Tab/myfeed.dart';
-
+import 'package:path/path.dart' as path;
 class CategoryjobPage extends StatefulWidget {
   final String categoryid, categoryname;
   const CategoryjobPage(
@@ -142,14 +147,15 @@ class _JobListcardState extends State<JobListcard> {
 
   Future<void> share() async {
     await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
-        linkUrl: 'https://flutter.dev/',
+        title: widget.data.jobTitle!,
+        text: widget.data.description!,
+        linkUrl: widget.data.sharelink,
         chooserTitle: 'Example Chooser Title');
   }
-
+  final player = AudioPlay();
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -200,19 +206,19 @@ class _JobListcardState extends State<JobListcard> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               children: [
                 Text(
-                  "Post: ${difference} day ago",
+                  "Post: $difference day ago",
                   style: TextStyle(
                       fontFamily: 'Kalpurush', color: Colors.grey[700]),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5)),
@@ -226,29 +232,182 @@ class _JobListcardState extends State<JobListcard> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Text(
               widget.data.description!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+              style: const TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
             ),
           ),
+
           Container(
             color: Colors.white,
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => ImagedialogBox(),
-                );
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset('images/post.jpg'),
-                ],
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                widget.data.doc == null
+                    ? Container()
+                    : ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+
+                  itemCount: widget.data.doc!.length,
+                  itemBuilder: ((context, index) {
+                    var data = widget.data.doc![index];
+
+                    if (path.extension(data) == ".jpg" ||
+                        path.extension(data) == ".png" ||
+                        path.extension(data) == ".JPG" ||
+                        path.extension(data) == ".jpeg") {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  JobPostDetailsPage(
+                                    doc: data,
+                                    descripton: widget.data.description!,
+                                    id: widget.data.jobId!,
+                                    jobtitle: widget.data.jobTitle!,
+                                    username: widget.data.createdByName!,
+                                    catgeoryname: widget.data.category!,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Image.network(
+                          jobimage + data,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    } else if (path.extension(data) == ".mp4") {
+                      return ChewieDemo(
+                        videourl: jobimage + data,
+                      );
+                    } else if (path.extension(data) == ".pdf") {
+                      return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    JobPostDetailsPage(
+                                      doc: data,
+                                      descripton:
+                                      widget.data.description!,
+                                      id: widget.data.jobId!,
+                                      jobtitle: widget.data.jobTitle!,
+                                      username:
+                                      widget.data.createdByName!,
+                                      catgeoryname: widget.data.category!,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: PdfView(data: data));
+                    } else if (path.extension(data) == ".aac") {
+                      print(jobimage + data);
+                      return Container(
+                        child: IconButton(
+                            onPressed: () async {
+                              await player.toogleaudioplayer(
+                                  whenfinish: () {
+                                    setState(() {});
+                                  },
+                                  path: jobimage + data);
+                              // playaudio(jobimage + data);
+                            },
+                            icon: const Icon(Icons.mic)),
+                      );
+                    } else {
+                      return Image.asset(
+                        'images/post.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  }),
+                )
+                // : Container(
+                //     height: 160,
+                //     width: double.infinity,
+
+                //     child: PageView.builder(
+                //       itemCount: widget.data.doc!.length,
+                //       itemBuilder: ((context, index) {
+                //         var data = widget.data.doc![index];
+                //         if (path.extension(data) == ".jpg" ||
+                //             path.extension(data) == ".png" ||
+                //             path.extension(data) == ".JPG") {
+                //           return InkWell(
+                //             onTap: () {
+                //               Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                   builder: (context) =>
+                //                       JobPostDetailsPage(
+                //                     doc: data,
+                //                     descripton: widget.data.description!,
+                //                     id: widget.data.jobId!,
+                //                     jobtitle: widget.data.jobTitle!,
+                //                     username: widget.data.createdByName!,
+                //                     catgeoryname: widget.data.category!,
+                //                   ),
+                //                 ),
+                //               );
+                //             },
+                //             child: Container(
+                //               child: Image.network(
+                //                 jobimage + data,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //             ),
+                //           );
+                //         } else if (path.extension(data) == ".mp4") {
+                //           return ChewieDemo(
+                //             videourl: jobimage + data,
+                //           );
+                //         } else if (path.extension(data) == ".pdf") {
+                //           return InkWell(
+                //               onTap: () {
+                //                 Navigator.push(
+                //                   context,
+                //                   MaterialPageRoute(
+                //                     builder: (context) =>
+                //                         JobPostDetailsPage(
+                //                       doc: data,
+                //                       descripton:
+                //                           widget.data.description!,
+                //                       id: widget.data.jobId!,
+                //                       jobtitle: widget.data.jobTitle!,
+                //                       username:
+                //                           widget.data.createdByName!,
+                //                       catgeoryname: widget.data.category!,
+                //                     ),
+                //                   ),
+                //                 );
+                //               },
+                //               child: PdfView(data: data));
+                //         } else if (path.extension(data) == ".aac") {
+                //             return Container(
+
+                //               child: IconButton(
+                //                   onPressed: () {
+                //                     playaudio(jobimage + data);
+                //                   },
+                //                   icon: Icon(Icons.mic)),
+                //             );
+                //           } else {
+                //           return Image.asset(
+                //             'images/post.jpg',
+                //             fit: BoxFit.cover,
+                //           );
+                //         }
+                //       }),
+                //     ),
+                //   )
+              ],
             ),
           ),
           Divider(
@@ -270,11 +429,11 @@ class _JobListcardState extends State<JobListcard> {
                                   connectid: widget.data.jobId!,
                                   id: widget.data.jobId!,
                                   tile: widget.data.jobTitle!,
-                                  username: widget.data.createdBy!),
+                                  username: widget.data.createdBy!, image: widget.data.doc![0],),
                             ));
                       },
                       child: Container(
-                        padding: EdgeInsets.all(9),
+                        padding: const EdgeInsets.all(9),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -305,7 +464,7 @@ class _JobListcardState extends State<JobListcard> {
                 Container(
                   color: Colors.grey[300],
                   width: 1,
-                  child: VerticalDivider(
+                  child: const VerticalDivider(
                     color: Colors.black,
                     thickness: 3,
                     indent: 20,

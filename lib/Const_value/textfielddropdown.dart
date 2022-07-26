@@ -30,27 +30,23 @@ class _TextfieldDropdownState extends State<TextfieldDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            // margin:
-            //     const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
-            child: Text(
-              widget.name!,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontFamily: 'Kalpurush'),
-            ),
+          Text(
+            widget.name!,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontFamily: 'Kalpurush'),
           ),
-          Container(
+          SizedBox(
             height: 40,
             // margin: const EdgeInsets.symmetric(horizontal: 10),
             child: DropdownSearch<String>(
               dropdownSearchDecoration: InputDecoration(
-                errorStyle: TextStyle(height: 0),
+                errorStyle: const TextStyle(height: 0),
                 hintText: widget.hinttext,
-                hintStyle: TextStyle(fontFamily: 'Kalpurush'),
+                hintStyle: const TextStyle(fontFamily: 'Kalpurush'),
                 contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                 // isDense: true,
               ),

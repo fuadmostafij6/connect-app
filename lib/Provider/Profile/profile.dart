@@ -12,6 +12,7 @@ import '../../Model/Profile/profile.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileProvider extends ChangeNotifier {
+  List<int> services =[];
   Profile? profile;
 
   Future getprofileinfo() async {
@@ -20,15 +21,17 @@ class ProfileProvider extends ChangeNotifier {
       'Cookie': 'ci_session=6462a9d3495609d2caf8d9a99a5fdb8325123111'
     };
     var request = http.Request(
-        'GET', Uri.parse('$url/api/user/profile/${box.get('userid')}'));
+        'GET', Uri.parse('https://new.goshrt.com/api/user/profile/${box.get('userid')}'));
 
     request.headers.addAll(headers);
-
+print(box.get("userid"));
     http.StreamedResponse response = await request.send();
     var responsedata = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
       profile = Profile.fromJson(jsonDecode(responsedata.body));
+      services = profile!.msg!.userData!.serviceArea!;
+      print(services.toString() +"servises");
       notifyListeners();
     } else {
       print(responsedata.body);
@@ -83,14 +86,14 @@ class ProfileProvider extends ChangeNotifier {
 
   Postlinkuser? postlinkuser;
 
-  Future getpostlinkuser({String? userid, String? mainuserid}) async {
+  Future getpostlinkuser({String? userid}) async {
     var headers = {
       'Cookie': 'ci_session=078502072d22dd8f57fd941184a9d4dffcc1898d'
     };
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://launch1.goshrt.com/api/user/profile/$userid/1/$mainuserid'));
+            "https://new.goshrt.com/api/user/profile/$userid"));
 
     request.headers.addAll(headers);
 

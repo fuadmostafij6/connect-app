@@ -80,13 +80,7 @@ class _JobPostDetailsPageState extends State<JobPostDetailsPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => PostLinkuserprofile(
-                                //         userid: widget.data.createdBy!,
-                                //       ),
-                                //     ));
+
                               },
                               child: Text(
                                 widget.username,

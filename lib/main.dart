@@ -9,13 +9,16 @@ import 'Provider/Categorybyjob/categoryjob.dart';
 import 'Provider/Follow/follow.dart';
 import 'Provider/Form/form.dart';
 import 'package:path_provider/path_provider.dart';
+import 'Provider/Job_Apply/applicationListProvider.dart';
 import 'Provider/Job_Apply/job_apply.dart';
 import 'Provider/Jobdetails/jobdetails.dart';
 import 'Provider/MemberPackage/memberpackage.dart';
+import 'Provider/Message/contactMessageProvuder.dart';
 import 'Provider/Notification/notification.dart';
 import 'Provider/Pdf/pdf.dart';
 import 'Provider/Profile/profile.dart';
 import 'Provider/Search/search.dart';
+import 'Provider/UserProfile/UserProfile.dart';
 import 'Provider/Userjob/userjob.dart';
 import 'Provider/home.dart';
 import 'Screen/splash/splash.dart';
@@ -45,7 +48,10 @@ void main() async {
     ChangeNotifierProvider(create: ((context) => PackageProvider())),
     ChangeNotifierProvider(create: ((context) => NotificationProvider())),
     ChangeNotifierProvider(create: ((context) => FollowProvider())),
-    ChangeNotifierProvider(create: ((context) => PdfProvider()))
+    ChangeNotifierProvider(create: ((context) => PdfProvider())),
+    ChangeNotifierProvider(create: ((context) => UserProfileProvider())),
+    ChangeNotifierProvider(create: ((context) => ContactMessageProvider())),
+    ChangeNotifierProvider(create: ((context) => ApplicationListProvider())),
   ], child: const MyApp()));
 }
 

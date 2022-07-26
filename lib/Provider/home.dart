@@ -41,7 +41,9 @@ class HomeProvider extends ChangeNotifier {
     var request = http.Request(
         'GET',
         Uri.parse(
-            '$url/api/job/listing?user_id=${box.get('userid')}&limit=20000&offset=0'));
+
+
+            'https://new.goshrt.com/api/job/listing?user_id=${box.get('userid')}&limit=10&offset=0'));
 
     request.headers.addAll(headers);
 

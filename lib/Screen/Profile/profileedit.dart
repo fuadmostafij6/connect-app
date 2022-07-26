@@ -160,7 +160,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                           servicearea: [],
                           profiletag: profiletag.text,
                         )
-                        .then((value) => profile.getprofileinfo());
+                        .then((value) => {
+                      profile.getprofileinfo(),
+                      Navigator.pop(context)
+                    } );
                   },
                   child: Text("আপডেট প্রোফাইল"),
                 ),

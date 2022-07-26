@@ -16,7 +16,7 @@ class UserPreviliesProvider extends ChangeNotifier {
     };
     var request = http.Request(
         'GET', Uri.parse('$url/api/user/privilege/${box.get('userid')}'));
-
+print(box.get('userid')+ "userid");
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -26,6 +26,7 @@ class UserPreviliesProvider extends ChangeNotifier {
       var json = jsonDecode(responsedata.body);
       if (json['error'] == 0) {
         userPrevilies = userPreviliesFromJson(responsedata.body);
+        print(json);
       } else {
         print(responsedata.body);
       }

@@ -17,9 +17,13 @@ import 'package:jobs_app/Screen/Searchpage/mainsearchpage.dart';
 import 'package:jobs_app/Screen/home/Tab/myfeed.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:path/path.dart' as path;
 import '../../Const_value/apilink.dart';
 import '../../Provider/Follow/follow.dart';
+import '../JobpostDetails/jobpostdetails.dart';
+import '../Linkscreen/mylinkscreen.dart';
+import '../VideoPlay/videoplayer.dart';
+import '../create_Job/audioplay.dart';
 
 class PostLinkuserprofile extends StatefulWidget {
   final String userid;
@@ -37,7 +41,8 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
   Future loaddata() async {
     var box = Hive.box('login');
     await Provider.of<ProfileProvider>(context, listen: false)
-        .getpostlinkuser(userid: widget.userid, mainuserid: box.get('userid'));
+        .getpostlinkuser(userid: widget.userid);
+
     await Provider.of<Userjobpage>(context, listen: false)
         .getuserjob(userid: widget.userid);
     followstatus();
@@ -88,7 +93,7 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
     var box = Hive.box('login');
     return Scaffold(
       key: _key,
-      endDrawer: DrawerPage(),
+      endDrawer: const DrawerPage(),
       appBar: AppBar(
         title: Text('Profile',
             style: TextStyle(fontSize: 16, fontFamily: 'Kalpurush')),
@@ -165,7 +170,7 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
                                     Text(
                                       profile.postlinkuser!.msg!.userData!
                                           .fullName!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontFamily: 'kalpurush',
                                           fontWeight: FontWeight.bold),
@@ -269,12 +274,12 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
                             margin: EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               children: [
-                                Icon(Icons.phone, size: 17),
-                                SizedBox(width: 5),
+                                const Icon(Icons.phone, size: 17),
+                                const SizedBox(width: 5),
                                 Text(
                                   profile.postlinkuser!.msg!.userData!.phone ??
                                       '',
-                                  style: TextStyle(fontFamily: 'kalpurush'),
+                                  style: const TextStyle(fontFamily: 'kalpurush'),
                                 ),
                               ],
                             ),
@@ -292,7 +297,7 @@ class _PostLinkuserprofileState extends State<PostLinkuserprofile> {
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: userjob.userjob!.msg!.length,
                       itemBuilder: (context, index) {
                         var data = userjob.userjob!.msg![index];
@@ -341,9 +346,10 @@ class _JobListcardState extends State<JobListcard> {
         linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Example Chooser Title');
   }
-
+  final player = AudioPlay();
   @override
   void initState() {
+    player.playaudioinit();
     categorynamefind();
     super.initState();
   }
@@ -365,7 +371,7 @@ class _JobListcardState extends State<JobListcard> {
             padding: EdgeInsets.only(left: 15, top: 5),
             child: Text(
               widget.data.jobTitle!,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.red,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -381,11 +387,11 @@ class _JobListcardState extends State<JobListcard> {
                   style: TextStyle(
                       fontFamily: 'Kalpurush', color: Colors.grey[700]),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5)),
@@ -403,11 +409,11 @@ class _JobListcardState extends State<JobListcard> {
             child: Row(
               children: [
                 Text(
-                  "Post: ${difference} day ago by",
+                  "Post: $difference day ago by",
                   style: TextStyle(
                       fontFamily: 'Kalpurush', color: Colors.grey[700]),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text(
@@ -420,12 +426,12 @@ class _JobListcardState extends State<JobListcard> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Text(
               widget.data.description!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
+              style: const TextStyle(fontFamily: 'Kalpurush', color: Colors.black),
             ),
           ),
           Container(
@@ -440,7 +446,87 @@ class _JobListcardState extends State<JobListcard> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset('images/post.jpg'),
+                  widget.data.doc == null
+                      ? Container()
+                      : ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: widget.data.doc!.length,
+
+                    itemBuilder: ((context, index) {
+                      var data = widget.data.doc![index];
+                      if (path.extension(data) == ".jpg" ||
+                          path.extension(data) == ".png" ||
+                          path.extension(data) == ".JPG" ||
+                          path.extension(data) == ".jpeg") {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    JobPostDetailsPage(
+                                      doc: data,
+                                      descripton: widget.data.description!,
+                                      id: widget.data.jobId!,
+                                      jobtitle: widget.data.jobTitle!,
+                                      username: widget.data.createdByName!,
+                                      catgeoryname: widget.data.category!,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Image.network(
+                            jobimage + data,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      } else if (path.extension(data) == ".mp4") {
+                        return ChewieDemo(
+                          videourl: jobimage + data,
+                        );
+                      } else if (path.extension(data) == ".pdf") {
+                        return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobPostDetailsPage(
+                                        doc: data,
+                                        descripton:
+                                        widget.data.description!,
+                                        id: widget.data.jobId!,
+                                        jobtitle: widget.data.jobTitle!,
+                                        username:
+                                        widget.data.createdByName!,
+                                        catgeoryname: widget.data.category!,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: PdfView(data: data));
+                      } else if (path.extension(data) == ".aac") {
+                        print(jobimage + data);
+                        return IconButton(
+                            onPressed: () async {
+                              await player.toogleaudioplayer(
+                                  whenfinish: () {
+                                    setState(() {});
+                                  },
+                                  path: jobimage + data
+                              );
+                              // playaudio(jobimage + data);
+                            },
+                            icon: Icon(Icons.mic));
+                      } else {
+                        return Image.asset(
+                          'images/post.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    }),
+                  )
                 ],
               ),
             ),
@@ -464,7 +550,7 @@ class _JobListcardState extends State<JobListcard> {
                                   connectid: widget.data.jobId!,
                                   id: widget.data.jobId!,
                                   tile: widget.data.jobTitle!,
-                                  username: widget.data.createdByName!),
+                                  username: widget.data.createdByName!, image: widget.data.doc![0],),
                             ));
                       },
                       child: Container(

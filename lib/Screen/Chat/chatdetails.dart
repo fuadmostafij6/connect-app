@@ -1,20 +1,25 @@
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jobs_app/Model/Message/messagelist.dart';
 import 'package:jobs_app/Model/Messagelist/messagelist.dart';
+import 'package:jobs_app/Provider/Jobdetails/jobdetails.dart';
 import 'package:jobs_app/Provider/Message/message.dart';
 import 'package:provider/provider.dart';
 
 import 'Custom_paint/custompaint.dart';
 
 class ChatdetailsPage extends StatefulWidget {
-  final String recvid, senderid, applyid, jobid;
+  final String recvid, senderid, applyid, jobid, titile;
+  final String? name;
   const ChatdetailsPage(
       {Key? key,
       required this.recvid,
       required this.senderid,
       required this.applyid,
-      required this.jobid})
+      required this.jobid, required this.titile, this.name})
       : super(key: key);
 
   @override
@@ -23,6 +28,7 @@ class ChatdetailsPage extends StatefulWidget {
 
 class _ChatdetailsPageState extends State<ChatdetailsPage> {
   TextEditingController message = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +40,63 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
             jobid: widget.jobid,
             recvid: widget.recvid,
             senderid: widget.senderid,
-            refreshTime: Duration(seconds: 1)),
+            refreshTime: const Duration(seconds: 1)),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+
+          if(snapshot.connectionState==ConnectionState.waiting){
+
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: const Color(0xFFE51D20),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(30),
+                  ),
+                ),
+                flexibleSpace: const Image(
+                  image: AssetImage(
+                    'images/Top Bar illustration Solid.png',
+                  ),
+                  fit: BoxFit.cover,
+                ),
+                title: Row(
+                  children: [
+                    const CircleAvatar(
+                      backgroundImage: AssetImage('images/Chat_list/1.jpg'),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:  [
+                          Text(
+                            widget.name!,
+                            style:
+                            const TextStyle(fontSize: 17, fontFamily: 'Kalpurush'),
+                          ),
+                          const SizedBox(height: 3),
+                          const Text(
+                            "tab here for contact info",
+                            style:
+                            TextStyle(fontSize: 12, color: Color(0xFFEBEBEB)),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_ios)),
+              ),
+              body: const Center(child: CircularProgressIndicator(),),
+            );
+          }
+
+         else if (snapshot.hasData) {
             var data = snapshot.data;
             return Scaffold(
               backgroundColor: Color(0xFFFFFFFF),
@@ -65,12 +125,12 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            data!.profile!.name!,
-                            style: TextStyle(
+                            widget.name ?? '',
+                            style: const TextStyle(
                                 fontSize: 17, fontFamily: 'Kalpurush'),
                           ),
-                          SizedBox(height: 3),
-                          Text(
+                          const SizedBox(height: 3),
+                          const Text(
                             "tab here for contatc info",
                             style: TextStyle(
                                 fontSize: 12, color: Color(0xFFEBEBEB)),
@@ -89,9 +149,20 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                 Padding(
+                   padding: const EdgeInsets.only(top: 20),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                     children: [
+                       Text("Connect Id: ${widget.jobid}"),
+                       Text("Job Title: ${widget.titile}"),
+                     ],
+                   ),
+                 ),
                   Flexible(
                     child: Container(
-                      child: listmessage2(data),
+                     // child: listmessage2(data),
+                      child: listMessage3(data),
                     ),
                   ),
                   Container(
@@ -105,6 +176,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
                         ]),
                     child: Row(
                       children: [
+
                         Flexible(
                             child: TextFormField(
                           controller: message,
@@ -138,6 +210,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
                         //     )),
                         IconButton(
                             onPressed: () {
+                              print(widget.applyid+widget.jobid+ widget.recvid+widget.senderid);
                               mess
                                   .messagesend(
                                       applyid: widget.applyid,
@@ -146,7 +219,10 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
                                       senderid: widget.senderid,
                                       message: message.text,
                                       photo: "")
-                                  .then((value) => message.clear());
+                                  .then((value){
+                                message.clear();
+
+                              });
                             },
                             icon: Image.asset(
                               'images/send.png',
@@ -161,52 +237,150 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
             );
           } else {
             return Scaffold(
-                appBar: AppBar(
-              elevation: 0,
-              backgroundColor: const Color(0xFFE51D20),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(30),
+              backgroundColor: Color(0xFFFFFFFF),
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: const Color(0xFFE51D20),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(30),
+                  ),
                 ),
-              ),
-              flexibleSpace: const Image(
-                image: AssetImage(
-                  'images/Top Bar illustration Solid.png',
+                flexibleSpace: const Image(
+                  image: AssetImage(
+                    'images/Top Bar illustration Solid.png',
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
+                title: Row(
+                  children: [
+                    const CircleAvatar(
+                      backgroundImage: AssetImage('images/Chat_list/1.jpg'),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.name!,
+                            style: const TextStyle(
+                                fontSize: 17, fontFamily: 'Kalpurush'),
+                          ),
+                          const SizedBox(height: 3),
+                          const Text(
+                            "tab here for contatc info",
+                            style: TextStyle(
+                                fontSize: 12, color: Color(0xFFEBEBEB)),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back_ios)),
               ),
-              title: Row(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('images/Chat_list/1.jpg'),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text("Connect Id: ${widget.jobid}"),
+                        Text("Job Title: ${widget.titile}"),
+                      ],
+                    ),
+                  ),
+                  const Flexible(
+                    child: Center(
+                      // child: listmessage2(data),
+                      child: Text("Lats start"),
+                    ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFF6F6F6),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              blurRadius: 1)
+                        ]),
+                    child: Row(
                       children: [
-                        Text(
-                          "",
-                          style:
-                              TextStyle(fontSize: 17, fontFamily: 'Kalpurush'),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          "tab here for contatc info",
-                          style:
-                              TextStyle(fontSize: 12, color: Color(0xFFEBEBEB)),
-                        )
+
+                        Flexible(
+                            child: TextFormField(
+                              controller: message,
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                    const BorderSide(color: Color(0xFFCFCFD0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                    const BorderSide(color: Color(0xFFCFCFD0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                    const BorderSide(color: Color(0xFFCFCFD0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  filled: true,
+                                  fillColor: const Color(0xFFFAFAFA)),
+                            )),
+                        // IconButton(
+                        //     onPressed: () {},
+                        //     icon: Image.asset(
+                        //       'images/message_icon/camera.png',
+                        //       height: 27,
+                        //     )),
+                        IconButton(
+                            onPressed: () {
+                              print(widget.applyid+widget.jobid+ widget.recvid+widget.senderid);
+                              mess
+                                  .messagesend(
+                                  applyid: widget.applyid,
+                                  jobid: widget.jobid,
+                                  recvid: widget.recvid,
+                                  senderid: widget.senderid,
+                                  message: message.text,
+                                  photo: "")
+                                  .then((value){
+                                message.clear();
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChatdetailsPage(
+                                  applyid: widget.applyid,
+                                  jobid: widget.jobid,
+                                  recvid: widget.recvid,
+                                  senderid: widget.senderid,
+                                  name: widget.name,
+                                  titile: widget.titile,
+                                )));
+
+                              });
+                            },
+                            icon: Image.asset(
+                              'images/send.png',
+                              color: Colors.black,
+                              height: 27,
+                            ))
                       ],
                     ),
                   )
                 ],
               ),
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back_ios)),
-            ));
+            );
           }
         });
   }
@@ -216,7 +390,7 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
     final mess = Provider.of<MessageProvider>(context);
     data!.msg!.sort((a, b) => b.messageId!.compareTo(a.messageId!));
     return ListView.builder(
-        padding: EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         reverse: true,
         itemCount: data.msg!.length,
         itemBuilder: ((context, index) {
@@ -224,7 +398,48 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
           return m.receiverUserId == widget.recvid ? rigthside(m) : leftside(m);
         }));
   }
+  Widget listMessage3(Messagelist? data) {
+    // var box = Hive.box('login');
+    // final mess = Provider.of<MessageProvider>(context);
+    // data!.msg!.sort((a, b) => b.messageId!.compareTo(a.messageId!));
+    return  GroupedListView<Msg, DateTime>(elements: data!.msg!, groupBy: (m)=>DateTime(2022),
+    groupHeaderBuilder: (Msg m)=> const SizedBox(),
+    reverse: true,
+    order: GroupedListOrder.DESC,
+    itemBuilder: (context,Msg m){
+      return  Align(
+        alignment: m.receiverUserId == widget.recvid? Alignment.centerRight: Alignment.centerLeft,
+        child: Bubble(
+          padding:  const BubbleEdges.all(10),
+          margin:  const BubbleEdges.all(2),
+          color: HexColor("#fce6e7"),
+          nip: BubbleNip.rightTop,
+          radius: const Radius.circular(5),
+          showNip: true,
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 150),
+            child: Column(
+              children: [
+                Text(
+                  m.msg!,
+                  style: const TextStyle(color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("${m.createdAt!.minute.ceil()}:${m.createdAt!.second}", style: TextStyle(color: Colors.grey.shade400),)
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      );
 
+    },
+
+    );
+  }
   // Widget listmessage() {
   //   return ListView.builder(
   //     reverse: true,
@@ -569,16 +784,28 @@ class _ChatdetailsPageState extends State<ChatdetailsPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-              margin: EdgeInsets.all(2),
-              constraints: BoxConstraints(maxWidth: 250),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.indigo, borderRadius: BorderRadius.circular(5)),
-              child: Text(
-                m.msg!,
-                style: TextStyle(color: Colors.white),
-              )),
+          Bubble(
+            padding:  const BubbleEdges.all(10),
+            margin:  const BubbleEdges.all(2),
+            color: HexColor("#fce6e7"),
+            nip: BubbleNip.rightTop,
+            radius: const Radius.circular(5),
+            showNip: true,
+            child: Column(
+              children: [
+                Text(
+                  m.msg!,
+                  style: const TextStyle(color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("${m.createdAt!.minute.ceil()}:${m.createdAt!.second}", style: TextStyle(color: Colors.grey.shade400),)
+                  ],
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );

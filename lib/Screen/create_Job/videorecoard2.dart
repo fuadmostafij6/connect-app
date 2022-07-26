@@ -56,6 +56,7 @@ class _VideoRecordCameraPageState extends State<VideoRecordCameraPage> {
       if (file != null) {
         // showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
+        print(videoFile!.path+"postpath");
         jbdetails.getpath(videoFile!.path);
         // _startVideoPlayer();
       }
