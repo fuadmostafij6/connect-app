@@ -81,7 +81,7 @@ class _ChewieDemoState extends State<ChewieDemo> {
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController1,
-      autoPlay: true,
+      autoPlay: false,
       looping: true,
       // customControls: Container(
       //   height: 50,

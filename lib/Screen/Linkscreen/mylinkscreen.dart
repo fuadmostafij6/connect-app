@@ -187,6 +187,10 @@ class JobListcard extends StatefulWidget {
 
 class _JobListcardState extends State<JobListcard> {
   String categoryname = '';
+  bool isPlay = false;
+  AudioPlayer audioPlayer = AudioPlayer();
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
 
   void refreshdara() {
     var box = Hive.box('login');
@@ -216,8 +220,23 @@ class _JobListcardState extends State<JobListcard> {
   final player = AudioPlay();
   @override
   void initState() {
-    player.playaudioinit();
+    //player.playaudioinit();
     categorynamefind();
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      setState(() {
+        isPlay = event == PlayerState.PLAYING;
+      });
+    });
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        duration = event;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      setState(() {
+        position = event;
+      });
+    });
     super.initState();
   }
 
@@ -361,14 +380,20 @@ class _JobListcardState extends State<JobListcard> {
                                   ),
                                 );
                               },
-                              child: Image.network(
-                                jobimage + data,
-                                fit: BoxFit.cover,
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 5, bottom: 5),
+                                child: Image.network(
+                                  jobimage + data,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             );
                           } else if (path.extension(data) == ".mp4") {
-                            return ChewieDemo(
-                              videourl: jobimage + data,
+                            return Container(
+                              margin: EdgeInsets.only(top: 5, bottom: 5),
+                              child: ChewieDemo(
+                                videourl: jobimage + data,
+                              ),
                             );
                           } else if (path.extension(data) == ".pdf") {
                             return InkWell(
@@ -390,20 +415,46 @@ class _JobListcardState extends State<JobListcard> {
                                     ),
                                   );
                                 },
-                                child: PdfView(data: data));
+                                child: Container(
+                                    margin: const EdgeInsets.only(top: 5, bottom: 5),
+                                    child: PdfView(data: data)));
                           } else if (path.extension(data) == ".aac") {
                             print(jobimage + data);
-                            return IconButton(
-                                onPressed: () async {
-                                  await player.toogleaudioplayer(
-                                    whenfinish: () {
-                                      setState(() {});
-                                    },
-                                    path: jobimage + data
-                                  );
-                                  // playaudio(jobimage + data);
-                                },
-                                icon: Icon(Icons.mic));
+                            return Container(
+                              margin: const EdgeInsets.only(top: 5, bottom: 5),
+
+                              color: Colors.red,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  IconButton(onPressed: ()async{
+                                    if(isPlay){
+                                      await audioPlayer.pause();
+                                    }
+                                    else{
+                                      String url = jobimage + data;
+                                      await audioPlayer.play(url);
+
+                                    }
+
+                                  }, icon: isPlay==false?const Icon(Icons.play_arrow, color: Colors.white,):const Icon(Icons.pause,color: Colors.white)),
+                                  Text("${duration.inMinutes.remainder(60)-position.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)-position.inSeconds.remainder(60)}", style: TextStyle(color: Colors.white),),
+                                  Slider(value: position.inSeconds.toDouble(),
+                                    min:0,
+                                    max: duration.inSeconds.toDouble(),
+
+                                    onChanged: (val)async{
+                                      final position = Duration(seconds: val.toInt());
+                                      await audioPlayer.seek(position);
+                                      await audioPlayer.resume();
+
+                                    }, activeColor: Colors.white,
+                                    inactiveColor: Colors.black,
+                                  )
+                                ],
+                              ),
+                            );
                           } else {
                             return Image.asset(
                               'images/post.jpg',

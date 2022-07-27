@@ -29,6 +29,7 @@ class Myfeedpage extends StatefulWidget {
 }
 
 class _MyfeedpageState extends State<Myfeedpage> {
+  bool isPlay = false;
   @override
   Widget build(BuildContext context) {
     final homeprovider = Provider.of<HomeProvider>(context);
@@ -55,7 +56,6 @@ class _MyfeedpageState extends State<Myfeedpage> {
 }
 
 class JobListcard extends StatefulWidget {
-
   final Msg data;
   final int index;
   const JobListcard({Key? key, required this.data, required this.index})
@@ -70,8 +70,10 @@ class _JobListcardState extends State<JobListcard> {
   Offset? tapXY;
   // ↓ hold screen size, using first line in build() method
   RenderBox? overlay;
-
+  bool isPlay = false;
   AudioPlayer audioPlayer = AudioPlayer();
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
 
   Future playaudio(String url) async {
     await audioPlayer.play(url);
@@ -83,6 +85,19 @@ class _JobListcardState extends State<JobListcard> {
   // ↓ get the tap position Offset
   void getPosition(TapDownDetails detail) {
     tapXY = detail.globalPosition;
+  }
+
+  String formatTime(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final second = twoDigits(duration.inHours.remainder(60));
+
+    return [
+      if (duration.inHours < 0) hours,
+      minutes,
+      second,
+    ].join(":");
   }
 
   void categorynamefind() {
@@ -106,12 +121,25 @@ class _JobListcardState extends State<JobListcard> {
         chooserTitle: 'Example Chooser Title');
   }
 
-
   @override
   void initState() {
-    player.playaudioinit();
+    // player.playaudioinit();
     categorynamefind();
-
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      setState(() {
+        isPlay = event == PlayerState.PLAYING;
+      });
+    });
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        duration = event;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      setState(() {
+        position = event;
+      });
+    });
     super.initState();
   }
 
@@ -122,7 +150,8 @@ class _JobListcardState extends State<JobListcard> {
     final date2 = DateTime.now();
     final difference = date2.difference(birthday).inDays;
     overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox?;
-print(widget.data.doc);
+    print(widget.data.doc);
+
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 10 : 0),
@@ -225,24 +254,23 @@ print(widget.data.doc);
                   widget.data.doc == null
                       ? Container()
                       : ListView.builder(
-                        primary: false,
-                        shrinkWrap: true,
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: widget.data.doc!.length,
 
-                        itemCount: widget.data.doc!.length,
-                        itemBuilder: ((context, index) {
-                          var data = widget.data.doc![index];
-
-                          if (path.extension(data) == ".jpg" ||
-                              path.extension(data) == ".png" ||
-                              path.extension(data) == ".JPG" ||
-                              path.extension(data) == ".jpeg") {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        JobPostDetailsPage(
+                    itemBuilder: ((context, index) {
+                      var data = widget.data.doc![index];
+                      if (path.extension(data) == ".jpg" ||
+                          path.extension(data) == ".png" ||
+                          path.extension(data) == ".JPG" ||
+                          path.extension(data) == ".jpeg") {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    JobPostDetailsPage(
                                       doc: data,
                                       descripton: widget.data.description!,
                                       id: widget.data.jobId!,
@@ -250,61 +278,92 @@ print(widget.data.doc);
                                       username: widget.data.createdByName!,
                                       catgeoryname: widget.data.category!,
                                     ),
-                                  ),
-                                );
-                              },
-                              child: Image.network(
-                                jobimage + data,
-                                fit: BoxFit.cover,
                               ),
                             );
-                          } else if (path.extension(data) == ".mp4") {
-                            return ChewieDemo(
-                              videourl: jobimage + data,
-                            );
-                          } else if (path.extension(data) == ".pdf") {
-                            return InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          JobPostDetailsPage(
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 5, bottom: 5),
+                            child: Image.network(
+                              jobimage + data,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      } else if (path.extension(data) == ".mp4") {
+                        return Container(
+                          margin: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: ChewieDemo(
+                            videourl: jobimage + data,
+                          ),
+                        );
+                      } else if (path.extension(data) == ".pdf") {
+                        return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      JobPostDetailsPage(
                                         doc: data,
                                         descripton:
-                                            widget.data.description!,
+                                        widget.data.description!,
                                         id: widget.data.jobId!,
                                         jobtitle: widget.data.jobTitle!,
                                         username:
-                                            widget.data.createdByName!,
+                                        widget.data.createdByName!,
                                         catgeoryname: widget.data.category!,
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: PdfView(data: data));
-                          } else if (path.extension(data) == ".aac") {
-                            print(jobimage + data);
-                            return Container(
-                              child: IconButton(
-                                  onPressed: () async {
-                                    await player.toogleaudioplayer(
-                                        whenfinish: () {
-                                          setState(() {});
-                                        },
-                                        path: jobimage + data);
-                                    // playaudio(jobimage + data);
-                                  },
-                                  icon: const Icon(Icons.mic)),
-                            );
-                          } else {
-                            return Image.asset(
-                              'images/post.jpg',
-                              fit: BoxFit.cover,
-                            );
-                          }
-                        }),
-                      )
+                                ),
+                              );
+                            },
+                            child: Container(
+                                margin: const EdgeInsets.only(top: 5, bottom: 5),
+                                child: PdfView(data: data)));
+                      } else if (path.extension(data) == ".aac") {
+                        print(jobimage + data);
+                        return Container(
+                          margin: const EdgeInsets.only(top: 5, bottom: 5),
+
+                          color: Colors.red,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(onPressed: ()async{
+                                if(isPlay){
+                                  await audioPlayer.pause();
+                                }
+                                else{
+                                  String url = jobimage + data;
+                                  await audioPlayer.play(url);
+
+                                }
+
+                              }, icon: isPlay==false?const Icon(Icons.play_arrow, color: Colors.white,):const Icon(Icons.pause,color: Colors.white)),
+                              Text("${duration.inMinutes.remainder(60)-position.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)-position.inSeconds.remainder(60)}", style: TextStyle(color: Colors.white),),
+                              Slider(value: position.inSeconds.toDouble(),
+                                min:0,
+                                max: duration.inSeconds.toDouble(),
+
+                                onChanged: (val)async{
+                                  final position = Duration(seconds: val.toInt());
+                                  await audioPlayer.seek(position);
+                                  await audioPlayer.resume();
+
+                                }, activeColor: Colors.white,
+                                inactiveColor: Colors.black,
+                              )
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Image.asset(
+                          'images/post.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    }),
+                  )
                   // : Container(
                   //     height: 160,
                   //     width: double.infinity,

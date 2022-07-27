@@ -151,16 +151,17 @@ class _CustomMaterialControlsState extends State<CustomMaterialControls>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                  onPressed: () {
-                    SystemChrome.setPreferredOrientations([
-                      DeviceOrientation.portraitUp,
-                    ]).then((value) => Navigator.pop(context));
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  )),
+              // IconButton(
+              //     onPressed: () {
+              //       SystemChrome.setPreferredOrientations([
+              //         DeviceOrientation.portraitUp,
+              //       ]).then((value) => Navigator.pop(context));
+              //     },
+              //     icon: const Icon(
+              //       Icons.arrow_back,
+              //       color: Colors.white,
+              //     )),
+              Spacer(),
               _buildSubtitleToggle(),
               if (chewieController.showOptions) _buildOptionsButton(),
             ],

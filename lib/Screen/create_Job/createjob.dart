@@ -684,10 +684,16 @@ class _CreateJobpageState extends State<CreateJobpage> {
                     : Container(),
                 videoupload
                     ?
-
+                videoFIle!=null?
                 Expanded(
                   child: Text(
-                    videoFIle!.path==""?"":videoFIle!.path ,
+                    videoFIle!.path,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ):  Expanded(
+                  child: Text(
+            "",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

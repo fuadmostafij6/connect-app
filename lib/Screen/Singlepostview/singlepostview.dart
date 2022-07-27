@@ -67,6 +67,10 @@ class _JobListcard2State extends State<JobListcard2> {
   Offset? tapXY;
   // ↓ hold screen size, using first line in build() method
   RenderBox? overlay;
+  bool isPlay = false;
+  AudioPlayer audioPlayer = AudioPlayer();
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
 
   RelativeRect get relRectSize =>
       RelativeRect.fromSize(tapXY! & const Size(40, 40), overlay!.size);
@@ -97,7 +101,22 @@ class _JobListcard2State extends State<JobListcard2> {
 final player = AudioPlay();
   @override
   void initState() {
-    player.playaudioinit();
+    //player.playaudioinit();
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      setState(() {
+        isPlay = event == PlayerState.PLAYING;
+      });
+    });
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        duration = event;
+      });
+    });
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      setState(() {
+        position = event;
+      });
+    });
     categorynamefind();
     super.initState();
   }
@@ -212,11 +231,10 @@ final player = AudioPlay();
                       : ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-
                     itemCount: widget.data.doc!.length,
+
                     itemBuilder: ((context, index) {
                       var data = widget.data.doc![index];
-
                       if (path.extension(data) == ".jpg" ||
                           path.extension(data) == ".png" ||
                           path.extension(data) == ".JPG" ||
@@ -238,14 +256,20 @@ final player = AudioPlay();
                               ),
                             );
                           },
-                          child: Image.network(
-                            jobimage + data,
-                            fit: BoxFit.cover,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 5, bottom: 5),
+                            child: Image.network(
+                              jobimage + data,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         );
                       } else if (path.extension(data) == ".mp4") {
-                        return ChewieDemo(
-                          videourl: jobimage + data,
+                        return Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5),
+                          child: ChewieDemo(
+                            videourl: jobimage + data,
+                          ),
                         );
                       } else if (path.extension(data) == ".pdf") {
                         return InkWell(
@@ -267,20 +291,45 @@ final player = AudioPlay();
                                 ),
                               );
                             },
-                            child: PdfView(data: data));
+                            child: Container(
+                                margin: const EdgeInsets.only(top: 5, bottom: 5),
+                                child: PdfView(data: data)));
                       } else if (path.extension(data) == ".aac") {
                         print(jobimage + data);
                         return Container(
-                          child: IconButton(
-                              onPressed: () async {
-                                await player.toogleaudioplayer(
-                                    whenfinish: () {
-                                      setState(() {});
-                                    },
-                                    path: jobimage + data);
-                                // playaudio(jobimage + data);
-                              },
-                              icon: const Icon(Icons.mic)),
+                          margin: const EdgeInsets.only(top: 5, bottom: 5),
+
+                          color: Colors.red,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(onPressed: ()async{
+                                if(isPlay){
+                                  await audioPlayer.pause();
+                                }
+                                else{
+                                  String url = jobimage + data;
+                                  await audioPlayer.play(url);
+
+                                }
+
+                              }, icon: isPlay==false?const Icon(Icons.play_arrow, color: Colors.white,):const Icon(Icons.pause,color: Colors.white)),
+                              Text("${duration.inMinutes.remainder(60)-position.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)-position.inSeconds.remainder(60)}", style: TextStyle(color: Colors.white),),
+                              Slider(value: position.inSeconds.toDouble(),
+                                min:0,
+                                max: duration.inSeconds.toDouble(),
+
+                                onChanged: (val)async{
+                                  final position = Duration(seconds: val.toInt());
+                                  await audioPlayer.seek(position);
+                                  await audioPlayer.resume();
+
+                                }, activeColor: Colors.white,
+                                inactiveColor: Colors.black,
+                              )
+                            ],
+                          ),
                         );
                       } else {
                         return Image.asset(
